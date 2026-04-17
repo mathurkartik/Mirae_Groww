@@ -1,0 +1,35 @@
+# docker-compose.yml — Local development for Mutual Fund FAQ Assistant
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - ./backend:/app/backend
+      - ./ingestion:/app/ingestion
+    environment:
+      - CHROMA_PERSIST_PATH=data/chroma_db
+      - CHUNKS_JSONL=data/chunks.jsonl
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # Don't overwrite node_modules with host mount
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
