@@ -1,0 +1,229 @@
+# .github/workflows/ingestion-scheduler.yml
+#
+# Phase 4.0 — Daily Ingestion Pipeline
+# ======================================
+# Schedule : every day at 9:15 AM IST = 03:45 UTC → cron "45 3 * * *"
+# Trigger  : automatic schedule + workflow_dispatch (manual, with optional flags)
+#
+# Jobs (sequential):
+#   1. scrape_documents   — fetch all 36 Groww URLs → cleaned_docs.jsonl
+#   2. chunk_documents    — section-aware chunking   → chunks.jsonl
+#   3. embed_and_upsert   — bge-small-en-v1.5 embed + ChromaDB upsert
+#                           reads ingestion_manifest.json for diff (NEW/UPDATED/SKIP)
+#                           writes updated ingestion_manifest.json for next run
+
+name: Daily Ingestion Pipeline
+
+on:
+  schedule:
+    - cron: "45 3 * * *"   # 9:15 AM IST daily  (UTC 03:45)
+
+  workflow_dispatch:
+    inputs:
+      force_full_rerun:
+        description: >
+          Set to "true" to re-embed ALL chunks, ignoring the manifest diff.
+          Use after an embedding model upgrade.
+        required: false
+        default: "false"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Shared defaults
+# ─────────────────────────────────────────────────────────────────────────────
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Job 1 — scrape_documents
+  # Reads : data/urls.yaml  (committed to repo)
+  # Writes: data/cleaned_docs.jsonl
+  # Upload: artifact "scrape-output-{run_id}"  (retention 1 day)
+  # ───────────────────────────────────────────────────────────────────────────
+  scrape_documents:
+    name: "1 — Scrape Groww Pages"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install scraper dependencies
+        run: |
+          pip install --upgrade pip
+          pip install requests beautifulsoup4 pyyaml playwright
+
+      - name: Install Playwright Chromium browser
+        run: playwright install chromium --with-deps
+
+      - name: Create output directories
+        run: |
+          mkdir -p data/raw
+
+      - name: Run scraper
+        run: python ingestion/scraper.py
+        env:
+          URLS_YAML:           data/urls.yaml
+          RAW_DIR:             data/raw
+          OUTPUT_JSONL:        data/cleaned_docs.jsonl
+          MIN_CONTENT_CHARS:   "500"
+          PLAYWRIGHT_TIMEOUT:  "30000"
+          REQUEST_TIMEOUT:     "15"
+          MAX_RETRIES:         "3"
+
+      - name: Verify output — must have exactly 36 entries
+        run: |
+          count=$(wc -l < data/cleaned_docs.jsonl)
+          echo "cleaned_docs.jsonl has ${count} lines"
+          if [ "${count}" -ne 36 ]; then
+            echo "::error::Expected 36 entries in cleaned_docs.jsonl, got ${count}"
+            exit 1
+          fi
+
+      - name: Upload scrape artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: scrape-output-${{ github.run_id }}
+          path: |
+            data/cleaned_docs.jsonl
+            data/raw/
+          retention-days: 1
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Job 2 — chunk_documents
+  # Needs : scrape_documents
+  # Download: artifact "scrape-output-{run_id}"
+  # Writes: data/chunks.jsonl
+  # Upload: artifact "chunk-output-{run_id}"  (retention 1 day)
+  # ───────────────────────────────────────────────────────────────────────────
+  chunk_documents:
+    name: "2 — Chunk Documents"
+    needs: [scrape_documents]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install chunking dependencies
+        run: |
+          pip install --upgrade pip
+          pip install tiktoken pyyaml
+
+      - name: Download scrape artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: scrape-output-${{ github.run_id }}
+          path: data/
+
+      - name: Run chunker
+        run: python ingestion/chunker.py
+        env:
+          INPUT_JSONL:   data/cleaned_docs.jsonl
+          OUTPUT_JSONL:  data/chunks.jsonl
+          CHUNK_SIZE:    "500"
+          CHUNK_OVERLAP: "50"
+          MIN_CHUNK:     "50"
+
+      - name: Upload chunk artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chunk-output-${{ github.run_id }}
+          path: data/chunks.jsonl
+          retention-days: 1
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Job 3 — embed_and_upsert
+  # Needs : chunk_documents
+  # Download: "chunk-output-{run_id}"  (chunks.jsonl)
+  #           "manifest-latest"        (ingestion_manifest.json from previous run)
+  # Writes: data/chroma_db/ + data/ingestion_manifest.json
+  # Upload: "chroma-output-{run_id}"  (chroma_db/,  retention 7 days)
+  #         "manifest-latest"         (ingestion_manifest.json, retention 30 days,
+  #                                    overwrite=true — rolling single artifact)
+  # ───────────────────────────────────────────────────────────────────────────
+  embed_and_upsert:
+    name: "3 — Embed & Upsert (ChromaDB)"
+    needs: [chunk_documents]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install embedding + vector store dependencies
+        run: |
+          pip install --upgrade pip
+          pip install sentence-transformers chromadb tiktoken rank-bm25 pyyaml
+
+      - name: Download chunk artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: chunk-output-${{ github.run_id }}
+          path: data/
+
+      # Pull previous ingestion manifest for change-detection diff.
+      # continue-on-error: true handles the very first pipeline run where
+      # no manifest artifact exists yet — embedder treats all chunks as NEW.
+      - name: Download previous ingestion manifest
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: manifest-latest
+          path: data/
+
+      - name: Create ChromaDB directory
+        run: mkdir -p data/chroma_db
+
+      - name: Run embedder and ChromaDB upsert
+        run: python ingestion/embedder.py
+        env:
+          CHUNKS_JSONL:          data/chunks.jsonl
+          MANIFEST_PATH:         data/ingestion_manifest.json
+          CHROMA_PERSIST_PATH:   data/chroma_db
+          CHROMA_COLLECTION:     mutual_fund_faq
+          EMBEDDING_MODEL:       BAAI/bge-small-en-v1.5
+          BATCH_SIZE:            "32"
+          FORCE_FULL_RERUN:      ${{ github.event.inputs.force_full_rerun || 'false' }}
+          PIPELINE_RUN_ID:       ${{ github.run_id }}
+
+      # Persist updated ChromaDB so the Render backend can pull it
+      - name: Upload ChromaDB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chroma-output-${{ github.run_id }}
+          path: data/chroma_db/
+          retention-days: 7
+
+      # Overwrite the rolling "manifest-latest" artifact so the next run
+      # can download it for its change-detection diff
+      - name: Upload updated ingestion manifest (rolling latest)
+        uses: actions/upload-artifact@v4
+        with:
+          name: manifest-latest
+          path: data/ingestion_manifest.json
+          overwrite: true        # replaces previous manifest-latest artifact
+          retention-days: 30

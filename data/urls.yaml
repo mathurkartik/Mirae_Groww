@@ -1,0 +1,155 @@
+# data/urls.yaml
+# Source of truth for all 36 Mirae Asset mutual fund Groww pages.
+# AMC: Mirae Asset | Source: Groww pages only | PDFs: Not in scope (v1.0)
+# DO NOT add non-Groww URLs or PDF links to this file.
+
+urls:
+
+  # ── Equity / Core ──────────────────────────────────────────────────────────
+  - url: https://groww.in/mutual-funds/mirae-asset-large-cap-fund-direct-growth
+    scheme_name: "Mirae Asset Large Cap Fund"
+    category: "Equity / Core"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-large-midcap-fund-direct-growth
+    scheme_name: "Mirae Asset Large & Midcap Fund"
+    category: "Equity / Core"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-midcap-fund-direct-growth
+    scheme_name: "Mirae Asset Midcap Fund"
+    category: "Equity / Core"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-small-cap-fund-direct-growth
+    scheme_name: "Mirae Asset Small Cap Fund"
+    category: "Equity / Core"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-multicap-fund-direct-growth
+    scheme_name: "Mirae Asset Multicap Fund"
+    category: "Equity / Core"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth
+    scheme_name: "Mirae Asset Flexi Cap Fund"
+    category: "Equity / Core"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-elss-tax-saver-fund-direct-growth
+    scheme_name: "Mirae Asset ELSS Tax Saver Fund"
+    category: "Equity / Core"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-aggressive-hybrid-fund-direct-growth
+    scheme_name: "Mirae Asset Aggressive Hybrid Fund"
+    category: "Equity / Core"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-equity-savings-fund-direct-growth
+    scheme_name: "Mirae Asset Equity Savings Fund"
+    category: "Equity / Core"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-balanced-advantage-fund-direct-growth
+    scheme_name: "Mirae Asset Balanced Advantage Fund"
+    category: "Equity / Core"
+
+  # ── Sectoral ────────────────────────────────────────────────────────────────
+  - url: https://groww.in/mutual-funds/mirae-asset-great-consumer-fund-direct-growth
+    scheme_name: "Mirae Asset Great Consumer Fund"
+    category: "Sectoral"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-healthcare-fund-direct-growth
+    scheme_name: "Mirae Asset Healthcare Fund"
+    category: "Sectoral"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-banking-and-financial-services-fund-direct-growth
+    scheme_name: "Mirae Asset Banking & Financial Services Fund"
+    category: "Sectoral"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-infrastructure-fund-direct-growth
+    scheme_name: "Mirae Asset Infrastructure Fund"
+    category: "Sectoral"
+
+  # ── Index / Passive ─────────────────────────────────────────────────────────
+  - url: https://groww.in/mutual-funds/mirae-asset-nifty-50-index-fund-direct-growth
+    scheme_name: "Mirae Asset Nifty 50 Index Fund"
+    category: "Index / Passive"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-nifty-largemidcap-250-index-fund-direct-growth
+    scheme_name: "Mirae Asset Nifty LargeMidcap 250 Index Fund"
+    category: "Index / Passive"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth
+    scheme_name: "Mirae Asset Nifty Total Market Index Fund"
+    category: "Index / Passive"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-nifty-midsmallcap400-momentum-quality-100-etf-fof-direct-growth
+    scheme_name: "Mirae Asset Nifty MidSmallcap400 ETF FoF"
+    category: "Index / Passive"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-nifty-india-new-age-consumption-etf-fof-direct-growth
+    scheme_name: "Mirae Asset Nifty India New Age Consumption ETF FoF"
+    category: "Index / Passive"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth
+    scheme_name: "Mirae Asset NYSE FANG+ ETF FoF"
+    category: "Index / Passive"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-hang-seng-tech-etf-fof-direct-growth
+    scheme_name: "Mirae Asset Hang Seng TECH ETF FoF"
+    category: "Index / Passive"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-s-and-p-500-top-50-etf-fof-direct-growth
+    scheme_name: "Mirae Asset S&P 500 Top 50 ETF FoF"
+    category: "Index / Passive"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-global-x-artificial-intelligence-technology-etf-fof-direct-growth
+    scheme_name: "Mirae Asset Global X AI & Tech ETF FoF"
+    category: "Index / Passive"
+
+  # ── Debt ────────────────────────────────────────────────────────────────────
+  - url: https://groww.in/mutual-funds/mirae-asset-liquid-fund-direct-growth
+    scheme_name: "Mirae Asset Liquid Fund"
+    category: "Debt"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-money-market-fund-direct-growth
+    scheme_name: "Mirae Asset Money Market Fund"
+    category: "Debt"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-short-duration-fund-direct-growth
+    scheme_name: "Mirae Asset Short Duration Fund"
+    category: "Debt"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-low-duration-fund-direct-growth
+    scheme_name: "Mirae Asset Low Duration Fund"
+    category: "Debt"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-ultra-short-duration-fund-direct-growth
+    scheme_name: "Mirae Asset Ultra Short Duration Fund"
+    category: "Debt"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-dynamic-bond-fund-direct-growth
+    scheme_name: "Mirae Asset Dynamic Bond Fund"
+    category: "Debt"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-corporate-bond-fund-direct-growth
+    scheme_name: "Mirae Asset Corporate Bond Fund"
+    category: "Debt"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-banking-and-psu-fund-direct-growth
+    scheme_name: "Mirae Asset Banking & PSU Fund"
+    category: "Debt"
+
+  # ── Target Maturity ─────────────────────────────────────────────────────────
+  - url: https://groww.in/mutual-funds/mirae-asset-crisil-ibx-financial-services-9-12-months-debt-index-fund-direct-growth
+    scheme_name: "Mirae Asset CRISIL IBX FinServ 9-12M Index Fund"
+    category: "Target Maturity"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-crisil-ibx-gilt-index-april-2033-index-fund-direct-growth
+    scheme_name: "Mirae Asset CRISIL IBX Gilt Apr 2033 Index Fund"
+    category: "Target Maturity"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-nifty-sdl-jun-2027-index-fund-direct-growth
+    scheme_name: "Mirae Asset Nifty SDL Jun 2027 Index Fund"
+    category: "Target Maturity"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-nifty-sdl-june-2028-index-fund-direct-growth
+    scheme_name: "Mirae Asset Nifty SDL Jun 2028 Index Fund"
+    category: "Target Maturity"
+
+  - url: https://groww.in/mutual-funds/mirae-asset-nifty-aaa-psu-bond-plus-sdl-apr-2026-50-50-index-fund-direct-growth
+    scheme_name: "Mirae Asset Nifty AAA PSU Bond Plus SDL Apr 2026 50:50 Index Fund"
+    category: "Target Maturity"

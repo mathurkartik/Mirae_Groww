@@ -1,0 +1,30 @@
+# requirements.txt — Mutual Fund FAQ Assistant ingestion + retrieval
+# Install with: pip install -r ingestion/requirements.txt
+#
+# Phase 4.0 — Scraping Service
+requests>=2.32.3
+beautifulsoup4>=4.12.3
+pyyaml>=6.0.2
+playwright>=1.44.0        # For JS-rendered pages; also run: playwright install chromium
+
+# Phase 4.1 — Chunking
+tiktoken>=0.7.0
+
+# Phase 4.2 / 4.3 — Embedding + ChromaDB
+sentence-transformers>=5.4.1   # includes SentenceTransformer + CrossEncoder
+chromadb>=1.5.7
+
+# Phase 5 — Hybrid Retrieval
+rank-bm25>=0.2.2               # BM25 sparse index
+# cross-encoder/ms-marco-MiniLM-L-6-v2 downloaded via sentence-transformers (no separate install)
+
+# Phase 6 — Groq LLM + Query Guard
+groq>=1.1.2                    # Groq Python SDK (llama3-8b-8192)
+python-dotenv>=1.0.0           # Load GROQ_API_KEY from .env
+
+# Phase 7 — Post-Processor (no new deps — uses stdlib re + pyyaml already above)
+
+# Phase 8 — FastAPI Backend
+fastapi>=0.115.0               # Web framework
+uvicorn[standard]>=0.29.0      # ASGI server (Render deployment)
+httpx>=0.27.0                  # TestClient + async HTTP client
