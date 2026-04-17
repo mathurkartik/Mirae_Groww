@@ -92,7 +92,7 @@ urls:
     scheme_name: "Mirae Asset Hang Seng TECH ETF FoF"
     category: "Index / Passive"
 
-  - url: https://groww.in/mutual-funds/mirae-asset-s-and-p-500-top-50-etf-fof-direct-growth
+  - url: https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth
     scheme_name: "Mirae Asset S&P 500 Top 50 ETF FoF"
     category: "Index / Passive"
 
@@ -150,6 +150,6 @@ urls:
     scheme_name: "Mirae Asset Nifty SDL Jun 2028 Index Fund"
     category: "Target Maturity"
 
-  - url: https://groww.in/mutual-funds/mirae-asset-nifty-aaa-psu-bond-plus-sdl-apr-2026-50-50-index-fund-direct-growth
+  - url: https://groww.in/mutual-funds/mirae-asset-nifty-aaa-psu-bond-plus-sdl-apr-2026-50:50-index-fund-direct-growth
     scheme_name: "Mirae Asset Nifty AAA PSU Bond Plus SDL Apr 2026 50:50 Index Fund"
     category: "Target Maturity"
