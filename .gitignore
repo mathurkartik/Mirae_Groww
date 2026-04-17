@@ -27,6 +27,7 @@ data/chroma_db/
 data/cleaned_docs.jsonl
 data/chunks.jsonl
 data/ingestion_manifest.json
+data/logs/
 
 # ── HuggingFace model cache ───────────────────────────
 .cache/

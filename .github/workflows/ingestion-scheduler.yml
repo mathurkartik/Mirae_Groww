@@ -157,7 +157,7 @@ jobs:
   # Download: "chunk-output-{run_id}"  (chunks.jsonl)
   #           "manifest-latest"        (ingestion_manifest.json from previous run)
   # Writes: data/chroma_db/ + data/ingestion_manifest.json
-  # Upload: "chroma-output-{run_id}"  (chroma_db/,  retention 7 days)
+  #         "chroma-latest"           (chroma_db/,  retention 7 days, rolling)
   #         "manifest-latest"         (ingestion_manifest.json, retention 30 days,
   #                                    overwrite=true — rolling single artifact)
   # ───────────────────────────────────────────────────────────────────────────
@@ -166,6 +166,9 @@ jobs:
     needs: [chunk_documents]
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
 
     steps:
       - name: Checkout repository
@@ -188,17 +191,52 @@ jobs:
           name: chunk-output-${{ github.run_id }}
           path: data/
 
-      # Pull previous ingestion manifest for change-detection diff.
-      # continue-on-error: true handles the very first pipeline run where
-      # no manifest artifact exists yet — embedder treats all chunks as NEW.
-      - name: Download previous ingestion manifest
+      # Pull previous ingestion manifest + vector store for incremental updates.
+      # We search for the latest successful run that produced these artifacts.
+      # continue-on-error: true handles the very first pipeline run.
+      - name: Locate last successful state
+        id: state-locator
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const response = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'manifest-latest',
+              per_page: 1
+            });
+            if (response.data.artifacts.length > 0) {
+              const artifact = response.data.artifacts[0];
+              console.log(`Found manifest-latest from run ${artifact.workflow_run.id}`);
+              core.setOutput('run_id', artifact.workflow_run.id);
+              core.setOutput('found', 'true');
+            } else {
+              console.log('No previous manifest-latest found.');
+              core.setOutput('found', 'false');
+            }
+
+      - name: Download previous manifest
+        if: steps.state-locator.outputs.found == 'true'
         uses: actions/download-artifact@v4
         continue-on-error: true
         with:
           name: manifest-latest
           path: data/
+          run-id: ${{ steps.state-locator.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create ChromaDB directory
+      - name: Download previous ChromaDB
+        if: steps.state-locator.outputs.found == 'true'
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: chroma-latest
+          path: data/chroma_db/
+          run-id: ${{ steps.state-locator.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create ChromaDB directory (backup)
         run: mkdir -p data/chroma_db
 
       - name: Run embedder and ChromaDB upsert
@@ -213,12 +251,14 @@ jobs:
           FORCE_FULL_RERUN:      ${{ github.event.inputs.force_full_rerun || 'false' }}
           PIPELINE_RUN_ID:       ${{ github.run_id }}
 
-      # Persist updated ChromaDB so the Render backend can pull it
+      # Persist updated ChromaDB so the Render backend can pull it.
+      # We use a rolling name "chroma-latest" for easier cross-run state passing.
       - name: Upload ChromaDB artifact
         uses: actions/upload-artifact@v4
         with:
-          name: chroma-output-${{ github.run_id }}
+          name: chroma-latest
           path: data/chroma_db/
+          overwrite: true
           retention-days: 7
 
       # Overwrite the rolling "manifest-latest" artifact so the next run
