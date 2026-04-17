@@ -120,13 +120,21 @@ _NOISE_CLASS_FRAGMENTS = [
 # ── Utility helpers ───────────────────────────────────────────────────────────
 
 def slug_from_url(url: str) -> str:
-    """Extract the last path segment of the URL to use as the file slug.
+    """Extract the last path segment of the URL and sanitize for filesystem safety.
 
     Example:
         https://groww.in/mutual-funds/mirae-asset-large-cap-fund-direct-growth
         → mirae-asset-large-cap-fund-direct-growth
+
+    Sanitization replaces characters not allowed in GitHub Actions artifacts
+    (", :, <, >, |, *, ?, \r, \n) with hyphens to ensure cross-platform compatibility.
     """
-    return urlparse(url).path.rstrip("/").split("/")[-1]
+    slug = urlparse(url).path.rstrip("/").split("/")[-1]
+    # Replace artifact-invalid characters with hyphens
+    invalid_chars = ['"', ':', '<', '>', '|', '*', '?', '\r', '\n']
+    for char in invalid_chars:
+        slug = slug.replace(char, '-')
+    return slug
 
 
 def sha256(text: str) -> str:
