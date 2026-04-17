@@ -210,7 +210,7 @@ The system follows a **Retrieval-Augmented Generation (RAG)** pattern. Every ans
 | | 19 | Mirae Asset Nifty India New Age ETF FoF | https://groww.in/mutual-funds/mirae-asset-nifty-india-new-age-consumption-etf-fof-direct-growth |
 | | 20 | Mirae Asset NYSE FANG+ ETF FoF | https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth |
 | | 21 | Mirae Asset Hang Seng TECH ETF FoF | https://groww.in/mutual-funds/mirae-asset-hang-seng-tech-etf-fof-direct-growth |
-| | 22 | Mirae Asset S&P 500 Top 50 ETF FoF | https://groww.in/mutual-funds/mirae-asset-s-and-p-500-top-50-etf-fof-direct-growth |
+| | 22 | Mirae Asset S&P 500 Top 50 ETF FoF | https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth |
 | | 23 | Mirae Asset Global X AI & Tech ETF FoF | https://groww.in/mutual-funds/mirae-asset-global-x-artificial-intelligence-technology-etf-fof-direct-growth |
 | **Debt** | 24 | Mirae Asset Liquid Fund | https://groww.in/mutual-funds/mirae-asset-liquid-fund-direct-growth |
 | | 25 | Mirae Asset Money Market Fund | https://groww.in/mutual-funds/mirae-asset-money-market-fund-direct-growth |
@@ -224,7 +224,7 @@ The system follows a **Retrieval-Augmented Generation (RAG)** pattern. Every ans
 | | 33 | Mirae Asset CRISIL IBX Gilt Apr 2033 | https://groww.in/mutual-funds/mirae-asset-crisil-ibx-gilt-index-april-2033-index-fund-direct-growth |
 | | 34 | Mirae Asset Nifty SDL Jun 2027 | https://groww.in/mutual-funds/mirae-asset-nifty-sdl-jun-2027-index-fund-direct-growth |
 | | 35 | Mirae Asset Nifty SDL Jun 2028 | https://groww.in/mutual-funds/mirae-asset-nifty-sdl-june-2028-index-fund-direct-growth |
-| | 36 | Mirae Asset Nifty AAA PSU+SDL Apr 2026 | https://groww.in/mutual-funds/mirae-asset-nifty-aaa-psu-bond-plus-sdl-apr-2026-50-50-index-fund-direct-growth |
+| | 36 | Mirae Asset Nifty AAA PSU+SDL Apr 2026 | https://groww.in/mutual-funds/mirae-asset-nifty-aaa-psu-bond-plus-sdl-apr-2026-50:50-index-fund-direct-growth |
 
 ---
 
