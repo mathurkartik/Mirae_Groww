@@ -178,6 +178,9 @@ def _parse_fund_detail(record: dict, url_entry: dict) -> dict[str, Any]:
     ret_3y_match = re.search(ret_3y_p, text, re.IGNORECASE)
     ret_1d_match = re.search(ret_1d_p, text, re.IGNORECASE)
 
+    # Exit load
+    exit_load_match = re.search(r"Exit load[\s\n\r]+([^\n\r]+)", text, re.IGNORECASE)
+
     # Fund benchmark and objective
     benchmark_match = re.search(r"Fund benchmark[\s\n\r]+([^\n\r]+)", text, re.IGNORECASE)
     objective_match = re.search(r"Investment Objective[\s\n\r]+(.*?)(?:\n\s*Fund benchmark|;|$)", text, re.DOTALL | re.IGNORECASE)
