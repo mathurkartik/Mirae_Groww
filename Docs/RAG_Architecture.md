@@ -1,9 +1,9 @@
 # RAG Architecture — Mutual Fund FAQ Assistant
 
 > **Project:** Facts-Only Mutual Fund FAQ Assistant — Mirae Asset (Groww Context)
-> **Version:** 2.0
-> **Date:** April 2026
-> **Embedding Model:** BAAI/bge-small-en-v1.5 (local, no API cost)
+> **Version:** 2.1
+> **Date:** April 17, 2026
+> **Embedding Model:** BAAI/bge-small-en-v1.5 (local)
 > **LLM:** Groq (llama3-8b-8192)
 > **Vector Store:** ChromaDB (local persistent)
 > **Deployment:** GitHub Actions (Scheduler) · Render (Backend) · Vercel (Frontend)
@@ -260,10 +260,12 @@ The system follows a **Retrieval-Augmented Generation (RAG)** pattern. Every ans
 - [ ] SHA-256 content hash computed per document
 - [ ] `cleaned_docs.jsonl` uploaded as GitHub Actions artifact and downloaded by `chunk_documents`
 - [ ] `chunks.jsonl` uploaded as artifact and downloaded by `embed_and_upsert`
-- [ ] `ingestion_manifest.json` from previous run downloaded at start of `embed_and_upsert` for diff
-- [ ] `ingestion_manifest.json` written and uploaded at end of `embed_and_upsert` for next run
-- [ ] Scrape run logged with URL, status, hash, timestamp
-- [ ] Test: trigger scheduler manually via `workflow_dispatch` and verify all 3 jobs turn green
+- [ ] `state-locator` step uses `actions/github-script` to find `run-id` of last successful run
+- [ ] `ingestion_manifest.json` from previous run downloaded using cross-run `run-id` for diff
+- [ ] `chroma-latest` (previous DB state) downloaded to ensure incremental continuity
+- [ ] Updated `data/` committed back to `main` branch with `[skip ci]` to trigger Render
+- [ ] Render deploy hook hit manually at end of pipeline for instant refresh
+- [ ] Test: trigger scheduler manually and verify commit + Render deployment trigger
 
 ---
 
@@ -682,122 +684,46 @@ on:
 
 ---
 
-### 10.3 Full YAML Definition
+### 10.3 Full YAML Definition (Reference)
 
 ```yaml
 # .github/workflows/ingestion-scheduler.yml
+# Full implementation available in the repository. Key logic highlighted below:
 
-name: Daily Ingestion Pipeline
-
-on:
-  schedule:
-    - cron: "45 3 * * *"   # 9:15 AM IST (UTC 03:45)
-  workflow_dispatch:
-    inputs:
-      force_full_rerun:
-        description: "Re-embed ALL chunks ignoring manifest diff"
-        required: false
-        default: "false"
-
-jobs:
-
-  # ─────────────────────────────────────────────────────────────
-  # Job 1: Scrape all 36 Groww URLs
-  # ─────────────────────────────────────────────────────────────
-  scrape_documents:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install scraper dependencies
-        run: pip install requests beautifulsoup4 playwright
-
-      - name: Install Playwright browsers
-        run: playwright install chromium
-
-      - name: Run scraper
-        run: python ingestion/scraper.py
-        env:
-          URLS_YAML: data/urls.yaml
-
-      - name: Upload scrape artifact
-        uses: actions/upload-artifact@v4
+      - name: Locate last successful state
+        id: state-locator
+        uses: actions/github-script@v7
         with:
-          name: scrape-output-${{ github.run_id }}
-          path: data/cleaned_docs.jsonl
-          retention-days: 1
+          script: |
+            const response = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'manifest-latest',
+              per_page: 1
+            });
+            if (response.data.artifacts.length > 0) {
+              const artifact = response.data.artifacts[0];
+              core.setOutput('run_id', artifact.workflow_run.id);
+              core.setOutput('found', 'true');
+            } else {
+              core.setOutput('found', 'false');
+            }
 
-  # ─────────────────────────────────────────────────────────────
-  # Job 2: Chunk cleaned documents
-  # ─────────────────────────────────────────────────────────────
-  chunk_documents:
-    needs: [scrape_documents]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download scrape artifact
+      - name: Download previous manifest
+        if: steps.state-locator.outputs.found == 'true'
         uses: actions/download-artifact@v4
-        with:
-          name: scrape-output-${{ github.run_id }}
-          path: data/
-
-      - name: Install chunking dependencies
-        run: pip install tiktoken
-
-      - name: Run chunker
-        run: python ingestion/chunker.py
-
-      - name: Upload chunk artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: chunk-output-${{ github.run_id }}
-          path: data/chunks.jsonl
-          retention-days: 1
-
-  # ─────────────────────────────────────────────────────────────
-  # Job 3: Embed chunks + upsert into ChromaDB
-  # ─────────────────────────────────────────────────────────────
-  embed_and_upsert:
-    needs: [chunk_documents]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download chunk artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: chunk-output-${{ github.run_id }}
-          path: data/
-
-      # Pull previous manifest for change-detection diff
-      # If no previous run exists, this step is skipped gracefully
-      - name: Download previous ingestion manifest
-        uses: actions/download-artifact@v4
-        continue-on-error: true   # first ever run has no manifest yet
         with:
           name: manifest-latest
           path: data/
-
-      - name: Install embedding + vector store dependencies
-        run: pip install sentence-transformers chromadb tiktoken rank-bm25
-
-      - name: Run embedder and ChromaDB upsert
-        run: python ingestion/embedder.py
-        env:
-          CHROMA_PERSIST_PATH: data/chroma_db
-          FORCE_FULL_RERUN: ${{ github.event.inputs.force_full_rerun || 'false' }}
-
-      # Persist updated ChromaDB for Render to pull
-      - name: Upload ChromaDB artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: chroma-output-${{ github.run_id }}
-          path: data/chroma_db/
-          retention-days: 7
-
-      # Overwrite manifest-latest so next run can download it for diff
-      - name: Upload updated ingestion manifest (latest)
+          run-id: ${{ steps.state-locator.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Commit ingestion data to repo
+        run: |
+          git add -f data/chroma_db/ data/chunks.jsonl data/ingestion_manifest.json
+          git commit -m "chore: update ingestion data [skip ci]"
+          git push
+```
         uses: actions/upload-artifact@v4
         with:
           name: manifest-latest

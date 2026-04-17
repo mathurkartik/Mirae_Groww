@@ -201,7 +201,7 @@ Add these steps **at the end of the `embed_and_upsert` job** in `.github/workflo
 | **Branch** | `main` |
 | **Root Directory** | *(leave blank — repo root)* |
 | **Runtime** | Python 3 |
-| **Build Command** | `pip install -r ingestion/requirements.txt` |
+| **Build Command** | `pip install -r requirements.txt` |
 | **Start Command** | `uvicorn backend.main:app --host 0.0.0.0 --port $PORT` |
 | **Instance Type** | Free (or Starter for reliability) |
 | **Auto-Deploy** | Yes (on push to `main`) |
@@ -271,18 +271,17 @@ async rewrites() {
 
 **Effect:** Browser calls `https://your-app.vercel.app/api/threads` → Vercel rewrites server-side to `https://your-service.onrender.com/api/threads`. No CORS preflight, no API URL exposed in client JS.
 
-### 5.3 Auto-Deploy
+### 5.3 Auto-Deploy & Build Optimization
 
-Vercel auto-deploys on push to `main`. Since the daily ingestion commits only touch `data/` files and have `[skip ci]` in the commit message, Vercel still deploys on those pushes (Vercel doesn't honor `[skip ci]`). This is harmless — the frontend code hasn't changed, so the build is fast and the deployment is identical.
+Vercel auto-deploys on push to `main`. Since daily ingestion runs push data changes directly to the repo, we use a `frontend/vercel.json` file to prevent redundant frontend builds:
 
-To restrict Vercel deploys to only frontend changes, use **Vercel Ignored Build Step**:
-
-```bash
-# vercel.json (in frontend/)
+```json
 {
-  "ignoreCommand": "git diff --quiet HEAD~1 -- frontend/"
+  "ignoreCommand": "git diff --quiet HEAD~1 -- ."
 }
 ```
+
+This tells Vercel to only trigger a build if files inside the `frontend/` directory have changed.
 
 ---
 
@@ -565,6 +564,31 @@ All day       │ Users query via Vercel frontend → Render backend → Groq LL
 | **Groq** | Free tier | $0 | Rate-limited; sufficient for demo traffic |
 | **Total (free tier)** | | **$0** | Suitable for development and demo |
 | **Total (recommended)** | | **$7/month** | Render Starter eliminates cold starts |
+
+---
+
+## 12. Local Development (Docker)
+
+To run the entire stack locally without relying on Render or Vercel, use the provided Docker orchestration.
+
+### 12.1 Prerequisites
+- Docker and Docker Compose installed
+- A `.env` file with `GROQ_API_KEY` set
+
+### 12.2 Quick Start
+```bash
+# 1. Build and start services
+docker-compose up --build
+
+# 2. Access points
+# Frontend: http://localhost:3000
+# Backend:  http://localhost:8000
+```
+
+### 12.3 Features
+- **Persistence:** The `data/` directory is mounted to the backend container, so ChromaDB state survives restarts.
+- **Hot-Reloading:** Both `backend/` and `frontend/` are mounted as volumes, allowing real-time code updates.
+- **Isolation:** Each service runs in its own containerized environment with proper networking.
 
 ---
 
