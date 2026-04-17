@@ -48,9 +48,9 @@ export function ChatWindow({
   const isEmpty = messages.length === 0;
 
   return (
-    <div className="chat-window">
+    <div className="chat-panel">
       {/* Message list / Welcome screen */}
-      <div className="chat-scroll" role="log" aria-live="polite" aria-label="Conversation">
+      <div className="chat-panel-messages" role="log" aria-live="polite" aria-label="Conversation">
         {isEmpty ? (
           <WelcomeScreen onQuestion={onExampleClick} />
         ) : (
@@ -61,13 +61,9 @@ export function ChatWindow({
 
             {/* Loading indicator */}
             {isLoading && (
-              <div className="msg-row msg-row--assistant" aria-label="Assistant is responding">
-                <div className="assistant-avatar" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
-                  </svg>
-                </div>
-                <div className="bubble bubble--assistant bubble--loading">
+              <div className="chat-msg-row chat-msg-row--assistant" aria-label="Assistant is responding">
+                <div className="chat-msg-avatar" aria-hidden="true">AI</div>
+                <div className="chat-bubble chat-bubble--assistant">
                   <LoadingDots />
                 </div>
               </div>

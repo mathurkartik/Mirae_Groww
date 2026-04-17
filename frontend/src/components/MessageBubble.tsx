@@ -18,9 +18,9 @@ export function MessageBubble({ message }: Props) {
 
   if (isUser) {
     return (
-      <div className="msg-row msg-row--user">
-        <div className="bubble bubble--user">
-          <p className="bubble-text">{message.content}</p>
+      <div className="chat-msg-row chat-msg-row--user">
+        <div className="chat-bubble chat-bubble--user">
+          <p>{message.content}</p>
         </div>
       </div>
     );
@@ -29,22 +29,16 @@ export function MessageBubble({ message }: Props) {
   const isError = message.content.startsWith("⚠️");
 
   return (
-    <div className="msg-row msg-row--assistant">
-      {/* Avatar */}
-      <div className="assistant-avatar" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
-        </svg>
-      </div>
+    <div className="chat-msg-row chat-msg-row--assistant">
+      <div className="chat-msg-avatar" aria-hidden="true">AI</div>
 
-      <div className={`bubble bubble--assistant ${isError ? "bubble--error" : ""}`}>
-        {/* Refusal badge */}
+      <div className={`chat-bubble chat-bubble--assistant ${isError ? "chat-bubble--error" : ""}`}>
         {message.is_refusal && !isError && (
-          <span className="refusal-badge">Advisory query — facts only</span>
+          <span className="refusal-badge" style={{ display: 'block', fontSize: '10px', opacity: 0.7, marginBottom: '4px' }}>
+            Advisory query — facts only
+          </span>
         )}
-
-        {/* Answer text */}
-        <p className="bubble-text">{message.content}</p>
+        <p>{message.content}</p>
 
         {/* Citation link */}
         {message.citation && (

@@ -17,49 +17,32 @@ export function WelcomeScreen({ onQuestion }: Props) {
   return (
     <div className="welcome">
       {/* Logo mark */}
-      <div className="welcome-icon" aria-hidden="true">
-        <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
-          <rect width="48" height="48" rx="14" fill="url(#wg)" />
-          <path
-            d="M14 34L24 14l10 20H14z"
-            fill="white"
-            fillOpacity="0.9"
-          />
-          <defs>
-            <linearGradient id="wg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#6366f1" />
-              <stop offset="1" stopColor="#8b5cf6" />
-            </linearGradient>
-          </defs>
-        </svg>
+      <div className="welcome-icon" aria-hidden="true" style={{ background: 'var(--accent-light)', color: 'var(--accent)', borderRadius: '12px', width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', marginBottom: '16px' }}>
+        🤖
       </div>
 
-      <h1 className="welcome-title">Mirae Asset FAQ Assistant</h1>
-      <p className="welcome-subtitle">
-        Ask factual questions about Mirae Asset mutual fund schemes.
-        <br />
-        Answers are sourced exclusively from official Groww pages.
+      <h1 className="welcome-title" style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '8px' }}>MiraeExplorer AI</h1>
+      <p className="welcome-subtitle" style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: 1.5 }}>
+        Quick answers about scheme facts, fees, and rules.
       </p>
 
       {/* Example questions */}
-      <div className="example-grid" role="list">
+      <div className="example-grid" role="list" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {EXAMPLES.map((q) => (
           <button
             key={q}
-            id={`example-${q.slice(0, 20).replace(/\s+/g, "-").toLowerCase()}`}
-            className="example-chip"
+            className="filter-pill"
+            style={{ textAlign: 'left', width: '100%', borderRadius: '10px' }}
             onClick={() => onQuestion(q)}
-            role="listitem"
             type="button"
           >
-            <span className="example-chip-icon" aria-hidden="true">✦</span>
             <span>{q}</span>
           </button>
         ))}
       </div>
 
-      <p className="welcome-disclaimer">
-        🔒 Facts-only &mdash; No investment advice
+      <p className="welcome-disclaimer" style={{ marginTop: 'auto', fontSize: '11px', color: 'var(--text-muted)', paddingTop: '20px' }}>
+        Facts-only • No investment advice
       </p>
     </div>
   );

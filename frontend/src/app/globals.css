@@ -978,6 +978,62 @@ a { color: inherit; text-decoration: none; }
 .chat-send-btn:hover { background: var(--accent-dark); }
 .chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
+.chat-input-field {
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-input);
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+  min-height: 44px;
+  max-height: 180px;
+  line-height: 1.5;
+}
+
+.chat-input-field:focus {
+  border-color: var(--accent);
+  background: white;
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.chat-send-btn-inset {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.chat-send-btn-inset:hover {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
+}
+
+.chat-send-btn-inset:disabled {
+  background: var(--text-muted);
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading-dots.mini span {
+  width: 3px;
+  height: 3px;
+  background: white;
+}
+
 /* ─── Loading Skeleton ──────────────────────────────────────────────────────── */
 .skeleton {
   background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);

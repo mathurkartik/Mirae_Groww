@@ -58,76 +58,40 @@ export function SendBar({ onSend, disabled = false }: Props) {
   const canSend = value.trim().length > 0 && !disabled;
 
   return (
-    <div className="send-bar">
-      <div className="send-bar-inner">
+    <div className="chat-send-bar">
+      <div className="chat-send-inner" style={{ flex: 1, position: 'relative' }}>
         <textarea
           ref={textareaRef}
           id="chat-input"
-          className="send-input"
-          placeholder="Ask a factual question about Mirae Asset funds…"
+          className="chat-input-field"
+          placeholder="Ask a factual question..."
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           disabled={disabled}
           rows={1}
-          aria-label="Message input"
-          aria-describedby="char-counter"
           maxLength={MAX_CHARS}
+          style={{ width: '100%', resize: 'none', paddingRight: '46px' }}
         />
 
-        <div className="send-bar-actions">
-          {nearLimit && (
-            <span
-              id="char-counter"
-              className={`char-counter ${charCount >= MAX_CHARS ? "char-counter--limit" : ""}`}
-              aria-live="polite"
-            >
-              {charCount}/{MAX_CHARS}
-            </span>
+        <button
+          id="send-button"
+          className="chat-send-btn-inset"
+          onClick={handleSend}
+          disabled={!canSend}
+          aria-label="Send message"
+          type="button"
+        >
+          {disabled ? (
+            <div className="loading-dots mini"><span></span><span></span><span></span></div>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+              <line x1="12" y1="19" x2="12" y2="5" />
+              <polyline points="5 12 12 5 19 12" />
+            </svg>
           )}
-
-          <button
-            id="send-button"
-            className="send-btn"
-            onClick={handleSend}
-            disabled={!canSend}
-            aria-label="Send message"
-            type="button"
-          >
-            {disabled ? (
-              /* Spinner when loading */
-              <svg
-                className="send-btn-spinner"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                aria-hidden="true"
-              >
-                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-              </svg>
-            ) : (
-              /* Arrow-up icon */
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <line x1="12" y1="19" x2="12" y2="5" />
-                <polyline points="5 12 12 5 19 12" />
-              </svg>
-            )}
-          </button>
-        </div>
+        </button>
       </div>
-
-      <p className="send-hint">
-        Press <kbd>Enter</kbd> to send &middot; <kbd>Shift+Enter</kbd> for new line
-      </p>
     </div>
   );
 }

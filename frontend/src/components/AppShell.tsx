@@ -10,21 +10,43 @@ import { useState, useCallback } from "react";
 import { ChatWidget } from "./ChatWidget";
 
 const NAV_ITEMS = [
-  { label: "Dashboard", icon: "📊", href: "/" },
-  { label: "Mutual Funds", icon: "💰", href: "/" },
-  { label: "Explore", icon: "🔍", href: "/" },
+  { label: "Home", icon: "🏠", href: "/" },
+  { label: "Equity Funds", icon: "📈", href: "/category/equity" },
+  { label: "Debt Funds", icon: "🛡️", href: "/category/debt" },
 ];
 
-const TOP_LINKS = [
-  { label: "Explore", href: "/" },
-  { label: "Investments", href: "/" },
-];
+const TOP_LINKS: {label: string, href: string}[] = [];
+
+import { useRouter } from "next/navigation";
+import * as api from "@/lib/api";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [chatOpen, setChatOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
 
   const toggleChat = useCallback(() => setChatOpen((v) => !v), []);
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    
+    setIsSearching(true);
+    try {
+      const results = await api.searchFunds(searchQuery);
+      if (results.funds.length > 0) {
+        // Navigate to the first matching fund
+        router.push(`/fund/${results.funds[0].slug}`);
+        setSearchQuery("");
+      }
+    } catch (err) {
+      console.error("Search failed:", err);
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   return (
     <div className="app-layout">
@@ -69,25 +91,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <header className="top-navbar" id="top-navbar">
           <div className="top-navbar-left">
             <div className="top-navbar-links">
-              {TOP_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className={`top-navbar-link ${
-                    pathname === link.href ? "top-navbar-link--active" : ""
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
             </div>
           </div>
 
           <div className="top-navbar-right">
-            <div className="top-navbar-search" id="search-bar">
-              <span className="top-navbar-search-icon">🔍</span>
-              <input type="text" placeholder="Search funds..." />
-            </div>
+            <form className="top-navbar-search" id="search-bar" onSubmit={handleSearch}>
+              <span className="top-navbar-search-icon">{isSearching ? "⏳" : "🔍"}</span>
+              <input 
+                type="text" 
+                placeholder="Search funds (e.g. Health, Midcap)..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </form>
             <button className="top-navbar-icon-btn" aria-label="Notifications">
               🔔
             </button>

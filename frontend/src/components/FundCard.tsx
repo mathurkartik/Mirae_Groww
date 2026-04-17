@@ -4,6 +4,7 @@
  * Links to fund detail page and Groww for "Invest Now".
  */
 import Link from "next/link";
+import { useWatchlist } from "@/hooks/useWatchlist";
 
 export interface FundSummary {
   slug: string;
@@ -31,6 +32,15 @@ interface FundCardProps {
 export function FundCard({ fund }: FundCardProps) {
   const ret3y = fund.returns_3y_annualized;
   const isPositive = ret3y ? !ret3y.startsWith("-") : true;
+  const { isInWatchlist, addToWatchlist, removeFromWatchlist } = useWatchlist();
+  const isWatched = isInWatchlist(fund.slug);
+
+  const toggleWatch = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isWatched) removeFromWatchlist(fund.slug);
+    else addToWatchlist(fund);
+  };
 
   return (
     <div className="fund-card" id={`fund-${fund.slug}`}>
@@ -40,7 +50,19 @@ export function FundCard({ fund }: FundCardProps) {
       >
         <div className="fund-card-header">
           <div className="fund-card-info">
-            <h3 className="fund-card-name">{fund.scheme_name}</h3>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+              <h3 className="fund-card-name" style={{ paddingRight: 8 }}>{fund.scheme_name}</h3>
+              <button 
+                onClick={toggleWatch} 
+                style={{ 
+                  background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, 
+                  color: isWatched ? 'var(--accent)' : '#cbd5e1', padding: 0 
+                }}
+                aria-label={isWatched ? "Remove from watchlist" : "Add to watchlist"}
+              >
+                {isWatched ? '★' : '☆'}
+              </button>
+            </div>
             <p className="fund-card-category">
               {fund.category} • Direct Plan
             </p>

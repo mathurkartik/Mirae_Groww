@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import * as api from "@/lib/api";
-import type { FundSummary, Category, FundDetail, NavPoint } from "@/lib/api";
+import type { FundSummary, Category, FundDetail, NavPoint, DiscoveryResponse } from "@/lib/api";
 
 export function useFunds(categorySlug?: string) {
   const [funds, setFunds] = useState<FundSummary[]>([]);
@@ -122,4 +122,26 @@ export function useNavHistory(slug: string, period: string = "1Y") {
   }, [slug, period]);
 
   return { history, isLoading, error };
+}
+
+export function useDiscoveryFunds() {
+  const [data, setData] = useState<DiscoveryResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const resp = await api.getDiscoveryFunds();
+        setData(resp);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load discovery data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  return { data, isLoading, error };
 }

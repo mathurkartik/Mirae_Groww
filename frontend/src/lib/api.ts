@@ -81,6 +81,14 @@ export interface FundDetail extends FundSummary {
   }>;
 }
 
+export interface DiscoveryResponse {
+  high_return: FundSummary[];
+  top_rated: FundSummary[];
+  sip_affordable: FundSummary[];
+  new_funds: FundSummary[];
+  top_10_active: FundSummary[];
+}
+
 export interface NavPoint {
   date: string;
   nav: number;
@@ -175,4 +183,12 @@ export async function getFundDetail(slug: string): Promise<{ fund: FundDetail }>
 
 export async function getNavHistory(slug: string, period: string = "1Y"): Promise<{ data: NavPoint[] }> {
   return request(`/api/funds/${slug}/nav-history?period=${period}`);
+}
+
+export async function searchFunds(query: string): Promise<{ funds: FundSummary[] }> {
+  return request(`/api/funds/search?q=${encodeURIComponent(query)}`);
+}
+
+export async function getDiscoveryFunds(): Promise<DiscoveryResponse> {
+  return request(`/api/funds/discovery`);
 }

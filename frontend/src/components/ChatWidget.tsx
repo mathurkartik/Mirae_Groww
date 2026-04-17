@@ -85,9 +85,7 @@ export function ChatWidget({ isOpen, onToggle }: ChatWidgetProps) {
                 onExampleClick={handleExample}
              />
           </div>
-
-          <SendBar onSend={handleSend} disabled={isLoading} />
-        </aside>
+         </aside>
       )}
     </>
   );

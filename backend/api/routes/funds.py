@@ -24,6 +24,8 @@ from backend.core.fund_registry import (
     get_categories,
     get_fund_by_slug,
     get_funds_by_category,
+    search_funds,
+    get_discovery_funds,
 )
 
 log = logging.getLogger("funds")
@@ -98,9 +100,23 @@ def list_funds(
     return {"funds": summaries, "total": len(summaries)}
 
 
-# ── GET /api/funds/categories ────────────────────────────────────────────────
+# ── GET /api/funds/search ───────────────────────────────────────────────────
 
-@router.get("/categories", summary="List categories with fund counts")
+@router.get("/search", summary="Fuzzy search funds")
+def search(q: str = Query("", description="Search query")) -> dict:
+    """Returns funds matching the search query."""
+    return {"funds": search_funds(q)}
+
+
+# ── GET /api/funds/discovery ────────────────────────────────────────────────
+
+@router.get("/discovery", summary="Get curated lists for the Home Page")
+def discovery() -> dict:
+    """Returns curated lists: high_return, top_rated, sip_affordable, new_funds, top_10_active."""
+    return get_discovery_funds()
+
+
+# ── GET /api/funds/categories ────────────────────────────────────────────────
 def list_categories() -> dict:
     """Returns all fund categories with display metadata and fund counts."""
     return {"categories": get_categories()}

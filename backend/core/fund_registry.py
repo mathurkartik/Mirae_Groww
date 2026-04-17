@@ -84,13 +84,16 @@ def _extract_metric(text: str, pattern: str) -> Optional[str]:
 
 
 def _parse_nav(text: str) -> tuple[Optional[str], Optional[str]]:
-    """Extract NAV value and date from cleaned text."""
-    # Pattern: NAV: 16 Apr '26\n₹124.18
-    nav_date_match = re.search(r"NAV:\s*(.+?)[\n\r]", text)
-    nav_val_match = re.search(r"NAV:.*?[\n\r]\s*₹([\d,.]+)", text)
-    nav_date = nav_date_match.group(1).strip() if nav_date_match else None
-    nav_val = nav_val_match.group(1).strip().replace(",", "") if nav_val_match else None
-    return nav_val, nav_date
+    """Extract NAV value and date with maximum flexibility."""
+    # Label is "NAV: 16 Apr '26" or similar, then newline, then "₹124.18"
+    # Match the date
+    date_match = re.search(r"NAV:\s*([^\n\r]+)", text, re.IGNORECASE)
+    # Match the numeric value (look for ₹ then numbers, ignoring whitespace)
+    val_match = re.search(r"NAV:[^\n\r]+[\s\n\r]+₹\s*([\d,.]+)", text, re.IGNORECASE)
+    
+    date = date_match.group(1).strip() if date_match else None
+    val = val_match.group(1).replace(",", "").strip() if val_match else None
+    return val, date
 
 
 def _parse_returns(text: str) -> dict[str, Optional[str]]:
@@ -157,31 +160,27 @@ def _parse_fund_detail(record: dict, url_entry: dict) -> dict[str, Any]:
 
     nav_val, nav_date = _parse_nav(text)
 
-    # Extract key metrics
-    aum_match = re.search(r"Fund size \(AUM\)\s*[\n\r]\s*₹?([\d,.]+\s*Cr)", text)
-    expense_match = re.search(r"Expense ratio\s*[\n\r]\s*([\d.]+%)", text)
-    rating_match = re.search(r"Rating\s*[\n\r]\s*(\d+|--)", text)
-    min_sip_match = re.search(r"Min\.\s*for SIP\s*[\n\r]\s*₹?([\d,]+)", text)
-    risk_match = re.search(r"rated\s+([\w\s]+)\s+risk", text, re.IGNORECASE)
+    # Extract key metrics with ultra-permissive regex
+    # Looking for: Label -> Any Whitespace -> Optional Symbol -> The Value
+    aum_p = r"Fund size\s*\(AUM\)?[\s\n\r]+₹?\s*([\d,.]+\s*Cr)"
+    expense_p = r"Expense ratio[\s\n\r]+([\d.]+\s*%)"
+    rating_p = r"Rating[\s\n\r]+(\d+|--)"
+    sip_p = r"Min\.\s*for SIP[\s\n\r]+₹?\s*([\d,]+)"
+    risk_p = r"rated\s+([A-Za-z\s-]+)\s+risk"
+    ret_3y_p = r"([+-]?[\d.]+)\s*%[\s\n\r]+3Y annualised"
+    ret_1d_p = r"([+-]?[\d.]+)\s*%[\s\n\r]+1D"
 
-    # Extract 3Y annualized return from top of page
-    ret_3y_match = re.search(r"([+-][\d.]+)\s*%\s*[\n\r]\s*3Y annualised", text)
+    aum_match = re.search(aum_p, text, re.IGNORECASE)
+    expense_match = re.search(expense_p, text, re.IGNORECASE)
+    rating_match = re.search(rating_p, text, re.IGNORECASE)
+    min_sip_match = re.search(sip_p, text, re.IGNORECASE)
+    risk_match = re.search(risk_p, text, re.IGNORECASE)
+    ret_3y_match = re.search(ret_3y_p, text, re.IGNORECASE)
+    ret_1d_match = re.search(ret_1d_p, text, re.IGNORECASE)
 
-    # Extract 1D change
-    ret_1d_match = re.search(r"([+-][\d.]+)\s*%\s*[\n\r]\s*1D", text)
-
-    # Exit load
-    exit_load_match = re.search(r"Exit load\s*[\n\r]+\s*(.+?)(?:\n|$)", text, re.IGNORECASE)
-
-    # Fund benchmark
-    benchmark_match = re.search(r"Fund benchmark\s*[\n\r]+\s*(.+?)(?:\n|$)", text)
-
-    # Investment objective
-    objective_match = re.search(
-        r"Investment Objective\s*[\n\r]+\s*(.+?)(?:\n(?:Fund benchmark|;)|$)",
-        text,
-        re.DOTALL,
-    )
+    # Fund benchmark and objective
+    benchmark_match = re.search(r"Fund benchmark[\s\n\r]+([^\n\r]+)", text, re.IGNORECASE)
+    objective_match = re.search(r"Investment Objective[\s\n\r]+(.*?)(?:\n\s*Fund benchmark|;|$)", text, re.DOTALL | re.IGNORECASE)
 
     # Fund manager
     manager_match = re.search(r"Fund management.*?([A-Z]{2})([A-Za-z\s]+?)(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)", text, re.DOTALL)
@@ -342,3 +341,56 @@ def get_funds_by_category(category_slug: str) -> list[dict[str, Any]]:
     """Return all funds in a given category."""
     initialize()
     return [f for f in _FUND_CATALOG if f.get("category_slug") == category_slug]
+
+
+def search_funds(query: str) -> list[dict[str, Any]]:
+    """Fuzzy match funds by name."""
+    initialize()
+    query = query.lower().strip()
+    if not query:
+        return []
+    
+    results = []
+    for fund in _FUND_CATALOG:
+        if query in fund["scheme_name"].lower() or query in fund["slug"].lower():
+            results.append(fund)
+            
+    return results
+
+
+def get_discovery_funds() -> dict[str, Any]:
+    """Curation logic for the Home Page filters and sidebar."""
+    initialize()
+    
+    def _parse_ret(r_str: Optional[str]) -> float:
+        if not r_str: return -999.0
+        try: return float(r_str.replace("%", "").strip())
+        except: return -999.0
+
+    # Sort all funds by 3Y returns
+    sorted_by_ret = sorted(_FUND_CATALOG, key=lambda x: _parse_ret(x.get("returns_3y_annualized")), reverse=True)
+    
+    # Sort all funds by rating
+    sorted_by_rating = sorted(_FUND_CATALOG, key=lambda x: x.get("rating") or 0, reverse=True)
+
+    # SIP Affordable (SIP <= 500)
+    def _parse_sip(s_str: Optional[str]) -> int:
+        if not s_str: return 99999
+        try: return int(s_str.replace("₹", "").replace(",", "").strip())
+        except: return 99999
+
+    sip_affordable = [f for f in _FUND_CATALOG if _parse_sip(f.get("min_sip")) <= 500]
+
+    # New Funds - use scrape_date or just last 3 in catalog
+    new_funds = _FUND_CATALOG[-3:][::-1]
+
+    # Top 10 Active: Top 10 by return, then sorted by rating
+    top_10_active = sorted(sorted_by_ret[:10], key=lambda x: x.get("rating") or 0, reverse=True)
+
+    return {
+        "high_return": sorted_by_ret[:10],
+        "top_rated": sorted_by_rating[:10],
+        "sip_affordable": sip_affordable[:10],
+        "new_funds": new_funds,
+        "top_10_active": top_10_active
+    }
