@@ -193,10 +193,10 @@ jobs:
       # no manifest artifact exists yet — embedder treats all chunks as NEW.
       - name: Download previous ingestion manifest
         uses: actions/download-artifact@v4
+        continue-on-error: true
         with:
           name: manifest-latest
           path: data/
-          if-no-files-found: ignore
 
       - name: Create ChromaDB directory
         run: mkdir -p data/chroma_db
