@@ -1,90 +1,86 @@
 /**
- * page.tsx — Main chat interface
- * "use client" because all state lives in useThreads (React state, no localStorage).
- * Renders: ThreadSidebar | ChatWindow
- * On mount, creates the first thread automatically.
- * Falls back to a local-only thread if the backend is unreachable.
+ * page.tsx — Home Page (Fund Explorer)
+ * Replaces the original Chat interface with the "Discover Mutual Funds" landing page.
  */
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { useThreads } from "@/hooks/useThreads";
-import { ThreadSidebar } from "@/components/ThreadSidebar";
-import { ChatWindow } from "@/components/ChatWindow";
+import { AppShell } from "@/components/AppShell";
+import { CategoryCard } from "@/components/CategoryCard";
+import { useCategories, useFunds } from "@/hooks/useFundData";
 
 export default function Home() {
-  const {
-    threads,
-    activeThreadId,
-    activeMessages,
-    isLoading,
-    createThread,
-    deleteThread,
-    switchThread,
-    sendMessage,
-    createLocalThread,
-  } = useThreads();
-
-  const [isCreating, setIsCreating] = useState(false);
-  const didInit = useRef(false);
-
-  // Create an initial thread on first mount.
-  // If the backend is unreachable, fall back to a local-only thread
-  // so the WelcomeScreen (with example questions) is always visible.
-  useEffect(() => {
-    if (didInit.current) return;
-    didInit.current = true;
-    handleNewThread();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleNewThread = useCallback(async () => {
-    setIsCreating(true);
-    try {
-      const id = await createThread();
-      // If backend call failed, create a local placeholder thread
-      if (!id) createLocalThread();
-    } finally {
-      setIsCreating(false);
-    }
-  }, [createThread, createLocalThread]);
-
-  const handleSend = useCallback(
-    (content: string) => {
-      if (!activeThreadId) return;
-      sendMessage(activeThreadId, content);
-    },
-    [activeThreadId, sendMessage]
-  );
-
-  const handleExample = useCallback(
-    (question: string) => {
-      if (!activeThreadId) return;
-      sendMessage(activeThreadId, question);
-    },
-    [activeThreadId, sendMessage]
-  );
+  const { categories, isLoading: catsLoading } = useCategories();
 
   return (
-    <main className="app-shell">
-      {/* Left sidebar */}
-      <ThreadSidebar
-        threads={threads}
-        activeThreadId={activeThreadId}
-        onNew={handleNewThread}
-        onSwitch={switchThread}
-        onDelete={deleteThread}
-        isCreating={isCreating}
-      />
+    <AppShell>
+      <section className="home-hero">
+        <h1>Discover Mutual Funds</h1>
+        <p>
+          Curated investment categories designed for your financial goals. 
+          Smart data meets editorial precision.
+        </p>
+      </section>
 
-      {/* Main chat area */}
-      <ChatWindow
-        messages={activeMessages}
-        isLoading={isLoading}
-        hasActiveThread={activeThreadId !== null}
-        onSend={handleSend}
-        onExampleClick={handleExample}
-      />
-    </main>
+      <div className="filter-pills">
+        <button className="filter-pill filter-pill--active">All Categories</button>
+        <button className="filter-pill">High Return</button>
+        <button className="filter-pill">Top Rated</button>
+        <button className="filter-pill">SIP with ₹500</button>
+      </div>
+
+      <div className="category-grid">
+        {catsLoading
+          ? Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="skeleton skeleton-card" />
+            ))
+          : categories.map((cat) => (
+              <CategoryCard
+                key={cat.slug}
+                slug={cat.slug}
+                displayName={cat.display_name}
+                description={cat.description}
+                icon={cat.icon}
+                color={cat.color}
+                fundCount={cat.fund_count}
+              />
+            ))}
+      </div>
+
+      <section className="promo-section">
+        <div className="promo-banner">
+          <h2>Invest in Better Tomorrow</h2>
+          <p>
+            Our curator tool helps you find the perfect fund based on your risk 
+            profile and goal timeline.
+          </p>
+          <button className="promo-banner-btn">Start Curator Survey</button>
+          <div className="promo-banner-sparkle">✨</div>
+        </div>
+
+        <div className="promo-tiles">
+          <div className="promo-tile">
+            <div className="promo-tile-icon">🚀</div>
+            <div>
+              <h3>Top 10</h3>
+              <p>Active Funds</p>
+            </div>
+          </div>
+          <div className="promo-tile">
+            <div className="promo-tile-icon">⚡</div>
+            <div>
+              <h3>New</h3>
+              <p>Fund Offers</p>
+            </div>
+          </div>
+          <div className="promo-tile">
+             <div style={{ display:'flex', alignItems:'center', gap: 12, width:'100%' }}>
+                <span style={{ fontSize: 18 }}>🕒</span>
+                <span style={{ fontWeight: 600, fontSize: 14, flex: 1 }}>Watchlist History</span>
+                <span>›</span>
+             </div>
+          </div>
+        </div>
+      </section>
+    </AppShell>
   );
 }

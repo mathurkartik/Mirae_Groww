@@ -1,17 +1,23 @@
 /**
  * layout.tsx — Root layout
- * Mounts DisclaimerBanner (fixed top) and sets page metadata.
+ * Light theme with Inter font, no disclaimer banner.
  */
 import type { Metadata } from "next";
 import "./globals.css";
-import { DisclaimerBanner } from "@/components/DisclaimerBanner";
 
 export const metadata: Metadata = {
-  title: "Mirae Asset FAQ Assistant",
+  title: "Mirae Asset Fund Explorer",
   description:
-    "Facts-only FAQ assistant for Mirae Asset mutual fund schemes. " +
-    "Answers sourced from official Groww pages. No investment advice.",
-  keywords: ["mutual funds", "Mirae Asset", "FAQ", "expense ratio", "SIP", "ELSS"],
+    "Explore Mirae Asset mutual fund schemes with real-time NAV data, " +
+    "performance analytics, and an AI-powered FAQ assistant.",
+  keywords: [
+    "mutual funds",
+    "Mirae Asset",
+    "NAV",
+    "SIP",
+    "expense ratio",
+    "fund explorer",
+  ],
 };
 
 export default function RootLayout({
@@ -31,11 +37,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body>
-        {/* Disclaimer banner — fixed, always visible */}
-        <DisclaimerBanner />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

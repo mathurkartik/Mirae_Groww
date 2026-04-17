@@ -1,6 +1,4 @@
-Problem Statement: Mutual Fund FAQ Assistant (Facts-Only Q&A)
-Overview
-The objective of this project is to build a facts-only FAQ assistant for mutual fund schemes, using Groww as the reference product context. The assistant will answer objective, verifiable queries related to mutual funds by retrieving information exclusively from official public sources, such as AMC (Asset Management Company) websites, AMFI, and SEBI.
+The objective of this project is to build a **Mutual Fund Explorer & FAQ Assistant**. This platform transforms the traditional static fund discovery process into an interactive experience featuring a 3-screen navigation system (Home, Category, and Fund Detail) with high-performance historical NAV analytics, while retaining a facts-only RAG assistant as a persistent support widget. The system retrieves information exclusively from official public sources such as Mirae Asset AMC and MFAPI.in.
 The system must strictly avoid providing investment advice, opinions, or recommendations. Every response must include a single, clear source link and adhere to defined constraints around clarity, accuracy, and compliance.
 
 Objective
@@ -50,12 +48,13 @@ Be polite and clearly worded
 Reinforce the facts-only limitation
 Provide a relevant educational link (e.g., AMFI or SEBI resource)
 
-4. User Interface (Minimal)
-The solution should include a simple interface with:
-A welcome message
-Three example questions
-A visible disclaimer:
- “Facts-only. No investment advice.”
+3. User Interface (Explorer + Chat)
+The solution features a modern 3-screen navigation system in a light-themed, premium UI:
+- **Home**: Discovery landing page with category-based fund grouping.
+- **Category Listing**: Filterable and sortable list of all schemes within a category.
+- **Fund Detail**: deep-dive analytics dashboard with interactive historical NAV charts and portfolio holdings.
+- **Floating AI Assistant**: A persistent chatbot widget accessible from any screen for factual Q&A.
+- **Disclaimer Banner**: Always visible: “Facts-only. No investment advice.”
 
 Constraints
 Data and Sources

@@ -33,6 +33,59 @@ export interface SendMessageResponse extends Message {
   retrieval_count?: number;
 }
 
+export interface FundSummary {
+  slug: string;
+  scheme_name: string;
+  category: string;
+  category_slug: string;
+  source_url: string;
+  mfapi_code: number | null;
+  nav: number | null;
+  nav_date: string | null;
+  nav_change_1d: string | null;
+  aum: string | null;
+  expense_ratio: string | null;
+  rating: number | null;
+  min_sip: string | null;
+  risk_level: string | null;
+  returns_3y_annualized: string | null;
+  returns: Record<string, string>;
+}
+
+export interface Category {
+  name: string;
+  slug: string;
+  display_name: string;
+  icon: string;
+  description: string;
+  color: string;
+  fund_count: number;
+}
+
+export interface FundDetail extends FundSummary {
+  objective: string | null;
+  benchmark: string | null;
+  exit_load: string | null;
+  holdings_count: number | null;
+  top_holdings: Array<{
+    name: string;
+    sector: string;
+    instrument: string;
+    allocation: string;
+  }>;
+  peers: Array<{
+    name: string;
+    return_1y: string | null;
+    return_3y: string | null;
+    fund_size: string | null;
+  }>;
+}
+
+export interface NavPoint {
+  date: string;
+  nav: number;
+}
+
 export interface ApiError {
   detail: string;
   retry_after_seconds?: number;
@@ -99,4 +152,27 @@ export async function getMessages(
 
 export async function getHealth(): Promise<Record<string, unknown>> {
   return request("/api/health");
+}
+
+// ─── Fund endpoints ──────────────────────────────────────────────────────────
+
+export async function getFunds(category?: string): Promise<{ funds: FundSummary[] }> {
+  const query = category ? `?category=${category}` : "";
+  return request(`/api/funds${query}`);
+}
+
+export async function getCategories(): Promise<{ categories: Category[] }> {
+  return request("/api/funds/categories");
+}
+
+export async function getFundsByCategory(slug: string): Promise<{ category: Category; funds: FundSummary[] }> {
+  return request(`/api/funds/category/${slug}`);
+}
+
+export async function getFundDetail(slug: string): Promise<{ fund: FundDetail }> {
+  return request(`/api/funds/${slug}`);
+}
+
+export async function getNavHistory(slug: string, period: string = "1Y"): Promise<{ data: NavPoint[] }> {
+  return request(`/api/funds/${slug}/nav-history?period=${period}`);
 }

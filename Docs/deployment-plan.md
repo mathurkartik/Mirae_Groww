@@ -1,4 +1,4 @@
-# Deployment Plan — Mutual Fund FAQ Assistant
+# Deployment Plan — Mutual Fund Explorer & FAQ Assistant
 
 > **Version:** 1.0  
 > **Date:** April 2026  
@@ -37,10 +37,13 @@
  │                                                               │
  │  Reads:   data/chroma_db/  (committed to repo)              │
  │           data/chunks.jsonl (for BM25 index at startup)      │
- │  API:     GET  /api/health                                   │
- │           POST /api/threads                                  │
- │           POST /api/threads/{id}/messages                    │
- │           ...                                                │
+ │  API:     GET  /api/funds                                   │
+ │           GET  /api/funds/categories                        │
+ │           GET  /api/funds/{slug}                            │
+ │           GET  /api/funds/{slug}/nav-history                │
+ │           POST /api/threads                                 │
+ │           POST /api/threads/{id}/messages                   │
+ │           ...                                               │
  └───────────────────────────┬──────────────────────────────────┘
                               │ API calls via rewrite proxy
                               │
@@ -49,7 +52,8 @@
  │                                                              │
  │  Framework:  Next.js 16 (App Router)                        │
  │  Root Dir:   frontend/                                      │
- │  Build Cmd:  npm run build                                  │
+ │  Build Cmd:  npm install && npm run build                   │
+ │  Dependencies: recharts, lucide-react                       │
  │  Output Dir: .next                                          │
  │                                                              │
  │  Rewrite proxy in next.config.ts:                           │

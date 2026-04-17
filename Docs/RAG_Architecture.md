@@ -31,6 +31,7 @@ The system follows a **Retrieval-Augmented Generation (RAG)** pattern. Every ans
 |---|---|---|---|
 | 1 | **Ingestion Flow** (Offline/Scheduled) | GitHub Actions → Scraping → Chunking → Embedding (bge-small) → ChromaDB | Daily automated pipeline that scrapes Groww URLs, chunks content, and stores local vectors |
 | 2 | **Retrieval + Generation Flow** (Online) | Query Guard → Retriever → Re-ranker → Groq LLM → Post-processor | Real-time query handling with citation-backed, facts-only answers |
+| 3 | **Explorer & Analytics Flow** (Online) | Fund Registry → MFAPI.in Proxy → Recharts | Structured data navigation and historical NAV charting for 36 schemes |
 
 **Key design constraints:**
 - No OpenAI or paid embedding API — `bge-small-en-v1.5` runs locally via `sentence-transformers`
@@ -109,9 +110,10 @@ The system follows a **Retrieval-Augmented Generation (RAG)** pattern. Every ans
 │                  RETRIEVAL + GENERATION FLOW (Real-time)                     │
 │                                                                              │
 │  ┌─────────────────────────────────────────────────────────────────────────┐ │
-│  │                         NEXT.JS FRONTEND                                │ │
-│  │  Welcome message · 3 example questions · "Facts-only. No advice." banner│ │
-│  │  Thread sidebar (multiple independent sessions) · Dark theme             │ │
+│  │                         NEXT.JS EXPLORER UI                             │ │
+│  │  Home Page (Categories) · Category List · Fund Detail Dashboard         │ │
+│  │  Interactive Recharts NAV Chart · Sidebar Navigation · Light Theme       │ │
+│  │  Floating RAG Chat Widget (Stateless thread-based conversations)        │ │
 │  └────────────────────────────────┬────────────────────────────────────────┘ │
 │                                   │ User Query                               │
 │                                   ▼                                          │
@@ -249,6 +251,8 @@ The system follows a **Retrieval-Augmented Generation (RAG)** pattern. Every ans
 - `ingestion/scraper.py` — `requests` + `BeautifulSoup` for static pages; `Playwright` for JS-rendered pages
 - `ingestion/chunker.py` — section-aware chunker
 - `ingestion/embedder.py` — bge-small-en-v1.5 batch embedder + ChromaDB upsert
+- `backend/core/fund_registry.py` — structured fund analytics & metadata registry
+- `backend/api/routes/funds.py` — explorer REST API & MFAPI.in proxy
 - `data/urls.yaml` — source of truth for all 36 Groww URLs
 - `data/raw/` — timestamped raw HTML files
 
@@ -426,6 +430,11 @@ Facts-only. No investment advice.
 
 | Method | Endpoint | Description |
 |---|---|---|
+| `GET` | `/api/funds` | List all funds with summary metrics (sortable) |
+| `GET` | `/api/funds/categories` | List 5 primary fund categories with counts |
+| `GET` | `/api/funds/category/{slug}` | List funds belonging to a specific category |
+| `GET` | `/api/funds/{slug}` | Get full fund detail (objective, holdings, peers) |
+| `GET` | `/api/funds/{slug}/nav-history` | Proxy to MFAPI.in for time-series data (1hr cache) |
 | `POST` | `/api/threads` | Create a new conversation thread |
 | `GET` | `/api/threads` | List all active threads |
 | `DELETE` | `/api/threads/{thread_id}` | Delete a thread and its history |
@@ -499,6 +508,9 @@ Facts-only. No investment advice.
 | Chunking | Custom Python + `tiktoken` | Section-aware + recursive fallback |
 | Embedding | `sentence-transformers` + `BAAI/bge-small-en-v1.5` | Local, no API cost, 384-dim |
 | Vector Store | `chromadb` (PersistentClient) | Local, `data/chroma_db/` |
+| Fund Registry | Python + PyYAML | Structured analytics from scraped text |
+| External Data | MFAPI.in | Automated historical NAV pricing |
+| Visuals | Recharts | Interactive time-series charts |
 | Sparse Retrieval | `rank_bm25` | BM25 index at startup |
 | Re-ranker | `cross-encoder/ms-marco-MiniLM-L-6-v2` | Local cross-encoder |
 | LLM | Groq `llama3-8b-8192` | Free tier · fast inference |

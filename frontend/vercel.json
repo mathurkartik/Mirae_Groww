@@ -1,3 +1,6 @@
 {
-  "ignoreCommand": "git diff --quiet HEAD~1 -- ."
+  "ignoreCommand": "git diff --quiet HEAD~1 -- .",
+  "buildCommand": "next build",
+  "framework": "nextjs",
+  "installCommand": "npm install"
 }
