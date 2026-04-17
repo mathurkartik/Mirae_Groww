@@ -1,0 +1,23 @@
+# render.yaml — Render Blueprint for Mutual Fund FAQ Assistant
+# Docs: https://render.com/docs/blueprints
+
+services:
+  - type: web
+    name: mf-faq-backend
+    runtime: python
+    region: ohio # Default to a reliable region
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false # Must be set manually in Render dashboard for security
+      - key: CHROMA_PERSIST_PATH
+        value: data/chroma_db
+      - key: CHROMA_COLLECTION
+        value: mutual_fund_faq
+      - key: CHUNKS_JSONL
+        value: data/chunks.jsonl
+      - key: NEXT_PUBLIC_FRONTEND_URL
+        value: https://mirae-groww.vercel.app # Recommended default or template
+      - key: PYTHON_VERSION
+        value: 3.11.9

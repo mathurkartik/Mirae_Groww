@@ -270,3 +270,39 @@ jobs:
           path: data/ingestion_manifest.json
           overwrite: true        # replaces previous manifest-latest artifact
           retention-days: 30
+
+      # ── Commit updated data back to repo ─────────────────────────────
+      # This allows the Render backend to pull the latest vector store on its next deploy.
+      - name: Commit ingestion data to repo
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Force-add data files that are normally gitignored
+          git add -f data/chroma_db/
+          git add -f data/chunks.jsonl
+          git add -f data/ingestion_manifest.json
+
+          # Only commit if there are actual changes
+          if git diff --cached --quiet; then
+            echo "No data changes — skipping commit"
+          else
+            git commit -m "chore: update ingestion data [skip ci]
+
+            Run ID: ${{ github.run_id }}
+            Triggered by: ${{ github.event_name }}"
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Trigger Render redeploy ──────────────────────────────────────
+      # Hits the Render deploy hook URL (stored in repo secrets) to start a fresh deploy.
+      - name: Trigger Render redeploy
+        if: success()
+        run: |
+          echo "Triggering Render deploy hook..."
+          curl -s -o /dev/null -w "HTTP %{http_code}" \
+            -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+          echo ""
+          echo "Deploy hook triggered successfully"
