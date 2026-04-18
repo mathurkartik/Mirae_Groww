@@ -9,6 +9,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
 import { NavChart } from "@/components/NavChart";
 import { HoldingsTable } from "@/components/HoldingsTable";
+import { SectorChart } from "@/components/SectorChart";
 import { PeerComparison } from "@/components/PeerComparison";
 import { useFundDetail } from "@/hooks/useFundData";
 
@@ -308,14 +309,20 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
          </div>
       </div>
 
-      {/* ── 5. Holdings & Peer Comparison ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '40px' }}>
+      {/* ── 5. Holdings & Sectors ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.3fr) minmax(0, 1fr)', gap: '24px', marginBottom: '40px' }}>
          <div style={{ background: 'var(--bg-white)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '28px' }}>
             <HoldingsTable holdings={fund.top_holdings} totalCount={fund.holdings_count} />
          </div>
-         <div>
-            <PeerComparison peers={fund.peers} currentFundName={fund.scheme_name} />
+         <div style={{ background: 'var(--bg-white)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '28px' }}>
+            <h3 style={{ margin: '0 0 16px', fontSize: '11px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>SECTOR ALLOCATION</h3>
+            <SectorChart holdings={fund.top_holdings} />
          </div>
+      </div>
+
+      {/* ── 6. Peer Comparison ── */}
+      <div style={{ marginBottom: '40px' }}>
+         <PeerComparison peers={fund.peers} currentFundName={fund.scheme_name} />
       </div>
       
     </AppShell>

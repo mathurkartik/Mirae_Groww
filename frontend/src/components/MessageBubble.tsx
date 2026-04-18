@@ -14,21 +14,20 @@ export function MessageBubble({ message }: Props) {
 
   if (isUser) {
     return (
-      <div className="chat-msg-row chat-msg-row--user" style={{ marginBottom: '16px' }}>
+      <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
         <div 
-           className="chat-bubble chat-bubble--user" 
            style={{ 
              background: 'var(--bg-dark-green)', 
              color: 'white', 
-             padding: '12px 16px', 
-             borderRadius: '16px 16px 4px 16px',
-             fontSize: '13px',
+             padding: '16px 20px', 
+             borderRadius: '24px 24px 4px 24px',
+             fontSize: '14px',
              fontWeight: 500,
              maxWidth: '85%',
              boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
            }}
         >
-          <p>{message.content}</p>
+          <p style={{ margin: 0 }}>{message.content}</p>
         </div>
       </div>
     );
@@ -37,17 +36,17 @@ export function MessageBubble({ message }: Props) {
   const isError = message.content.startsWith("⚠️");
 
   return (
-    <div className="chat-msg-row chat-msg-row--assistant" style={{ marginBottom: '24px', position: 'relative' }}>
+    <div style={{ marginBottom: '24px', position: 'relative' }}>
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
          
          <div 
-            className={`chat-bubble chat-bubble--assistant ${isError ? "chat-bubble--error" : ""}`}
             style={{
-               background: 'white',
-               color: 'var(--text-primary)',
-               border: '1px solid var(--border)',
+               background: isError ? '#fef2f2' : 'white',
+               color: isError ? '#991b1b' : 'var(--text-primary)',
+               border: '1px solid',
+               borderColor: isError ? '#fecaca' : 'var(--border)',
                padding: '16px 20px',
-               borderRadius: '16px',
+               borderRadius: '24px 24px 24px 4px',
                fontSize: '13px',
                lineHeight: '1.6',
                maxWidth: '90%',

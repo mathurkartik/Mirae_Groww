@@ -50,7 +50,19 @@ export function ChatWindow({
   return (
     <>
       {/* Message list / Welcome screen */}
-      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3" role="log" aria-live="polite" aria-label="Conversation">
+      <div 
+        role="log" 
+        aria-live="polite" 
+        aria-label="Conversation"
+        style={{
+           flex: 1,
+           overflowY: 'auto',
+           padding: '24px',
+           display: 'flex',
+           flexDirection: 'column',
+           gap: '16px'
+        }}
+      >
         {isEmpty ? (
           <WelcomeScreen onQuestion={onExampleClick} />
         ) : (
@@ -61,10 +73,15 @@ export function ChatWindow({
 
             {/* Loading indicator */}
             {isLoading && (
-              <div className="chat-msg-row chat-msg-row--assistant" aria-label="Assistant is responding">
-                <div className="chat-msg-avatar" aria-hidden="true">AI</div>
-                <div className="chat-bubble chat-bubble--assistant">
-                  <LoadingDots />
+              <div aria-label="Assistant is responding" style={{ marginBottom: '24px', position: 'relative' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                  <div style={{ background: 'white', border: '1px solid var(--border)', padding: '16px 20px', borderRadius: '24px 24px 24px 4px', maxWidth: '90%', boxShadow: '0 4px 16px rgba(0,0,0,0.03)', display: 'inline-block', width: 'fit-content' }}>
+                     <LoadingDots />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px', paddingLeft: '4px' }}>
+                    <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>✨</div>
+                    <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)' }}>Atelier Assistant</span>
+                  </div>
                 </div>
               </div>
             )}
