@@ -48,9 +48,9 @@ export function ChatWindow({
   const isEmpty = messages.length === 0;
 
   return (
-    <div className="chat-panel">
+    <>
       {/* Message list / Welcome screen */}
-      <div className="chat-panel-messages" role="log" aria-live="polite" aria-label="Conversation">
+      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3" role="log" aria-live="polite" aria-label="Conversation">
         {isEmpty ? (
           <WelcomeScreen onQuestion={onExampleClick} />
         ) : (
@@ -75,6 +75,6 @@ export function ChatWindow({
 
       {/* Send bar — always visible at bottom */}
       <SendBar onSend={onSend} disabled={isLoading} />
-    </div>
+    </>
   );
 }

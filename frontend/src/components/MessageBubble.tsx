@@ -15,6 +15,7 @@ interface Props {
 
 export function MessageBubble({ message }: Props) {
   const isUser = message.role === "user";
+  const isFundPage = typeof window !== "undefined" && window.location.pathname.includes("/fund/");
 
   if (isUser) {
     return (
@@ -39,6 +40,17 @@ export function MessageBubble({ message }: Props) {
           </span>
         )}
         <p>{message.content}</p>
+
+        {message.is_math_redirect && (
+          <a
+            href={isFundPage ? "#sip-calculator" : "/"}
+            className="mt-2 inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 
+                       border border-zinc-700 rounded-lg text-sm text-zinc-300 
+                       hover:text-white transition-colors cursor-pointer"
+          >
+            {isFundPage ? "Scroll to Calculator ↓" : "Explore funds to calculate →"}
+          </a>
+        )}
 
         {/* Citation link */}
         {message.citation && (

@@ -4,7 +4,7 @@
  */
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { ChatWindow } from "./ChatWindow";
 import { SendBar } from "./SendBar";
 import { useThreads } from "@/hooks/useThreads";
@@ -71,19 +71,24 @@ export function ChatWidget({ isOpen, onToggle }: ChatWidgetProps) {
             </button>
           </header>
 
-          <div className="chat-panel-messages">
-             <div className="chat-panel-disclaimer">
-                💡 <strong>Facts-only AI:</strong> I can help with fund details, 
-                tax rules, and SIP calculations. No investment advice.
+
+          <div className="flex-1 flex flex-col overflow-hidden bg-white">
+             <div className="flex flex-col h-full">
+               <div className="px-4 pt-4">
+                 <div className="chat-panel-disclaimer">
+                    💡 <strong>Facts-only AI:</strong> I can help with fund details, 
+                    tax rules, and SIP calculations. No investment advice.
+                 </div>
+               </div>
+               
+               <ChatWindow 
+                  messages={activeMessages}
+                  isLoading={isLoading}
+                  hasActiveThread={activeThreadId !== null}
+                  onSend={handleSend}
+                  onExampleClick={handleExample}
+               />
              </div>
-             
-             <ChatWindow 
-                messages={activeMessages}
-                isLoading={isLoading}
-                hasActiveThread={activeThreadId !== null}
-                onSend={handleSend}
-                onExampleClick={handleExample}
-             />
           </div>
          </aside>
       )}

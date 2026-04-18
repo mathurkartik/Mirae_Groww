@@ -221,6 +221,7 @@ export function useThreads() {
           last_updated: response.last_updated,
           timestamp: response.timestamp,
           is_refusal: response.is_refusal,
+          is_math_redirect: response.is_math_redirect,
           intent: response.intent,
         };
         dispatch({ type: "ADD_MESSAGE", threadId, message: assistantMsg });

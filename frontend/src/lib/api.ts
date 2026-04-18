@@ -25,6 +25,7 @@ export interface Message {
   last_updated?: string | null;
   timestamp: string;
   is_refusal?: boolean;
+  is_math_redirect?: boolean;
   intent?: string | null;
 }
 
