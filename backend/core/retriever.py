@@ -194,6 +194,10 @@ def preprocess_query(query: str) -> str:
 
 def _get_embed_model():
     global _embed_model
+    if os.environ.get("RENDER"):
+        log.warning("Running on Render. Bypassing SentenceTransformer (PyTorch) to prevent 512MB OOM crashes.")
+        return None
+        
     if _embed_model is None:
         try:
             from sentence_transformers import SentenceTransformer
@@ -207,6 +211,22 @@ def _get_embed_model():
         _embed_model = SentenceTransformer(EMBEDDING_MODEL)
         log.info("Embedding model loaded in %.1fs", time.time() - t0)
     return _embed_model
+
+
+def embed_query(query: str) -> list[float]:
+    """
+    Embed a query string with the BGE prefix.
+    Must use the same prefix as ingestion to stay in the same semantic space.
+    """
+    model = _get_embed_model()
+    if model is None:
+        return [] # Return empty if bypassed
+        
+    vec = model.encode(
+        f"{BGE_PREFIX}{query}",
+        normalize_embeddings=True,
+    )
+    return vec.tolist()
 
 
 def _get_chroma_collection():
@@ -579,31 +599,34 @@ def retrieve(
     where_clause: dict | None = (
         {"scheme_name": {"$eq": scheme_filter}} if scheme_filter else None
     )
-    raw = collection.query(
-        query_embeddings=[query_vec],
-        n_results=n_results,
-        include=["documents", "metadatas", "distances"],
-        **({"where": where_clause} if where_clause else {}),
-    )
-
     dense_results: list[dict] = []
-    for cid, doc, meta, dist in zip(
-        raw["ids"][0], raw["documents"][0],
-        raw["metadatas"][0], raw["distances"][0],
-    ):
-        if dist > confidence_threshold:
-            log.debug("Dense filtered (dist=%.4f): %s...", dist, cid[:12])
-            continue
-        dense_results.append({
-            "chunk_id":          cid,
-            "content":           doc,
-            "source_url":        meta.get("source_url", ""),
-            "scheme_name":       meta.get("scheme_name", ""),
-            "section_heading":   meta.get("section_heading", ""),
-            "last_crawled_date": meta.get("last_crawled_date", ""),
-            "cosine_distance":   dist,
-            "retrieval_method":  "dense",
-        })
+    if query_vec:
+        raw = collection.query(
+            query_embeddings=[query_vec],
+            n_results=n_results,
+            include=["documents", "metadatas", "distances"],
+            **({"where": where_clause} if where_clause else {}),
+        )
+
+        for cid, doc, meta, dist in zip(
+            raw["ids"][0], raw["documents"][0],
+            raw["metadatas"][0], raw["distances"][0],
+        ):
+            if dist > confidence_threshold:
+                log.debug("Dense filtered (dist=%.4f): %s...", dist, cid[:12])
+                continue
+            dense_results.append({
+                "chunk_id":          cid,
+                "content":           doc,
+                "source_url":        meta.get("source_url", ""),
+                "scheme_name":       meta.get("scheme_name", ""),
+                "section_heading":   meta.get("section_heading", ""),
+                "last_crawled_date": meta.get("last_crawled_date", ""),
+                "cosine_distance":   dist,
+                "retrieval_method":  "dense",
+            })
+    else:
+        log.warning("Query vector empty; bypassing ChromaDB dense query.")
 
     log.info(
         "Dense: %d/%d passed filter (threshold=%.2f)",
