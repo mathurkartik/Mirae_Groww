@@ -299,6 +299,7 @@ jobs:
 
             Run ID: ${{ github.run_id }}
             Triggered by: ${{ github.event_name }}"
+            git pull --rebase origin main
             git push
           fi
         env:
