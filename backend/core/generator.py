@@ -187,8 +187,29 @@ def _build_context_block(chunks: list) -> str:
         return "No relevant context found."
 
     lines: list[str] = ["[RETRIEVED CONTEXT]"]
+    
+    # Try injecting authoritative facts from the top matched chunk's scheme
+    try:
+        from backend.core.fund_registry import get_fund_by_slug
+        top_url = chunks[0].source_url if hasattr(chunks[0], "source_url") else chunks[0].get("source_url", "")
+        if top_url:
+            slug = top_url.rstrip("/").split("/")[-1]
+            fund = get_fund_by_slug(slug)
+            if fund:
+                lines.append(">>> [AUTHORITATIVE LIVE FACTS for " + fund.get("scheme_name", "") + "] <<<")
+                lines.append("Use these values if they contradict the verbose text snippets below:")
+                lines.append(f"AUM: {fund.get('aum')}")
+                lines.append(f"Expense Ratio: {fund.get('expense_ratio')}")
+                lines.append(f"Latest NAV: {fund.get('nav')} (as of {fund.get('nav_date')})")
+                lines.append(f"Minimum SIP: ₹{fund.get('min_sip')}")
+                lines.append(f"Risk Level: {fund.get('risk_level')}")
+                lines.append(f"Exit Load: {fund.get('exit_load')}")
+                lines.append(f"3Y Annualised Return: {fund.get('returns_3y_annualized')}")
+                lines.append(">>> [END AUTHORITATIVE FACTS] <<<\n")
+    except Exception as exc:
+        log.warning("Could not inject authoritative metrics wrapper: %s", exc)
+
     for i, chunk in enumerate(chunks, 1):
-        # Handle both RetrievedChunk dataclass and plain dict
         if hasattr(chunk, "source_url"):
             url     = chunk.source_url
             scheme  = chunk.scheme_name
