@@ -266,3 +266,27 @@ These span multiple layers and represent systemic risks.
 ---
 
 > **Disclaimer:** Facts-only. No investment advice.
+
+## Newly Discovered Edge Cases (QA & Deployment Phase)
+
+During end-to-end testing and CI/CD deployment, several critical edge cases were identified and resolved:
+
+### 1. Data Integrity & Hallucination
+| # | Edge Case | Expected Behavior | Risk | Mitigation |
+|---|---|---|---|---|
+| N.1 | **SEO vs Factual Data Collision** — Scraped text contains AMC-wide numbers (like 2 Lakh Cr AUM) explicitly written in paragraphs for SEO, overriding the correct table data. | LLM quotes the AMC AUM instead of the Scheme AUM. | 🔴 High | Inject an authoritative override metric block from \und_registry.py\ to the top of the LLM context, instructing the LLM to prioritize the structured JSON over verbose raw text. |
+| N.2 | **Hardcoded String Parsing in UI** — Text like "Exit load for units..." causes \.split(' ')[0]\ to render "Exit" instead of "1%". | UI metrics cards display broken or partial data. | 🟡 Medium | Replace rigid split algorithms with responsive Regex \match(/(\d+(?:\.\d+)?%)/\) in the NextJS frontend to dynamically grab isolated integer metrics. |
+
+### 2. Infrastructure & Routing
+| # | Edge Case | Expected Behavior | Risk | Mitigation |
+|---|---|---|---|---|
+| N.3 | **Missing API Decorator** — Endpoint logically functional but missing \@router.get\. | Route raises \HTTP 404\; Frontend hangs with infinite Loading skeletons. | 🔴 High | Audit FastAPI routes rigorously; enhance UI to break out of loading skeleton timeout into a clear Error boundary instead of hanging. |
+| N.4 | **Git CI/CD Push Rejection** — Automated Actions pipeline throws \
+on-fast-forward\ error when pushing data because \main\ has diverged. | Pipeline fails; latest \chunks.jsonl\ isn't committed. | 🔴 High | Insert \git pull --rebase origin main\ universally in GitHub Actions before the final \git push\. |
+| N.5 | **Render Docker Caching Bloat** — Consecutive redeployments inherit bloated pip caches, resulting in OOM crashes on Render's 512MB RAM instance. | Render instance crashes continuously. | 🔴 High | Append \&clearCache=true\ onto the \RENDER_DEPLOY_HOOK\ secret URL inside GitHub actions. |
+
+### 3. Model & Mathematics Restrictions
+| # | Edge Case | Expected Behavior | Risk | Mitigation |
+|---|---|---|---|---|
+| N.6 | **Model Decommissioning** — Hardcoded LLM (e.g. \llama3-8b-8192\) gets removed from Groq's API. | App halts entirely; \query_guard.py\ returns 400 Bad Request. | 🔴 High | Normalize all LLM interactions to pull from a dynamically updatable \GROQ_MODEL\ .env variable (e.g., \llama-3.1-8b-instant\). |
+| N.7 | **Mathematical Queries Rejected** — User asks to calculate a 10-year step-up SIP based on history. | LLM refuses because "Return predictions are not in current sources". | 🟡 Medium | Update System Prompts to explicitly whitelist mathematical generation/projections using recognized SIP formulas, while retaining the block on fabricating raw AMC datasets. |
