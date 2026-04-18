@@ -256,6 +256,8 @@ def embed_query(query: str) -> list[float]:
     Must use the same prefix as ingestion to stay in the same semantic space.
     """
     model = _get_embed_model()
+    if model is None:
+        return []
     vec = model.encode(
         f"{BGE_PREFIX}{query}",
         normalize_embeddings=True,
