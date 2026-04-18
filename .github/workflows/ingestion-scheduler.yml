@@ -191,6 +191,12 @@ jobs:
           name: chunk-output-${{ github.run_id }}
           path: data/
 
+      - name: Download scrape artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: scrape-output-${{ github.run_id }}
+          path: data/
+
       # Pull previous ingestion manifest + vector store for incremental updates.
       # We search for the latest successful run that produced these artifacts.
       # continue-on-error: true handles the very first pipeline run.
@@ -282,6 +288,7 @@ jobs:
           # Force-add data files that are normally gitignored
           git add -f data/chroma_db/
           git add -f data/chunks.jsonl
+          git add -f data/cleaned_docs.jsonl
           git add -f data/ingestion_manifest.json
 
           # Only commit if there are actual changes
