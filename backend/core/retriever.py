@@ -204,8 +204,8 @@ def _get_embed_model():
             import torch
             torch.set_num_threads(1)  # Reduce CPU threads to save RAM on Render
         except ImportError:
-            log.critical("sentence-transformers not installed: pip install sentence-transformers")
-            sys.exit(1)
+            log.warning("sentence-transformers not installed. Bypassing PyTorch processing.")
+            return None
         log.info("Loading embedding model: %s", EMBEDDING_MODEL)
         t0 = time.time()
         _embed_model = SentenceTransformer(EMBEDDING_MODEL)
