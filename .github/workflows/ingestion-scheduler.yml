@@ -306,12 +306,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # ── Trigger Render redeploy ──────────────────────────────────────
-      # Hits the Render deploy hook URL (stored in repo secrets) to start a fresh deploy.
+      # Hits the Render deploy hook URL and explicitly requests a clean build cache
       - name: Trigger Render redeploy
         if: success()
         run: |
-          echo "Triggering Render deploy hook..."
+          echo "Triggering Render deploy hook (Clean Cache)..."
           curl -s -o /dev/null -w "HTTP %{http_code}" \
-            -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+            -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}&clearCache=true"
           echo ""
-          echo "Deploy hook triggered successfully"
+          echo "Deploy hook triggered successfully with Cache Cleared"
