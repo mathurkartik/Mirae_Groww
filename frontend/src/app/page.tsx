@@ -11,7 +11,7 @@ import { FundCard } from "@/components/FundCard";
 import { useCategories, useDiscoveryFunds } from "@/hooks/useFundData";
 import { useWatchlist } from "@/hooks/useWatchlist";
 
-type Tab = "categories" | "high_return" | "top_rated" | "sip_500";
+type Tab = "categories" | "high_return" | "top_rated" | "sip_500" | "new_funds";
 
 export default function Home() {
   const { categories, isLoading: catsLoading } = useCategories();
@@ -84,7 +84,8 @@ export default function Home() {
           /* Render Fund Cards for other tabs */
           (activeTab === "high_return" ? discovery?.high_return : 
            activeTab === "top_rated" ? discovery?.top_rated : 
-           activeTab === "sip_500" ? discovery?.sip_affordable : [])?.map(fund => (
+           activeTab === "sip_500" ? discovery?.sip_affordable : 
+           activeTab === "new_funds" ? discovery?.new_funds : [])?.map(fund => (
             <FundCard key={fund.slug} fund={fund} />
           ))
         )}
@@ -92,7 +93,7 @@ export default function Home() {
 
       <section className="promo-section" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         <div className="promo-tiles">
-          <div className="promo-tile">
+          <div className="promo-tile" style={{ cursor: 'pointer' }} onClick={() => setActiveTab("high_return")}>
             <div className="promo-tile-icon">🚀</div>
             <div>
               <h3>Top 10</h3>
@@ -104,7 +105,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="promo-tile">
+          <div className="promo-tile" style={{ cursor: 'pointer' }} onClick={() => setActiveTab("new_funds")}>
             <div className="promo-tile-icon">⚡</div>
             <div>
               <h3>New</h3>

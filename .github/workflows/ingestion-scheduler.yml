@@ -295,7 +295,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No data changes — skipping commit"
           else
-            git commit -m "chore: update ingestion data [skip ci]
+            git commit -m "chore: update ingestion data
 
             Run ID: ${{ github.run_id }}
             Triggered by: ${{ github.event_name }}"
