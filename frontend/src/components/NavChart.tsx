@@ -1,6 +1,7 @@
 /**
  * NavChart.tsx — Interactive NAV Chart
  * Uses Recharts to display historical price series with period toggles.
+ * No duplicate title — parent controls the heading.
  */
 "use client";
 
@@ -35,31 +36,39 @@ export function NavChart({ slug }: NavChartProps) {
 
   if (error) {
     return (
-      <div className="nav-chart-error" style={{ height: 300, display:'flex', alignItems:'center', justifyContent:'center', color:'var(--text-secondary)', background:'var(--bg-surface-2)', borderRadius: 12 }}>
+      <div style={{ height: 300, display:'flex', alignItems:'center', justifyContent:'center', color:'var(--text-secondary)', background:'var(--bg-surface-2)', borderRadius: 12 }}>
          <p>NAV history data currently unavailable</p>
       </div>
     );
   }
 
   return (
-    <div className="nav-chart-container" style={{ background: 'var(--bg-white)', padding: 24, borderRadius: 16, border: '1px solid var(--border)', marginBottom: 24 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <h3 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>Growth of ₹10,000</h3>
-        <div className="filter-pills" style={{ margin: 0 }}>
-          {PERIODS.map((p) => (
-            <button
-              key={p.value}
-              className={`filter-pill ${period === p.value ? "filter-pill--active" : ""}`}
-              onClick={() => setPeriod(p.value)}
-              style={{ padding: '4px 12px', fontSize: 12 }}
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
+    <div>
+      {/* Period Tabs */}
+      <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
+        {PERIODS.map((p) => (
+          <button
+            key={p.value}
+            onClick={() => setPeriod(p.value)}
+            style={{
+              padding: '4px 12px',
+              fontSize: '11px',
+              fontWeight: 700,
+              borderRadius: '20px',
+              border: 'none',
+              cursor: 'pointer',
+              background: period === p.value ? 'var(--bg-dark-green)' : 'var(--bg-surface-2)',
+              color: period === p.value ? 'white' : 'var(--text-secondary)',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            {p.label}
+          </button>
+        ))}
       </div>
 
-      <div style={{ width: "100%", height: 320 }}>
+      {/* Chart */}
+      <div style={{ width: "100%", height: 280 }}>
         {isLoading ? (
           <div className="skeleton" style={{ height: "100%", width: "100%" }} />
         ) : (
@@ -72,14 +81,8 @@ export function NavChart({ slug }: NavChartProps) {
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-light)" />
-              <XAxis 
-                dataKey="date" 
-                hide 
-              />
-              <YAxis 
-                hide 
-                domain={['auto', 'auto']}
-              />
+              <XAxis dataKey="date" hide />
+              <YAxis hide domain={['auto', 'auto']} />
               <Tooltip 
                 contentStyle={{ borderRadius: 8, border: 'none', boxShadow: 'var(--shadow-md)' }}
                 labelFormatter={(val) => new Date(val).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -100,7 +103,8 @@ export function NavChart({ slug }: NavChartProps) {
         )}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12, fontSize: 11, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+      {/* Date Range */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 11, color: 'var(--text-muted)', letterSpacing: '0.03em' }}>
          <span>{history[0]?.date ? new Date(history[0].date).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }) : ''}</span>
          <span>Current</span>
       </div>
