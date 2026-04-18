@@ -9,6 +9,7 @@ import { AppShell } from "@/components/AppShell";
 import { FundCard } from "@/components/FundCard";
 import { useCategoryDetail } from "@/hooks/useFundData";
 import { useState, useMemo } from "react";
+import Link from "next/link";
 
 export default function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -42,7 +43,11 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
     <AppShell>
       <div className="category-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          INVESTMENTS / <span style={{ color: 'var(--accent)' }}>{slug.replace('-', ' ')} MUTUAL FUNDS</span>
+          <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>MUTUAL FUNDS</Link>
+          <span>/</span>
+          <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>MIRAE ASSET</Link>
+          <span>/</span>
+          <span style={{ color: 'var(--accent)' }}>{slug.replace('-', ' ')}</span>
         </div>
         {isLoading ? (
           <div className="skeleton" style={{ height: 40, width: 300, marginBottom: 8 }} />

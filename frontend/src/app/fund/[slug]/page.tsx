@@ -81,7 +81,7 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
       </div>
 
       {/* ── 1. Title & NAV Header ── */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+      <header id="top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
          <div style={{ minWidth: 0 }}>
             <h1 style={{ margin: 0, fontSize: '28px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', wordBreak: 'break-word' }}>{fund.scheme_name}</h1>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '12px', flexWrap: 'wrap' }}>
@@ -246,7 +246,7 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
       </div>
 
       {/* ── 4. Bottom Detailed Stats ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', marginBottom: '48px' }}>
+      <div id="risk" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', marginBottom: '48px' }}>
          
          {/* Risk Profile */}
          <div>
@@ -310,7 +310,7 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
       </div>
 
       {/* ── 5. Holdings & Sectors ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.3fr) minmax(0, 1fr)', gap: '24px', marginBottom: '40px' }}>
+      <div id="holdings" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.3fr) minmax(0, 1fr)', gap: '24px', marginBottom: '40px' }}>
          <div style={{ background: 'var(--bg-white)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '28px' }}>
             <HoldingsTable holdings={fund.top_holdings} totalCount={fund.holdings_count} />
          </div>
