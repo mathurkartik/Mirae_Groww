@@ -9,6 +9,8 @@ import { AppShell } from "@/components/AppShell";
 import { NavChart } from "@/components/NavChart";
 import { HoldingsTable } from "@/components/HoldingsTable";
 import { PeerComparison } from "@/components/PeerComparison";
+import { ReturnCalculator } from "@/components/ReturnCalculator";
+import SipCalculator from "@/components/SipCalculator";
 import { useFundDetail } from "@/hooks/useFundData";
 
 export default function FundDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -125,8 +127,14 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
          </div>
 
          <div className="detail-right">
+            
+            {/* Historical Return Calculator */}
+            {Object.keys(fund.returns).length > 0 && (
+              <ReturnCalculator returns={fund.returns} />
+            )}
+
             {/* Returns Table */}
-            <div style={{ background: 'var(--bg-white)', padding: 24, borderRadius: 16, border: '1px solid var(--border)', marginBottom: 24 }}>
+            <div style={{ background: 'var(--bg-white)', padding: 24, borderRadius: 16, border: '1px solid var(--border)', marginBottom: 24 }} id="sip-calculator">
                <h3 style={{ margin: '0 0 20px', fontSize: 16, fontWeight: 700 }}>Returns</h3>
                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                   {Object.entries(fund.returns).map(([period, value]) => (
@@ -169,6 +177,11 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
                      <p style={{ margin: 0, fontSize: 11, color: 'var(--text-muted)' }}>Since 2008 • ₹1.5L Cr AUM</p>
                   </div>
                </div>
+            </div>
+
+            {/* SIP Calculator */}
+            <div style={{ marginTop: 24 }}>
+               <SipCalculator />
             </div>
          </div>
       </div>
