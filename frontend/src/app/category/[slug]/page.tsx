@@ -1,5 +1,5 @@
 /**
- * category/[slug]/page.tsx — Category Fund List
+ * category/[slug]/page.tsx — Category Fund List (Emerald Ledger)
  * Displays a list of funds for a specific category with filtering and sorting.
  */
 "use client";
@@ -41,34 +41,146 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
   return (
     <AppShell>
       <div className="category-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          INVESTMENTS / <span style={{ color: 'var(--accent)' }}>{slug.replace('-', ' ')} MUTUAL FUNDS</span>
+        </div>
         {isLoading ? (
-          <div className="skeleton" style={{ height: 32, width: 240, marginBottom: 8 }} />
+          <div className="skeleton" style={{ height: 40, width: 300, marginBottom: 8 }} />
         ) : (
-          <h1>{data?.category.display_name} Mutual Funds</h1>
+          <h1 style={{ fontSize: '32px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>
+            {data?.category.display_name} Mutual Funds
+          </h1>
         )}
         
         {isLoading ? (
           <div className="skeleton" style={{ height: 48, width: "100%", maxWidth: 600 }} />
         ) : (
-          <p>{data?.category.description}</p>
+          <p style={{ fontSize: '15px', color: 'var(--text-secondary)', maxWidth: '650px', lineHeight: '1.7' }}>
+            {data?.category.description || "Curated high-growth equity portfolios for long-term wealth appreciation through surgical asset allocation."}
+          </p>
         )}
       </div>
 
-      <div className="category-controls">
-        <div className="category-count">
-          {isLoading ? (
-            <span className="skeleton" style={{ display: 'inline-block', width: 80, height: 18 }} />
-          ) : (
-            <>Explore our top Mirae Asset picks with <strong>{data?.funds.length} funds</strong></>
-          )}
+      {/* Market Sentiment Banner */}
+      <section style={{ 
+        background: 'rgba(5, 150, 105, 0.08)', 
+        border: '1px solid rgba(5, 150, 105, 0.2)', 
+        borderRadius: 'var(--radius-lg)', 
+        padding: '32px', 
+        marginTop: '32px', 
+        marginBottom: '32px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '40px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <div style={{ 
+            width: '48px', 
+            height: '48px', 
+            borderRadius: '12px', 
+            background: 'var(--accent-light)', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            fontSize: '24px'
+          }}>📈</div>
+          <div>
+            <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 800, color: 'var(--accent-dark)' }}>Market Sentiment: Bullish •</h2>
+            <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '450px' }}>
+              Institutional flows indicate strong momentum in Large-cap and specialized Technology sectors.
+            </p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '48px' }}>
+          <div>
+            <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 4px' }}>NIFTY 50</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '18px', fontWeight: 800 }}>22,356.10</span>
+              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--green)' }}>+1.45%</span>
+            </div>
+          </div>
+          <div>
+            <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 4px' }}>SENSEX</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '18px', fontWeight: 800 }}>73,651.35</span>
+              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--green)' }}>+1.32%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button style={{ 
+            padding: '8px 16px', 
+            borderRadius: '20px', 
+            fontSize: '12px', 
+            fontWeight: 700, 
+            background: 'var(--bg-dark-green)', 
+            color: 'white', 
+            border: 'none',
+            cursor: 'pointer'
+          }}>MIRAE ASSET PICKS</button>
+          <button style={{ 
+            padding: '8px 16px', 
+            borderRadius: '20px', 
+            fontSize: '12px', 
+            fontWeight: 700, 
+            background: 'var(--bg-surface-2)', 
+            color: 'var(--text-secondary)', 
+            border: 'none',
+            cursor: 'pointer'
+          }}>LARGE CAP</button>
+          <button style={{ 
+            padding: '8px 16px', 
+            borderRadius: '20px', 
+            fontSize: '12px', 
+            fontWeight: 700, 
+            background: 'var(--bg-surface-2)', 
+            color: 'var(--text-secondary)', 
+            border: 'none',
+            cursor: 'pointer'
+          }}>MID CAP</button>
+          <button style={{ 
+            padding: '8px 16px', 
+            borderRadius: '20px', 
+            fontSize: '12px', 
+            fontWeight: 700, 
+            background: 'var(--bg-surface-2)', 
+            color: 'var(--text-secondary)', 
+            border: 'none',
+            cursor: 'pointer'
+          }}>SMALL CAP</button>
+          <button style={{ 
+            padding: '8px 16px', 
+            borderRadius: '20px', 
+            fontSize: '12px', 
+            fontWeight: 700, 
+            background: 'var(--bg-surface-2)', 
+            color: 'var(--text-secondary)', 
+            border: 'none',
+            cursor: 'pointer'
+          }}>TAX SAVER (ELSS)</button>
         </div>
         
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-           <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Sort by:</span>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+           <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>SORT BY:</span>
            <select 
              className="sort-select" 
              value={sortBy} 
              onChange={(e) => setSortBy(e.target.value)}
+             style={{ 
+               padding: '8px 12px', 
+               borderRadius: '8px', 
+               border: '1px solid var(--border)', 
+               fontSize: '13px', 
+               fontWeight: 600,
+               background: 'var(--bg-white)',
+               color: 'var(--text-primary)',
+               outline: 'none',
+               cursor: 'pointer'
+             }}
            >
              <option value="returns">Best 3Y Returns</option>
              <option value="aum">Largest AUM</option>
@@ -80,11 +192,29 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
       <div className="fund-grid">
         {isLoading
           ? Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="skeleton skeleton-card" />
+              <div key={i} className="skeleton skeleton-card" style={{ height: '300px' }} />
             ))
           : sortedFunds.map((fund) => (
               <FundCard key={fund.slug} fund={fund} />
             ))}
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px', marginBottom: '64px' }}>
+         <button style={{ 
+           padding: '12px 32px', 
+           borderRadius: '30px', 
+           border: '1px solid var(--border)', 
+           background: 'var(--bg-white)', 
+           fontSize: '13px', 
+           fontWeight: 700,
+           color: 'var(--text-primary)',
+           cursor: 'pointer',
+           display: 'flex',
+           alignItems: 'center',
+           gap: '8px'
+         }}>
+           LOAD MORE PICKS <span>⌄</span>
+         </button>
       </div>
 
       {error && (
@@ -99,22 +229,6 @@ export default function CategoryPage({ params }: { params: Promise<{ slug: strin
            <h3>No funds found in this category</h3>
         </div>
       )}
-
-      {/* Market Sentiment Banner from Mockup */}
-      <section className="promo-banner" style={{ marginTop: 40, height: 180, justifyContent: 'center' }}>
-         <h2>Market Sentiment: Bullish</h2>
-         <p>The large-cap segment is showing strong resistance levels with technical indicators suggesting growth.</p>
-         <div style={{ display:'flex', gap: 24, marginTop: 12 }}>
-            <div>
-               <p style={{ fontSize: 11, opacity: 0.7, textTransform:'uppercase' }}>NIFTY 50</p>
-               <p style={{ fontWeight: 700 }}>+1.24%</p>
-            </div>
-            <div>
-               <p style={{ fontSize: 11, opacity: 0.7, textTransform:'uppercase' }}>SENSEX</p>
-               <p style={{ fontWeight: 700 }}>+0.98%</p>
-            </div>
-         </div>
-      </section>
     </AppShell>
   );
 }

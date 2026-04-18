@@ -1,24 +1,32 @@
 /**
- * AppShell.tsx — Main layout shell
- * Renders: Left sidebar nav + Top navbar + Content area + Chat FAB
+ * AppShell.tsx — Emerald Ledger Layout
+ * Renders Dual Layout based on context:
+ * 1. Global View (Home, Explore)
+ * 2. Fund Detail View (Specialized sidebar + top nav)
  */
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState, useCallback } from "react";
 import { ChatWidget } from "./ChatWidget";
+import * as api from "@/lib/api";
 
-const NAV_ITEMS = [
-  { label: "Home", icon: "🏠", href: "/" },
-  { label: "Equity Funds", icon: "📈", href: "/category/equity" },
-  { label: "Debt Funds", icon: "🛡️", href: "/category/debt" },
+const GLOBAL_NAV = [
+  { label: "Explore", icon: "🌐", href: "/" },
+  { label: "Investments", icon: "🏛️", href: "#" },
+  { label: "SIP Dashboard", icon: "📅", href: "#" },
+  { label: "Watchlist", icon: "🔖", href: "#" },
+  { label: "Reports", icon: "📊", href: "#" },
 ];
 
-const TOP_LINKS: {label: string, href: string}[] = [];
-
-import { useRouter } from "next/navigation";
-import * as api from "@/lib/api";
+const FUND_SIDEBAR_NAV = [
+  { label: "OVERVIEW", icon: "📊" },
+  { label: "PERFORMANCE", icon: "📈", active: true },
+  { label: "HOLDINGS", icon: "🥧" },
+  { label: "RISK METRICS", icon: "🛡️" },
+  { label: "CALCULATORS", icon: "🧮" },
+];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -32,43 +40,101 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-    
     setIsSearching(true);
     try {
       const results = await api.searchFunds(searchQuery);
       if (results.funds.length > 0) {
-        // Navigate to the first matching fund
         router.push(`/fund/${results.funds[0].slug}`);
         setSearchQuery("");
       }
-    } catch (err) {
-      console.error("Search failed:", err);
     } finally {
       setIsSearching(false);
     }
   };
 
+  const isFundPage = pathname.includes('/fund/');
+
+  if (isFundPage) {
+    return (
+      <div className="app-layout" style={{ flexDirection: 'column' }}>
+        {/* Full Width Top Nav */}
+        <header style={{ height: '64px', background: 'var(--bg-white)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', position: 'sticky', top: 0, zIndex: 40 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--accent-dark)', letterSpacing: '-0.02em' }}>Emerald Ledger</div>
+            <div style={{ display: 'flex', gap: '20px', fontSize: '14px', fontWeight: 500, color: 'var(--text-secondary)' }}>
+              <span style={{ cursor: 'pointer' }}>Markets</span>
+              <span style={{ cursor: 'pointer', color: 'var(--accent)', borderBottom: '2px solid var(--accent)' }}>Funds</span>
+              <span style={{ cursor: 'pointer' }}>Insights</span>
+              <span style={{ cursor: 'pointer' }}>Institutional</span>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+            <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-secondary)', cursor: 'pointer' }}>Support</span>
+            <button style={{ background: 'var(--accent)', color: 'white', border: 'none', padding: '8px 20px', borderRadius: '30px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}>Invest Now</button>
+          </div>
+        </header>
+
+        {/* Content Wrapper */}
+        <div style={{ display: 'flex', flex: 1, position: 'relative' }}>
+          {/* specialized fund sidebar */}
+          <aside style={{ width: '240px', background: 'var(--bg-white)', borderRight: '1px solid var(--border)', padding: '24px 0', display: 'flex', flexDirection: 'column', position: 'fixed', top: '64px', bottom: 0 }}>
+             <div style={{ padding: '0 24px', marginBottom: '32px' }}>
+                <div style={{ width: '32px', height: '32px', background: 'var(--bg-surface-2)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '12px', marginBottom: '12px', color: 'var(--accent-dark)' }}>MA</div>
+                <h3 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: 800 }}>Mirae Asset</h3>
+                <p style={{ margin: 0, fontSize: '10px', color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.05em' }}>DEEP DIVE ANALYST</p>
+             </div>
+             
+             <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {FUND_SIDEBAR_NAV.map((item) => (
+                  <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 24px', fontSize: '12px', fontWeight: 700, cursor: 'pointer', color: item.active ? 'var(--accent)' : 'var(--text-secondary)', background: item.active ? 'var(--accent-light)' : 'transparent', borderRight: item.active ? '3px solid var(--accent)' : '3px solid transparent' }}>
+                    <span style={{ fontSize: '16px' }}>{item.icon}</span>
+                    {item.label}
+                  </div>
+                ))}
+             </nav>
+
+             <div style={{ marginTop: 'auto', padding: '0 20px' }}>
+                <div style={{ background: 'var(--bg-dark-green)', borderRadius: '12px', padding: '20px', color: 'white' }}>
+                   <p style={{ margin: '0 0 8px', fontSize: '10px', fontWeight: 800, letterSpacing: '0.05em' }}>AI RECOMMENDATION</p>
+                   <p style={{ margin: '0 0 16px', fontSize: '12px', color: '#e2e8f0' }}>Optimize your tax-saving portfolio for FY 24-25.</p>
+                   <button style={{ width: '100%', padding: '8px', border: 'none', background: 'var(--accent)', color: 'white', borderRadius: '6px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }} onClick={toggleChat}>AI ADVISOR</button>
+                </div>
+                <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '16px', paddingLeft: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', cursor: 'pointer' }}><span>📄</span> REPORTS</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', cursor: 'pointer' }}><span>⚙️</span> SETTINGS</div>
+                </div>
+             </div>
+          </aside>
+
+          <main style={{ marginLeft: '240px', flex: 1, padding: '40px 48px', maxWidth: '1200px' }}>
+             {children}
+          </main>
+        </div>
+
+        <ChatWidget isOpen={chatOpen} onToggle={toggleChat} />
+      </div>
+    );
+  }
+
+  // GLOBAL LAYOUT
   return (
     <div className="app-layout">
       {/* ── Left Sidebar ─────────────────────────────────────── */}
-      <aside className="nav-sidebar" id="sidebar-nav">
-        <div className="nav-sidebar-brand">
-          <div className="nav-sidebar-brand-dot">M</div>
-          <div className="nav-sidebar-brand-name">
-            Mirae<span>Explorer</span>
+      <aside className="nav-sidebar" id="sidebar-nav" style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className="nav-sidebar-brand" style={{ flexDirection: 'column', alignItems: 'flex-start', borderBottom: 'none', padding: '24px' }}>
+          <div className="nav-sidebar-brand-name" style={{ color: 'var(--accent-dark)', fontSize: '18px' }}>
+            Emerald Ledger
           </div>
+          <p style={{ margin: '4px 0 0', fontSize: '10px', color: 'var(--text-muted)', fontWeight: 800, letterSpacing: '0.05em' }}>SOVEREIGN ANALYST</p>
         </div>
 
-        <nav className="nav-sidebar-links">
-          {NAV_ITEMS.map((item) => (
+        <nav className="nav-sidebar-links" style={{ marginTop: '16px' }}>
+          {GLOBAL_NAV.map((item) => (
             <Link
               key={item.label}
               href={item.href}
-              className={`nav-link ${
-                pathname === item.href && item.label === "Mutual Funds"
-                  ? "nav-link--active"
-                  : ""
-              }`}
+              className={`nav-link ${pathname === item.href || (pathname.includes('/category/') && item.label==='Explore') ? "nav-link--active" : ""}`}
+              style={pathname === item.href || (pathname.includes('/category/') && item.label==='Explore') ? { borderRight: '3px solid var(--accent)', borderRadius: '0' } : {}}
             >
               <span className="nav-link-icon">{item.icon}</span>
               {item.label}
@@ -76,69 +142,61 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           ))}
         </nav>
 
-        <div className="nav-sidebar-footer">
-          <p className="nav-sidebar-footer-text">
-            Data sourced from Groww.in
-            <br />
-            Facts-only. No investment advice.
-          </p>
+        <div style={{ marginTop: 'auto', padding: '20px' }}>
+           <button onClick={toggleChat} style={{ width: '100%', padding: '12px', background: 'var(--accent)', color: 'white', borderRadius: '30px', border: 'none', fontSize: '14px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', marginBottom: '24px' }}>
+             ✨ AI Assistant
+           </button>
+           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', paddingLeft: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '13px', color: 'var(--text-secondary)', cursor: 'pointer' }}><span>⚙️</span> Settings</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '13px', color: 'var(--text-secondary)', cursor: 'pointer' }}><span>❓</span> Support</div>
+           </div>
+        </div>
+
+        <div style={{ padding: '20px', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+           <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--accent-dark)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>👨‍💼</div>
+           <div>
+              <p style={{ margin: 0, fontSize: '13px', fontWeight: 700 }}>Alex Mercer</p>
+              <p style={{ margin: 0, fontSize: '11px', color: 'var(--accent)', fontWeight: 800 }}>PRO TIER</p>
+           </div>
         </div>
       </aside>
 
       {/* ── Main area ────────────────────────────────────────── */}
       <div className="main-content">
         {/* Top Navbar */}
-        <header className="top-navbar" id="top-navbar">
+        <header className="top-navbar" id="top-navbar" style={{ padding: '0 24px' }}>
           <div className="top-navbar-left">
-            <div className="top-navbar-links">
-            </div>
+             <form className="top-navbar-search" id="search-bar" onSubmit={handleSearch} style={{ width: '300px', background: 'var(--bg-surface-2)', borderRadius: '30px', border: 'none' }}>
+               <span className="top-navbar-search-icon">{isSearching ? "⏳" : "🔍"}</span>
+               <input 
+                 type="text" 
+                 placeholder="Search direct funds, ETFs, or gold..." 
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 style={{ background: 'transparent' }}
+               />
+             </form>
           </div>
 
-          <div className="top-navbar-right">
-            <form className="top-navbar-search" id="search-bar" onSubmit={handleSearch}>
-              <span className="top-navbar-search-icon">{isSearching ? "⏳" : "🔍"}</span>
-              <input 
-                type="text" 
-                placeholder="Search funds (e.g. Health, Midcap)..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </form>
-            <button className="top-navbar-icon-btn" aria-label="Notifications">
-              🔔
-            </button>
-            <button className="top-navbar-icon-btn" aria-label="Profile">
-              👤
-            </button>
+          <div className="top-navbar-right" style={{ gap: '24px' }}>
+            <div className="top-navbar-links" style={{ display: 'flex', gap: '20px', fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.05em' }}>
+               <span style={{ color: 'var(--text-primary)', borderBottom: '2px solid var(--accent)', paddingBottom: '23px', marginBottom: '-24px', cursor: 'pointer' }}>DIRECT FUNDS</span>
+               <span style={{ cursor: 'pointer' }}>ETFS</span>
+               <span style={{ cursor: 'pointer' }}>GOLD</span>
+               <span style={{ cursor: 'pointer' }}>FIXED INCOME</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '16px' }}>
+               <span style={{ fontSize: '16px', color: 'var(--text-secondary)', cursor: 'pointer' }}>🔔</span>
+               <span style={{ fontSize: '16px', color: 'var(--text-secondary)', cursor: 'pointer' }}>📺</span>
+               <button style={{ background: 'var(--accent)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '30px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>Invest Now</button>
+            </div>
           </div>
         </header>
 
-        {/* Disclaimer */}
-        <div className="disclaimer-bar">
-          ⚠️ <strong>Disclaimer:</strong> Mutual fund investments are subject to
-          market risks. This is an info-only tool — not investment advice.
-        </div>
-
-        {/* Page content */}
         <main className="page-content">{children}</main>
 
-        {/* Footer */}
-        <footer className="site-footer">
-          <div className="site-footer-brand">MiraeExplorer</div>
-          <div className="site-footer-links">
-            <a href="#">Terms of Service</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Regulatory Disclosures</a>
-            <a href="#">Help Center</a>
-          </div>
-          <p className="site-footer-copy">
-            © 2026 MiraeExplorer. Data source: Groww.in &amp; MFAPI.in. Not
-            affiliated with Mirae Asset Investment Managers.
-          </p>
-        </footer>
       </div>
 
-      {/* ── Chat Widget ──────────────────────────────────────── */}
       <ChatWidget isOpen={chatOpen} onToggle={toggleChat} />
     </div>
   );

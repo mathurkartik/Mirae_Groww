@@ -1,7 +1,6 @@
 /**
- * FundCard.tsx — Fund summary card
+ * FundCard.tsx — Fund summary card (Emerald Ledger Redesign)
  * Displays key metrics: name, category, 3Y return, expense ratio, AUM, risk.
- * Links to fund detail page and Groww for "Invest Now".
  */
 import Link from "next/link";
 import { useWatchlist } from "@/hooks/useWatchlist";
@@ -43,89 +42,73 @@ export function FundCard({ fund }: FundCardProps) {
   };
 
   return (
-    <div className="fund-card" id={`fund-${fund.slug}`}>
+    <div className="fund-card" id={`fund-${fund.slug}`} style={{ background: 'var(--bg-white)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '24px', transition: 'all 0.2s ease', display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <Link
         href={`/fund/${fund.slug}`}
-        style={{ textDecoration: "none", color: "inherit" }}
+        style={{ textDecoration: "none", color: "inherit", display: 'flex', flexDirection: 'column', gap: '20px' }}
       >
-        <div className="fund-card-header">
-          <div className="fund-card-info">
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-              <h3 className="fund-card-name" style={{ paddingRight: 8 }}>{fund.scheme_name}</h3>
-              <button 
-                onClick={toggleWatch} 
-                style={{ 
-                  background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, 
-                  color: isWatched ? 'var(--accent)' : '#cbd5e1', padding: 0 
-                }}
-                aria-label={isWatched ? "Remove from watchlist" : "Add to watchlist"}
-              >
-                {isWatched ? '★' : '☆'}
-              </button>
-            </div>
-            <p className="fund-card-category">
-              {fund.category} • Direct Plan
-            </p>
-          </div>
-          <div className="fund-card-return">
-            <p
-              className={`fund-card-return-value ${
-                isPositive ? "positive" : "negative"
-              }`}
-            >
-              {ret3y || "—"}
-            </p>
-            <span className="fund-card-return-label">3Y Annualised</span>
-          </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+           <div style={{ flex: 1, minWidth: 0 }}>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--bg-surface-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>📈</div>
+                <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                   {fund.scheme_name}
+                </h3>
+             </div>
+             <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                {fund.category} / CORE • DIRECT GROWTH
+             </p>
+           </div>
+           
+           <div style={{ textAlign: 'right' }}>
+              <p style={{ margin: 0, fontSize: '10px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>3Y ANNUALIZED</p>
+              <p style={{ margin: 0, fontSize: '20px', fontWeight: 800, color: isPositive ? 'var(--green)' : 'var(--red)' }}>
+                 {ret3y || "—"}
+              </p>
+           </div>
         </div>
 
-        <div className="fund-card-metrics">
-          <div className="fund-card-metric">
-            <p className="fund-card-metric-label">Expense Ratio</p>
-            <p className="fund-card-metric-value">
-              {fund.expense_ratio || "—"}
-            </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+          <div style={{ padding: '8px', background: 'var(--bg-surface-2)', borderRadius: '8px' }}>
+            <p style={{ margin: 0, fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700 }}>AUM</p>
+            <p style={{ margin: '2px 0 0', fontSize: '13px', fontWeight: 700 }}>{fund.aum ? `₹${fund.aum} Cr` : "—"}</p>
           </div>
-          <div className="fund-card-metric">
-            <p className="fund-card-metric-label">AUM</p>
-            <p className="fund-card-metric-value">
-              {fund.aum ? `₹${fund.aum}` : "—"}
-            </p>
+          <div style={{ padding: '8px', background: 'var(--bg-surface-2)', borderRadius: '8px' }}>
+            <p style={{ margin: 0, fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700 }}>EXP. RATIO</p>
+            <p style={{ margin: '2px 0 0', fontSize: '13px', fontWeight: 700 }}>{fund.expense_ratio || "—"}</p>
           </div>
-          <div className="fund-card-metric">
-            <p className="fund-card-metric-label">Risk Level</p>
-            <p className="fund-card-metric-value">
-              {fund.risk_level || "—"}
-            </p>
+          <div style={{ padding: '8px', background: 'var(--bg-surface-2)', borderRadius: '8px' }}>
+            <p style={{ margin: 0, fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700 }}>RISK LEVEL</p>
+            <p style={{ margin: '2px 0 0', fontSize: '13px', fontWeight: 700, color: fund.risk_level?.includes('Very High') ? '#dc2626' : 'inherit' }}>{fund.risk_level || "—"}</p>
           </div>
         </div>
       </Link>
 
-      <div className="fund-card-footer">
-        <div className="fund-card-rating">
-          {fund.rating && fund.rating > 0 ? (
-            <span
-              className="fund-card-rating-badge"
-              style={{
-                background: "#e6f9f3",
-                color: "#00b386",
-              }}
-            >
-              ★ {fund.rating}
-            </span>
-          ) : (
-            <span style={{ fontSize: 12, color: "#94a3b8" }}>—</span>
-          )}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border-light)', paddingTop: '16px', marginTop: 'auto' }}>
+        <div style={{ display: 'flex', gap: '4px' }}>
+           <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 800 }}>JD</div>
+           <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 800 }}>MS</div>
         </div>
-        <a
-          href={fund.source_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fund-card-invest-btn"
-          onClick={(e) => e.stopPropagation()}
-        >
-          Invest Now
-        </a>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button 
+            onClick={toggleWatch} 
+            style={{ 
+              background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', 
+              color: isWatched ? 'var(--accent)' : '#cbd5e1', padding: 0 
+            }}
+          >
+            {isWatched ? '★' : '☆'}
+          </button>
+          <a
+            href={fund.source_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ background: 'var(--accent-dark)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '30px', fontSize: '12px', fontWeight: 700, textDecoration: 'none' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            Invest Now
+          </a>
+        </div>
       </div>
     </div>
   );
