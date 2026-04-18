@@ -90,7 +90,11 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
          {[
             { label: "Expense Ratio", value: fund.expense_ratio, sub: "Excl. GST" },
             { label: "Fund Size (AUM)", value: fund.aum ? `₹${fund.aum}` : "—", sub: "As of Mar 2026" },
-            { label: "Exit Load", value: fund.exit_load?.split(' ')[0] || "1.0%", sub: "For 1 month" },
+            { 
+               label: "Exit Load", 
+               value: fund.exit_load?.match(/(\d+(?:\.\d+)?%)/)?.[0] || "1.0%", 
+               sub: fund.exit_load?.match(/within (\d+ (?:days|months|year|years))/i)?.[0].replace(/within/i, "For") || "For 1 month"
+            },
             { label: "Minimum SIP", value: fund.min_sip, sub: "Monthly" }
          ].map((m, i) => (
             <div key={i} style={{ background: 'var(--bg-white)', padding: 20, borderRadius: 16, border: '1px solid var(--border)' }}>

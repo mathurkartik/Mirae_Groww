@@ -117,6 +117,8 @@ def discovery() -> dict:
 
 
 # ── GET /api/funds/categories ────────────────────────────────────────────────
+
+@router.get("/categories", summary="List all fund categories")
 def list_categories() -> dict:
     """Returns all fund categories with display metadata and fund counts."""
     return {"categories": get_categories()}
