@@ -197,6 +197,8 @@ def _get_embed_model():
     if _embed_model is None:
         try:
             from sentence_transformers import SentenceTransformer
+            import torch
+            torch.set_num_threads(1)  # Reduce CPU threads to save RAM on Render
         except ImportError:
             log.critical("sentence-transformers not installed: pip install sentence-transformers")
             sys.exit(1)
@@ -447,6 +449,10 @@ def reciprocal_rank_fusion(
 
 def _get_cross_encoder():
     global _cross_encoder
+    if os.environ.get("RENDER"):
+        log.info("Running on Render. Disabling cross-encoder to prevent out-of-memory (OOM) crash.")
+        return None
+        
     if _cross_encoder is None:
         try:
             from sentence_transformers import CrossEncoder
