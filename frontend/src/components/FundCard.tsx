@@ -4,25 +4,7 @@
  */
 import Link from "next/link";
 import { useWatchlist } from "@/hooks/useWatchlist";
-
-export interface FundSummary {
-  slug: string;
-  scheme_name: string;
-  category: string;
-  category_slug: string;
-  source_url: string;
-  mfapi_code: number | null;
-  nav: number | null;
-  nav_date: string | null;
-  nav_change_1d: string | null;
-  aum: string | null;
-  expense_ratio: string | null;
-  rating: number | null;
-  min_sip: string | null;
-  risk_level: string | null;
-  returns_3y_annualized: string | null;
-  returns: Record<string, string>;
-}
+import type { FundSummary } from "@/lib/api";
 
 interface FundCardProps {
   fund: FundSummary;

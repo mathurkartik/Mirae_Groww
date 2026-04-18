@@ -9,8 +9,6 @@ import { AppShell } from "@/components/AppShell";
 import { NavChart } from "@/components/NavChart";
 import { HoldingsTable } from "@/components/HoldingsTable";
 import { PeerComparison } from "@/components/PeerComparison";
-import { ReturnCalculator } from "@/components/ReturnCalculator";
-import SipCalculator from "@/components/SipCalculator";
 import { useFundDetail } from "@/hooks/useFundData";
 
 export default function FundDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -97,12 +95,19 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
                   <p style={{ margin: '4px 0 0', fontSize: '16px', fontWeight: 800 }}>{fund.expense_ratio || "0.52%"}</p>
                </div>
             </div>
-            {fund.aum && (
-               <div style={{ paddingTop: '16px', borderTop: '1px solid var(--border-light)' }}>
-                  <p style={{ margin: 0, fontSize: '10px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>FUND SIZE (AUM)</p>
-                  <p style={{ margin: '4px 0 0', fontSize: '16px', fontWeight: 800 }}>₹{fund.aum} Cr</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-light)' }}>
+               {fund.aum && (
+                  <div>
+                     <p style={{ margin: 0, fontSize: '10px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>FUND SIZE (AUM)</p>
+                     <p style={{ margin: '4px 0 0', fontSize: '16px', fontWeight: 800 }}>₹{fund.aum} Cr</p>
+                  </div>
+               )}
+               <div>
+                  <p style={{ margin: 0, fontSize: '10px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>EXIT LOAD</p>
+                  <p style={{ margin: '4px 0 0', fontSize: '16px', fontWeight: 800 }}>{fund.exit_load?.match(/(\d+(?:\.\d+)?%)/)?.[0] || "1.0%"}</p>
+                  <p style={{ margin: 0, fontSize: '10px', color: 'var(--text-muted)' }}>{fund.exit_load?.match(/within (\d+ (?:days|months|year|years))/i)?.[0]?.replace(/within/i, "For") || "For 1 month"}</p>
                </div>
-            )}
+            </div>
          </div>
 
          {/* Detail Right: Chart */}

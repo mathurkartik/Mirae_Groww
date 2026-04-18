@@ -1,5 +1,5 @@
 /**
- * CategoryCard.tsx — Category grid card
+ * CategoryCard.tsx — Category grid card (Emerald Ledger Redesign)
  * Displays a fund category with icon, description, fund count, and "View All" link.
  */
 import Link from "next/link";
@@ -31,23 +31,30 @@ export function CategoryCard({
 }: CategoryCardProps) {
   return (
     <Link href={`/category/${slug}`} style={{ textDecoration: "none" }}>
-      <div className="category-card" id={`category-${slug}`}>
+      <div className="category-card" id={`category-${slug}`} style={{ background: 'var(--bg-white)', border: '1px solid var(--border)', borderRadius: '16px', padding: '28px', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div
-          className="category-card-icon"
-          style={{ background: `${color}15`, color }}
+          style={{
+            width: '48px',
+            height: '48px',
+            borderRadius: '12px',
+            background: `${color}15`,
+            color,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '22px',
+          }}
         >
           {ICON_MAP[icon] || "📁"}
         </div>
-        <h3 className="category-card-title">{displayName}</h3>
-        <p className="category-card-desc">{description}</p>
-        <div className="category-card-footer">
-          <div className="category-card-count">
-            <strong>{fundCount}</strong>
-            <br />
-            FUNDS
-          </div>
-          <span className="category-card-link">
-            View All <span>→</span>
+        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>{displayName}</h3>
+        <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.6, flex: 1 }}>{description}</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '8px' }}>
+          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)' }}>
+            <strong style={{ fontSize: '16px', color: 'var(--text-primary)', fontWeight: 800 }}>{fundCount}</strong> FUNDS
+          </span>
+          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            VIEW ALL <span>→</span>
           </span>
         </div>
       </div>
