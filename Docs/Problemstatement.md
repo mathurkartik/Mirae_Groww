@@ -48,13 +48,14 @@ Be polite and clearly worded
 Reinforce the facts-only limitation
 Provide a relevant educational link (e.g., AMFI or SEBI resource)
 
-3. User Interface (Explorer + Chat)
-The solution features a modern 3-screen navigation system in a light-themed, premium UI:
-- **Home**: Discovery landing page with category-based fund grouping.
-- **Category Listing**: Filterable and sortable list of all schemes within a category.
-- **Fund Detail**: deep-dive analytics dashboard with interactive historical NAV charts and portfolio holdings.
-- **Floating AI Assistant**: A persistent chatbot widget accessible from any screen for factual Q&A.
-- **Disclaimer Banner**: Always visible: “Facts-only. No investment advice.”
+3. User Interface ("Emerald Ledger" Explorer + Atelier Advisor)
+The solution features a modern 3-screen navigation system branded as "Emerald Ledger" in a light-themed, institutional-grade UI:
+- **Home (Sovereign Explorer)**: Discovery landing page with category-based fund grouping, Top 10 Active table, NFO module, and Watchlist.
+- **Category Listing**: Filterable and sortable list of all schemes within a category, with "Market Sentiment" banner.
+- **Fund Detail (Analytics Dashboard)**: Deep-dive fund dashboard with investment objective, key metrics (Expense Ratio, AUM, Exit Load, Min SIP), interactive NAV chart, returns calculator, risk profile, asset allocation, holdings table, and peer comparison.
+- **Atelier Advisor**: A floating AI insight widget ("Active Insight") accessible from any screen for factual Q&A. Features dark emerald header, professional message styling, and inline citations.
+- **Dual Layout Architecture**: Global layout (sidebar + inline nav) for discovery pages; Fund Detail layout (full-width nav + specialized sidebar) for analytics pages.
+- **Disclaimer**: "Facts-only. No investment advice." present in both the AI assistant footer and the site footer.”
 
 Constraints
 Data and Sources

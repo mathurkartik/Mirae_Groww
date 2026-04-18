@@ -1,4 +1,4 @@
-# Deployment Plan — Mutual Fund Explorer & FAQ Assistant
+# Deployment Plan — Emerald Ledger (Mutual Fund Explorer & FAQ Assistant)
 
 > **Version:** 1.0  
 > **Date:** April 2026  
@@ -47,14 +47,8 @@
  └───────────────────────────┬──────────────────────────────────┘
                               │ API calls via rewrite proxy
                               │
- ┌────────────────────────────┴────────────────────────────────┐
+ ┌────────────────────────────┴───────────────────────────────┐
  │                     VERCEL (Frontend)                        │
- │                                                              │
- │  Framework:  Next.js 16 (App Router)                        │
- │  Root Dir:   frontend/                                      │
- │  Build Cmd:  npm install && npm run build                   │
- │  Dependencies: recharts, lucide-react                       │
- │  Output Dir: .next                                          │
  │                                                              │
  │  Rewrite proxy in next.config.ts:                           │
  │    /api/* → $NEXT_PUBLIC_API_URL/api/*                      │
@@ -255,6 +249,11 @@ Render free tier spins down after 15 minutes of inactivity. First request after 
 | **Output Directory** | `.next` *(auto-detected)* |
 | **Node.js Version** | 20.x |
 
+> [!NOTE]
+> The frontend is branded as **"Emerald Ledger"** with a dual-layout architecture.
+> The AI assistant is branded as **"Atelier Advisor"**.
+> Styling uses vanilla CSS with design tokens (no Tailwind required).
+
 4. Add environment variable from [Section 2.3](#23-vercel-environment-variables)
 5. Click **Deploy**
 
@@ -397,11 +396,13 @@ npm run lint           # Must pass with 0 lint errors
 npm run dev            # → http://localhost:3000
 
 # 4. Manual exit criteria checks:
-#    ✓ Disclaimer banner visible at top, stays fixed on scroll
-#    ✓ 3 example question chips on welcome screen
+#    ✓ "Emerald Ledger / SOVEREIGN ANALYST" branding in sidebar
+#    ✓ Dual layout: Global view on /, Fund Detail view on /fund/*
+#    ✓ All fund metrics shown: Expense Ratio, AUM, Exit Load, Min SIP
+#    ✓ Atelier Advisor (✨ FAB) opens and closes correctly
+#    ✓ 3 example question cards on Atelier Advisor welcome screen
 #    ✓ Click example → message bubble appears with citation + footer
-#    ✓ Create 2 threads → independent message histories
-#    ✓ Delete thread → disappears from sidebar
+#    ✓ Category pages show "Market Sentiment: Bullish" banner
 ```
 
 ### 7.3 End-to-End — Integration Test
@@ -415,12 +416,15 @@ uvicorn backend.main:app --reload --port 8000
 cd frontend && npm run dev
 
 # Open http://localhost:3000
-# Click "What is the expense ratio of Mirae Asset Large Cap Direct?"
+# Navigate to a fund detail page (e.g., /fund/mirae-asset-large-cap-fund-direct-growth)
+# Click the ✨ Atelier Advisor FAB button
+# Click example question: "What is the expense ratio of Mirae Asset Large Cap Direct?"
 # Verify:
-#   ✓ User bubble appears (indigo, right-aligned)
+#   ✓ User bubble appears (dark emerald, right-aligned)
 #   ✓ Loading dots animate in assistant bubble
-#   ✓ Assistant bubble appears with answer, "View source" link, and footer
+#   ✓ Assistant bubble appears with answer, "View source" link, and "Atelier Assistant" label
 #   ✓ Citation link opens Groww page in new tab
+#   ✓ Fund detail page shows all metrics: Expense Ratio, AUM, Exit Load, Min SIP
 ```
 
 ---

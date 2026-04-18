@@ -1,8 +1,8 @@
 # RAG Architecture — Mutual Fund FAQ Assistant
 
-> **Project:** Facts-Only Mutual Fund FAQ Assistant — Mirae Asset (Groww Context)
-> **Version:** 2.1
-> **Date:** April 17, 2026
+> **Project:** Facts-Only Mutual Fund FAQ Assistant — "Emerald Ledger" (Sovereign Analyst)
+> **Version:** 3.0
+> **Date:** April 19, 2026
 > **Embedding Model:** BAAI/bge-small-en-v1.5 (local)
 > **LLM:** Groq (llama3-8b-8192)
 > **Vector Store:** ChromaDB (local persistent)
@@ -110,10 +110,10 @@ The system follows a **Retrieval-Augmented Generation (RAG)** pattern. Every ans
 │                  RETRIEVAL + GENERATION FLOW (Real-time)                     │
 │                                                                              │
 │  ┌─────────────────────────────────────────────────────────────────────────┐ │
-│  │                         NEXT.JS EXPLORER UI                             │ │
-│  │  Home Page (Categories) · Category List · Fund Detail Dashboard         │ │
-│  │  Interactive Recharts NAV Chart · Sidebar Navigation · Light Theme       │ │
-│  │  Floating RAG Chat Widget (Stateless thread-based conversations)        │ │
+│  │                    NEXT.JS EMERALD LEDGER UI                            │ │
+│  │  Home (Sovereign Explorer) · Category List · Fund Analytics Dashboard   │ │
+│  │  Interactive Recharts NAV Chart · Dual-Layout · Light Emerald Theme      │ │
+│  │  Atelier Advisor (Floating AI Insight Widget)                           │ │
 │  └────────────────────────────────┬────────────────────────────────────────┘ │
 │                                   │ User Query                               │
 │                                   ▼                                          │
@@ -472,30 +472,47 @@ Facts-only. No investment advice.
 
 ---
 
-### Phase 9 — Next.js Frontend
+### Phase 9 — Next.js Frontend ("Emerald Ledger")
 
-**Objective:** Dark-theme chat UI with multi-thread sidebar and disclaimer.
+**Objective:** Institutional-grade, data-heavy light-theme UI with bifurcated layout and integrated AI advisor.
 
-**Tech:** Next.js (App Router) · Tailwind CSS · deployed on Vercel
+**Tech:** Next.js 16 (App Router, Turbopack) · Vanilla CSS (design tokens) · Recharts · deployed on Vercel
+
+**Brand:** Emerald Ledger / Sovereign Analyst
+**AI Assistant Brand:** Atelier Advisor (Active Insight)
+
+**Layout Architecture — Dual Mode:**
+- **Global Layout** (Home / Category pages): Full-height sidebar (Explore, Investments, SIP Dashboard, Watchlist, Reports) + "Alex Mercer / PRO TIER" profile card
+- **Fund Detail Layout**: Full-width top nav (Markets / Funds / Insights / Institutional) + specialized fund sidebar (Overview / Performance / Holdings / Risk Metrics / Calculators) with AI Recommendation card
 
 **Required UI components:**
-- `ThreadSidebar` — list threads, create new, switch, delete
+- `AppShell` — dual-layout shell with conditional rendering based on route
+- `CategoryCard` — category grid cards with emerald styling
+- `FundCard` — fund summary cards with metric grids (AUM, Expense Ratio, Risk Level)
+- `NavChart` — interactive Recharts NAV time-series chart
+- `HoldingsTable` — top holdings with sector and allocation data
+- `PeerComparison` — comparative table against peer funds
+- `SipCalculator` — standalone SIP/one-time calculator (dark-themed, pure client-side math)
+- `ChatWidget` (Atelier Advisor) — floating AI assistant with dark emerald header
 - `ChatWindow` — message list with user/assistant bubbles
-- `MessageBubble` — renders answer + citation link + "Last updated" footer
-- `DisclaimerBanner` — always visible: "Facts-only. No investment advice."
-- Welcome screen with 3 example questions:
-  1. "What is the expense ratio of Mirae Asset Large Cap Direct?"
-  2. "What is the exit load for Mirae Asset ELSS Tax Saver Fund?"
-  3. "What is the minimum SIP amount for Mirae Asset Flexi Cap Fund?"
+- `MessageBubble` — assistant cards with avatar + "Atelier Assistant" label
+- `WelcomeScreen` — 3 example questions with institutional styling
+- `SendBar` — chat input with inset send button
+
+**Fund Detail Page metrics preserved:**
+- Expense Ratio, AUM, Exit Load, Min SIP/Investment
+- Investment Objective, Benchmark
+- Risk Profile (visual bar), Asset Allocation (progress bars)
+- Fund Managers, Returns Calculator
+- Top Holdings, Peer Comparison
 
 **Exit criteria:**
-- [ ] New thread created on page load or sidebar button
-- [ ] Messages sent to `/api/threads/{id}/messages` and response rendered
-- [ ] Citation link opens in new tab
-- [ ] "Last updated from sources" footer visible on every assistant message
-- [ ] Disclaimer banner visible at all times
-- [ ] Thread switch preserves individual histories
-- [ ] Test: open two browser tabs, create threads in each, verify independent histories
+- [x] Dual layout renders correctly for global vs fund-detail routes
+- [x] All fund metrics (Expense Ratio, AUM, Exit Load, Min SIP) displayed on fund detail
+- [x] Atelier Advisor opens/closes correctly from both sidebar and FAB
+- [x] Citation link opens in new tab
+- [x] Production build passes with zero TypeScript errors
+- [x] Responsive breakpoint hides sidebar on mobile
 
 ---
 
@@ -515,7 +532,7 @@ Facts-only. No investment advice.
 | Re-ranker | `cross-encoder/ms-marco-MiniLM-L-6-v2` | Local cross-encoder |
 | LLM | Groq `llama3-8b-8192` | Free tier · fast inference |
 | Backend | FastAPI (Python 3.11+) | Deployed on Render |
-| Frontend | Next.js + Tailwind CSS | Deployed on Vercel |
+| Frontend | Next.js 16 + Vanilla CSS (design tokens) | "Emerald Ledger" brand · deployed on Vercel |
 | Session Store | In-memory dict | Thread isolation, dev scope |
 
 ---
