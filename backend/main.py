@@ -56,12 +56,10 @@ except ImportError:
     pass
 
 # ── Logging ───────────────────────────────────────────────────────────────────
-_utf8_stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
     datefmt="%Y-%m-%dT%H:%M:%SZ",
-    handlers=[logging.StreamHandler(_utf8_stdout)],
 )
 log = logging.getLogger("main")
 

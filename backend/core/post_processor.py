@@ -93,15 +93,11 @@ for _p in [str(_PROJECT), str(_BACKEND)]:
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-# ---------------------------------------------------------------------------
-# Logging
-# ---------------------------------------------------------------------------
-_utf8_stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+# ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(message)s",
     datefmt="%Y-%m-%dT%H:%M:%SZ",
-    handlers=[logging.StreamHandler(_utf8_stdout)],
 )
 log = logging.getLogger("post_processor")
 

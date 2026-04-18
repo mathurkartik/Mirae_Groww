@@ -67,16 +67,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-# ---------------------------------------------------------------------------
-# Logging -- UTF-8 safe on all platforms
-# ---------------------------------------------------------------------------
-_utf8_stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-
+# ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(message)s",
     datefmt="%Y-%m-%dT%H:%M:%SZ",
-    handlers=[logging.StreamHandler(_utf8_stdout)],
 )
 log = logging.getLogger("vector_store")
 

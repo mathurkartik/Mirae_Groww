@@ -62,19 +62,11 @@ import requests
 import yaml
 from bs4 import BeautifulSoup, Comment
 
-# ── Logging ──────────────────────────────────────────────────────────────────
-
-import io as _io
-
-# Force UTF-8 output even on Windows cp1252 terminals so emoji/arrows in log
-# messages never cause a UnicodeEncodeError.
-_utf8_stdout = _io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-
+# ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(message)s",
     datefmt="%Y-%m-%dT%H:%M:%SZ",
-    handlers=[logging.StreamHandler(_utf8_stdout)],
 )
 log = logging.getLogger("scraper")
 

@@ -65,16 +65,11 @@ if _PROJECT_ROOT not in _sys.path:
 # VectorStore owns all ChromaDB + manifest operations (Stage E)
 from ingestion.vector_store import VectorStore
 
-# ---------------------------------------------------------------------------
-# Logging -- UTF-8 safe on all platforms (avoids cp1252 crash on Windows)
-# ---------------------------------------------------------------------------
-_utf8_stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-
+# ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(message)s",
     datefmt="%Y-%m-%dT%H:%M:%SZ",
-    handlers=[logging.StreamHandler(_utf8_stdout)],
 )
 log = logging.getLogger("embedder")
 

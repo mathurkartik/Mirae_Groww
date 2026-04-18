@@ -90,15 +90,11 @@ for _p in [str(_PROJECT), str(_BACKEND)]:
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-# ---------------------------------------------------------------------------
-# Logging
-# ---------------------------------------------------------------------------
-_utf8_stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+# ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(message)s",
     datefmt="%Y-%m-%dT%H:%M:%SZ",
-    handlers=[logging.StreamHandler(_utf8_stdout)],
 )
 log = logging.getLogger("generator")
 
@@ -112,7 +108,7 @@ except ImportError:
     pass   # python-dotenv optional; key may already be in environment
 
 GROQ_API_KEY     = os.environ.get("GROQ_API_KEY", "")
-GROQ_MODEL       = os.environ.get("GROQ_MODEL",       "llama3-8b-8192")
+GROQ_MODEL       = os.environ.get("GROQ_MODEL",       "llama-3.1-8b-instant")
 GROQ_MAX_TOKENS  = int(os.environ.get("GROQ_MAX_TOKENS",  "256"))
 GROQ_TEMPERATURE = float(os.environ.get("GROQ_TEMPERATURE", "0.1"))
 GROQ_TIMEOUT     = int(os.environ.get("GROQ_TIMEOUT",     "30"))

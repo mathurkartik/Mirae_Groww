@@ -62,7 +62,9 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
            <div style={{ textAlign: 'right' }}>
               <p style={{ margin: 0, fontSize: 13, color: 'var(--text-muted)', fontWeight: 500 }}>CURRENT NAV ({fund.nav_date})</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
-                 <span style={{ fontSize: 28, fontWeight: 800 }}>₹{fund.nav?.toFixed(2)}</span>
+                 <span style={{ fontSize: 28, fontWeight: 800 }}>
+                    {fund.nav != null ? `₹${fund.nav.toFixed(2)}` : "—"}
+                 </span>
                  <span style={{ fontSize: 14, fontWeight: 600, color: isPositive ? 'var(--green)' : 'var(--red)' }}>
                     {isPositive ? "▲" : "▼"} {fund.nav_change_1d}
                  </span>
@@ -87,7 +89,7 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 32 }}>
          {[
             { label: "Expense Ratio", value: fund.expense_ratio, sub: "Excl. GST" },
-            { label: "Fund Size (AUM)", value: `₹${fund.aum}`, sub: "As of Mar 2026" },
+            { label: "Fund Size (AUM)", value: fund.aum ? `₹${fund.aum}` : "—", sub: "As of Mar 2026" },
             { label: "Exit Load", value: fund.exit_load?.split(' ')[0] || "1.0%", sub: "For 1 month" },
             { label: "Minimum SIP", value: fund.min_sip, sub: "Monthly" }
          ].map((m, i) => (
