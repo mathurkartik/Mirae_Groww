@@ -1,3 +1,5 @@
+"use client";
+
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
