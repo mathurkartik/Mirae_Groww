@@ -22,12 +22,22 @@ env/
 .env/
 
 # ── Data (large/generated files) ─────────────────────
-data/raw/
-data/chroma_db/
-data/cleaned_docs.jsonl
-data/chunks.jsonl
-data/ingestion_manifest.json
-data/logs/
+data/*
+!data/urls.yaml
+
+# ── Internal Documentation ───────────────────────────
+Docs/Improvement.md
+Docs/implementation_plan.md
+Docs/walkthrough.md
+Docs/deployment-plan.md
+Docs/edge-cases.md
+Docs/scratchpad_r5ftrfam.md
+improvement.md
+linkedin_post.md
+
+# ── Scratch & Temporary ──────────────────────────────
+scratch/
+.pytest_cache/
 
 # ── HuggingFace model cache ───────────────────────────
 .cache/
