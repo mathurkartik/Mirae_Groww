@@ -118,6 +118,20 @@ All original data points are rendered in the new layout:
 
 ---
 
+## 🎨 UI & UX Polish Iteration (Latest Updates)
+
+- **Sector Allocation Chart**: Added entirely new `SectorChart.tsx` (powered by Recharts) directly beside the Top Holdings table to visualize asset allocation dynamically.
+- **Top 5 Active Funds**: Corrected the Discovery page mapping to restrict correctly to the Top 5 funds instead of mapping to 10.
+- **Dynamic Calculator Restored**: Repaired the static mock elements for the Returns Calculator with real, functioning `<input type="range">` sliders that calculate Compound Interest live in the UI.
+- **Sidebar Scroll Spying**: Wired up actual HTML IDs (`#top`, `#risk`, `#holdings`, `#sip-calculator`) to allow the left navigation sidebar to smoothly jump through sections on the Fund layout.
+- **Breadcrumb Standardization**: Universal standard for breadcrumbs now strictly defaults to `MUTUAL FUNDS / MIRAE ASSET / {Category}` across both navigation routes.
+- **Chat Interface Refinement**: 
+    - Purged remaining Tailwind CSS clashes returning to strict native Vanilla CSS in `ChatWindow`.
+    - Transformed message bubble `border-radius` variables (from boxy `16px` to dynamic `24px` roundness). 
+    - Introduced perfect flex-gap padding to keep question pop-ups from hugging absolute borders.
+
+---
+
 ## ✅ Build & Deployment
 
 - **TypeScript**: `npm run build` passes with zero type errors
