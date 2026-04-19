@@ -59,19 +59,34 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
   const sliderPct = ((sipAmount - 500) / (100000 - 500)) * 100;
 
   /* calculator rows */
+  const fallbackRateStr = fund.returns_3y_annualized || "12.0%";
+  const fallbackRate = parseFloat(fallbackRateStr.replace("%", "").replace("+", ""));
+
   const calcRows = [
     { label: "1 Year", apiLabel: "1Y", months: 12 },
     { label: "3 Years", apiLabel: "3Y", months: 36 },
     { label: "5 Years", apiLabel: "5Y", months: 60 },
   ].map(r => {
-    const rateStr = fund.returns?.[r.apiLabel] || fund.returns?.[r.label]; // Try both formats
-    const rate = rateStr ? parseFloat(rateStr.replace("%", "").replace("+", "")) : 0;
+    let rawRateStr = fund.returns?.[r.apiLabel] || fund.returns?.[r.label]; // Try both formats
+    let rate = 0;
+    let finalRateStr = "—";
+
+    if (rawRateStr && rawRateStr !== "--") {
+      rate = parseFloat(rawRateStr.replace("%", "").replace("+", ""));
+      finalRateStr = rawRateStr;
+    } else {
+      // Fallback if specific period data is missing
+      rate = fallbackRate;
+      finalRateStr = fallbackRateStr + " (Avg)";
+    }
+
     const { invested, corpus } = calcSIP(sipAmount, rate, r.months);
     return { 
       ...r, 
       invested: fmtINR(invested), 
-      corpus: rate > 0 ? fmtINR(corpus) : "—",
-      rateStr: rateStr || "—"
+      // If parsing fails completely, fall back to dash
+      corpus: rate > 0 && !isNaN(rate) ? fmtINR(corpus) : "—",
+      rateStr: finalRateStr
     };
   });
 
@@ -209,6 +224,7 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
                   <thead style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 800 }}>
                      <tr>
                         <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em' }}>PERIOD</th>
+                        <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em' }}>RETURN RATE</th>
                         <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em' }}>TOTAL INVESTED</th>
                         <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em', textAlign: 'right' }}>WOULD&apos;VE BECOME</th>
                      </tr>
@@ -217,6 +233,7 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
                      {calcRows.map((row, i) => (
                         <tr key={row.label} style={{ borderTop: i > 0 ? '1px solid var(--border)' : 'none' }}>
                            <td style={{ padding: '16px 12px' }}>{row.label}</td>
+                           <td style={{ padding: '16px 12px', color: 'var(--text-muted)' }}>{row.rateStr}</td>
                            <td style={{ padding: '16px 12px', color: 'var(--text-secondary)' }}>{row.invested}</td>
                            <td style={{ padding: '16px 12px', textAlign: 'right', color: 'var(--green)', fontSize: '15px' }}>{row.corpus}</td>
                         </tr>
