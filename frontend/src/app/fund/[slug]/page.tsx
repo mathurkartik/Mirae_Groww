@@ -30,7 +30,6 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
   const { slug } = use(params);
   const { fund, isLoading, error } = useFundDetail(slug);
   const [sipAmount, setSipAmount] = useState(5000);
-  const [returnRate, setReturnRate] = useState(12);
 
   if (error) {
     return (
@@ -61,12 +60,19 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
 
   /* calculator rows */
   const calcRows = [
-    { label: "1 Year", months: 12 },
-    { label: "3 Years", months: 36 },
-    { label: "5 Years", months: 60 },
+    { label: "1 Year", apiLabel: "1Y", months: 12 },
+    { label: "3 Years", apiLabel: "3Y", months: 36 },
+    { label: "5 Years", apiLabel: "5Y", months: 60 },
   ].map(r => {
-    const { invested, corpus } = calcSIP(sipAmount, returnRate, r.months);
-    return { ...r, invested: fmtINR(invested), corpus: fmtINR(corpus) };
+    const rateStr = fund.returns?.[r.apiLabel] || fund.returns?.[r.label]; // Try both formats
+    const rate = rateStr ? parseFloat(rateStr.replace("%", "").replace("+", "")) : 0;
+    const { invested, corpus } = calcSIP(sipAmount, rate, r.months);
+    return { 
+      ...r, 
+      invested: fmtINR(invested), 
+      corpus: rate > 0 ? fmtINR(corpus) : "—",
+      rateStr: rateStr || "—"
+    };
   });
 
   return (
@@ -154,7 +160,7 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
       {/* ── 3. Returns Calculator (FUNCTIONAL) ── */}
       <div id="sip-calculator" style={{ background: 'var(--bg-white)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '32px', marginBottom: '40px' }}>
          <h2 style={{ margin: '0 0 4px', fontSize: '20px', fontWeight: 800 }}>Returns Calculator</h2>
-         <p style={{ margin: '0 0 28px', fontSize: '13px', color: 'var(--text-secondary)' }}>Estimate your future wealth with a monthly SIP in this fund.</p>
+         <p style={{ margin: '0 0 28px', fontSize: '13px', color: 'var(--text-secondary)' }}>Based on actual historical performance of this fund.</p>
          
          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '48px' }}>
             {/* Slider Controls */}
@@ -183,29 +189,6 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
                   </div>
                </div>
 
-               {/* Return Rate Slider */}
-               <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                     <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>EXPECTED RETURN (% P.A.)</span>
-                     <span style={{ background: 'var(--accent-light)', color: 'var(--accent-dark)', padding: '4px 14px', borderRadius: '8px', fontSize: '16px', fontWeight: 800 }}>{returnRate}%</span>
-                  </div>
-                  <div style={{ position: 'relative', height: '20px' }}>
-                     <div style={{ position: 'absolute', top: '8px', width: '100%', height: '4px', background: 'var(--border)', borderRadius: '2px' }}>
-                        <div style={{ width: `${((returnRate - 1) / 29) * 100}%`, height: '100%', background: 'var(--accent)', borderRadius: '2px' }} />
-                     </div>
-                     <input
-                       type="range"
-                       min={1} max={30} step={0.5}
-                       value={returnRate}
-                       onChange={(e) => setReturnRate(Number(e.target.value))}
-                       style={{ position: 'absolute', top: 0, width: '100%', height: '20px', appearance: 'none', background: 'transparent', cursor: 'pointer', zIndex: 2 }}
-                     />
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, marginTop: '4px' }}>
-                     <span>1%</span>
-                     <span>30%</span>
-                  </div>
-               </div>
 
                {/* Invest Now CTA */}
                <a
@@ -240,7 +223,7 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
                      ))}
                   </tbody>
                </table>
-               <p style={{ margin: '16px 0 0', fontSize: '10px', color: 'var(--text-muted)', textAlign: 'center' }}>⚠️ Based on your entered return rate — not actual fund performance. Not investment advice.</p>
+               <p style={{ margin: '16px 0 0', fontSize: '10px', color: 'var(--text-muted)', textAlign: 'center' }}>⚠️ Projections are based on historical returns of this specific fund. Past performance does not guarantee future results.</p>
             </div>
          </div>
       </div>
