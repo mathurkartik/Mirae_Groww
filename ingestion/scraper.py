@@ -160,6 +160,38 @@ def is_noise_element(tag) -> bool:
 
 # ── Text extraction / cleaning ────────────────────────────────────────────────
 
+def _strip_groww_nav(html_text: str) -> str:
+    """
+    Remove Groww-specific navigation boilerplate that appears at the start
+    of every fund page. This content is identical across all funds and adds
+    no fund-specific value.
+    """
+    # Pattern 1: Top nav links (Stocks, Mutual Funds, Fixed Deposits...)
+    html_text = re.sub(
+        r'Stocks\s+Mutual Funds\s+Fixed Deposits\s+Gold\s+US Stocks.*?(?=<)',
+        '',
+        html_text,
+        flags=re.DOTALL | re.IGNORECASE
+    )
+    
+    # Pattern 2: Login/Register + GROWW branding
+    html_text = re.sub(
+        r'Login/Register\s+GROWW.*?(?=<)',
+        '',
+        html_text,
+        flags=re.DOTALL
+    )
+    
+    # Pattern 3: Generic header menus (matches divs with navigation classes)
+    html_text = re.sub(
+        r'<div[^>]*class="[^"]*nav[^"]*"[^>]*>.*?</div>',
+        '',
+        html_text,
+        flags=re.DOTALL | re.IGNORECASE
+    )
+    
+    return html_text
+
 def clean_html(raw_html: str, source_url: str) -> str:
     """
     Parse raw HTML and return cleaned plain text suitable for chunking.
@@ -172,6 +204,7 @@ def clean_html(raw_html: str, source_url: str) -> str:
       5. Convert headings to markdown (## / ### / ####).
       6. Extract remaining text, normalize whitespace.
     """
+    raw_html = _strip_groww_nav(raw_html)
     soup = BeautifulSoup(raw_html, "html.parser")
 
     # Remove HTML comments

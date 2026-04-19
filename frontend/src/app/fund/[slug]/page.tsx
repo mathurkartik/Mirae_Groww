@@ -11,25 +11,12 @@ import { NavChart } from "@/components/NavChart";
 import { HoldingsTable } from "@/components/HoldingsTable";
 import { SectorChart } from "@/components/SectorChart";
 import { PeerComparison } from "@/components/PeerComparison";
+import SipCalculator from "@/components/SipCalculator";
 import { useFundDetail } from "@/hooks/useFundData";
-
-/* ── SIP math helpers ───────────────────────────────────────── */
-function calcSIP(sip: number, rate: number, months: number) {
-  if (rate === 0) return { invested: sip * months, corpus: sip * months };
-  const r = rate / 100 / 12;
-  const corpus = sip * ((Math.pow(1 + r, months) - 1) / r) * (1 + r);
-  return { invested: sip * months, corpus };
-}
-function fmtINR(n: number) {
-  if (n >= 1_00_00_000) return `₹${(n / 1_00_00_000).toFixed(2)} Cr`;
-  if (n >= 1_00_000) return `₹${(n / 1_00_000).toFixed(2)} L`;
-  return `₹${Math.round(n).toLocaleString("en-IN")}`;
-}
 
 export default function FundDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const { fund, isLoading, error } = useFundDetail(slug);
-  const [sipAmount, setSipAmount] = useState(5000);
 
   if (error) {
     return (
@@ -56,39 +43,6 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
   }
 
   const isPositive = !fund.nav_change_1d?.startsWith("-");
-  const sliderPct = ((sipAmount - 500) / (100000 - 500)) * 100;
-
-  /* calculator rows */
-  const fallbackRateStr = fund.returns_3y_annualized || "12.0%";
-  const fallbackRate = parseFloat(fallbackRateStr.replace("%", "").replace("+", ""));
-
-  const calcRows = [
-    { label: "1 Year", apiLabel: "1Y", months: 12 },
-    { label: "3 Years", apiLabel: "3Y", months: 36 },
-    { label: "5 Years", apiLabel: "5Y", months: 60 },
-  ].map(r => {
-    let rawRateStr = fund.returns?.[r.apiLabel] || fund.returns?.[r.label]; // Try both formats
-    let rate = 0;
-    let finalRateStr = "—";
-
-    if (rawRateStr && rawRateStr !== "--") {
-      rate = parseFloat(rawRateStr.replace("%", "").replace("+", ""));
-      finalRateStr = rawRateStr;
-    } else {
-      // Fallback if specific period data is missing
-      rate = fallbackRate;
-      finalRateStr = fallbackRateStr + " (Avg)";
-    }
-
-    const { invested, corpus } = calcSIP(sipAmount, rate, r.months);
-    return { 
-      ...r, 
-      invested: fmtINR(invested), 
-      // If parsing fails completely, fall back to dash
-      corpus: rate > 0 && !isNaN(rate) ? fmtINR(corpus) : "—",
-      rateStr: finalRateStr
-    };
-  });
 
   return (
     <AppShell>
@@ -173,76 +127,8 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
       </div>
 
       {/* ── 3. Returns Calculator (FUNCTIONAL) ── */}
-      <div id="sip-calculator" style={{ background: 'var(--bg-white)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '32px', marginBottom: '40px' }}>
-         <h2 style={{ margin: '0 0 4px', fontSize: '20px', fontWeight: 800 }}>Returns Calculator</h2>
-         <p style={{ margin: '0 0 28px', fontSize: '13px', color: 'var(--text-secondary)' }}>Based on actual historical performance of this fund.</p>
-         
-         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '48px' }}>
-            {/* Slider Controls */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-               {/* Amount Slider */}
-               <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                     <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>MONTHLY SIP AMOUNT</span>
-                     <span style={{ background: 'var(--accent-light)', color: 'var(--accent-dark)', padding: '4px 14px', borderRadius: '8px', fontSize: '16px', fontWeight: 800 }}>₹{sipAmount.toLocaleString("en-IN")}</span>
-                  </div>
-                  <div style={{ position: 'relative', height: '20px' }}>
-                     <div style={{ position: 'absolute', top: '8px', width: '100%', height: '4px', background: 'var(--border)', borderRadius: '2px' }}>
-                        <div style={{ width: `${sliderPct}%`, height: '100%', background: 'var(--accent)', borderRadius: '2px' }} />
-                     </div>
-                     <input
-                       type="range"
-                       min={500} max={100000} step={500}
-                       value={sipAmount}
-                       onChange={(e) => setSipAmount(Number(e.target.value))}
-                       style={{ position: 'absolute', top: 0, width: '100%', height: '20px', appearance: 'none', background: 'transparent', cursor: 'pointer', zIndex: 2 }}
-                     />
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, marginTop: '4px' }}>
-                     <span>₹500</span>
-                     <span>₹1,00,000</span>
-                  </div>
-               </div>
-
-
-               {/* Invest Now CTA */}
-               <a
-                 href={fund.source_url}
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 style={{ 
-                   padding: '14px', borderRadius: '12px', background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'white', border: 'none', fontSize: '15px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', boxShadow: '0 8px 24px rgba(0, 168, 132, 0.25)', textDecoration: 'none'
-                 }}
-               >
-                  INVEST NOW ON GROWW →
-               </a>
-            </div>
-
-            {/* Returns Result Table */}
-            <div style={{ background: 'var(--bg-surface-2)', borderRadius: '16px', padding: '24px' }}>
-               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                  <thead style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 800 }}>
-                     <tr>
-                        <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em' }}>PERIOD</th>
-                        <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em' }}>RETURN RATE</th>
-                        <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em' }}>TOTAL INVESTED</th>
-                        <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em', textAlign: 'right' }}>WOULD&apos;VE BECOME</th>
-                     </tr>
-                  </thead>
-                  <tbody style={{ fontSize: '13px', fontWeight: 700 }}>
-                     {calcRows.map((row, i) => (
-                        <tr key={row.label} style={{ borderTop: i > 0 ? '1px solid var(--border)' : 'none' }}>
-                           <td style={{ padding: '16px 12px' }}>{row.label}</td>
-                           <td style={{ padding: '16px 12px', color: 'var(--text-muted)' }}>{row.rateStr}</td>
-                           <td style={{ padding: '16px 12px', color: 'var(--text-secondary)' }}>{row.invested}</td>
-                           <td style={{ padding: '16px 12px', textAlign: 'right', color: 'var(--green)', fontSize: '15px' }}>{row.corpus}</td>
-                        </tr>
-                     ))}
-                  </tbody>
-               </table>
-               <p style={{ margin: '16px 0 0', fontSize: '10px', color: 'var(--text-muted)', textAlign: 'center' }}>⚠️ Projections are based on historical returns of this specific fund. Past performance does not guarantee future results.</p>
-            </div>
-         </div>
+      <div id="sip-calculator" style={{ marginBottom: '40px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border)' }}>
+         <SipCalculator fundName={fund.scheme_name} mfapiCode={fund.mfapi_code} />
       </div>
 
       {/* ── 4. Bottom Detailed Stats ── */}

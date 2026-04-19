@@ -85,6 +85,7 @@ GROQ_MODEL   = os.environ.get("GROQ_MODEL", "llama-3.1-8b-instant")
 INTENT_FACTUAL      = "FACTUAL"
 INTENT_ADVISORY     = "ADVISORY"
 INTENT_OUT_OF_SCOPE = "OUT_OF_SCOPE"
+INTENT_MATH_QUERY   = "MATH_QUERY"
 
 # ---------------------------------------------------------------------------
 # Refusal & redirect messages  (verbatim per architecture spec section 7)
@@ -103,6 +104,13 @@ REFUSAL_OUT_OF_SCOPE = (
     "available on Groww. Your question appears to be outside my scope. "
     "For general mutual fund education, please visit the AMFI Investor Education "
     f"portal at {AMFI_LINK}.\n\nFacts-only. No investment advice."
+)
+
+REFUSAL_MATH_REDIRECT = (
+    "I can help you with that using our interactive calculator. "
+    "The calculator lets you simulate SIP or one-time investments with custom return rates and periods. "
+    "Please use the SIP Calculator tab to project your investment growth.\n\n"
+    "Facts-only. No investment advice."
 )
 
 # ---------------------------------------------------------------------------
@@ -195,6 +203,29 @@ _OOS_PHRASES: list[str] = [
     "personal loan",
 ]
 
+# Math query patterns: triggers calculator redirect
+_MATH_PHRASES: list[str] = [
+    "calculate sip",
+    "sip calculation",
+    "calculate returns",
+    "future value",
+    "corpus after",
+    "how much will",
+    "what will be the",
+    "sip calculator",
+    "lumpsum calculator",
+    "investment calculator",
+    "calculate investment",
+    "sip of ",
+    "monthly sip of",
+    "invest 5000",
+    "invest 10000",
+    "maturity value",
+    "final amount",
+    "step up sip",
+    "step-up sip",
+]
+
 # Phrases that are commonly mis-flagged: whitelist overrides advisory check
 _FACTUAL_OVERRIDES: list[str] = [
     "exit load",            # "exit load" contains "load" but is clearly factual
@@ -223,6 +254,10 @@ class GuardResult:
     def is_refusal(self) -> bool:
         return not self.is_allowed
 
+    @property
+    def is_math_redirect(self) -> bool:
+        return self.intent == INTENT_MATH_QUERY
+
 
 # ---------------------------------------------------------------------------
 # Stage-1: keyword matching
@@ -238,7 +273,7 @@ def _normalise(text: str) -> str:
 
 def _keyword_classify(query: str) -> GuardResult | None:
     """
-    Check query against advisory and OOS phrase lists.
+    Check query against advisory, math, and OOS phrase lists.
 
     Returns a GuardResult if a phrase matches, or None if ambiguous.
     Factual overrides are checked first to prevent false positives.
@@ -252,6 +287,17 @@ def _keyword_classify(query: str) -> GuardResult | None:
                 intent=INTENT_FACTUAL,
                 refusal_message=None,
                 matched_phrase=f"override:{override}",
+                stage="keyword",
+            )
+
+    # Priority 2: Check MATH patterns
+    for phrase in _MATH_PHRASES:
+        if phrase in norm:
+            log.info("Query MATH_QUERY: %r matched %r", query[:60], phrase)
+            return GuardResult(
+                intent=INTENT_MATH_QUERY,
+                refusal_message=REFUSAL_MATH_REDIRECT,
+                matched_phrase=phrase,
                 stage="keyword",
             )
 

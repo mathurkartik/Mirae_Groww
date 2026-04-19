@@ -54,6 +54,7 @@ class MessageResponse(BaseModel):
     last_updated: Optional[str]
     timestamp:    str
     is_refusal:   bool
+    is_math_redirect: bool = False
     intent:       Optional[str]   = None
     # Debug fields (omitted from production responses via exclude_none)
     retrieval_count: Optional[int] = None
@@ -147,17 +148,18 @@ def send_message(
 
     guard = classify(query)
 
-    if guard.is_refusal:
-        # Build refusal assistant message directly — no LLM call
+    if guard.is_refusal or guard.is_math_redirect:
+        # Build refusal/redirect assistant message directly — no LLM call
         assistant_msg = Message(
-            message_id   = str(uuid.uuid4()),
-            role         = "assistant",
-            content      = guard.refusal_message or REFUSAL_ADVISORY,
-            timestamp    = _utcnow(),
-            citation     = "https://www.amfiindia.com/investor-corner/knowledge-center",
-            last_updated = None,
-            is_refusal   = True,
-            intent       = guard.intent,
+            message_id       = str(uuid.uuid4()),
+            role             = "assistant",
+            content          = guard.refusal_message or REFUSAL_ADVISORY,
+            timestamp        = _utcnow(),
+            citation         = "https://www.amfiindia.com/investor-corner/knowledge-center" if guard.is_refusal else None,
+            last_updated     = None,
+            is_refusal       = guard.is_refusal,
+            is_math_redirect = guard.is_math_redirect,
+            intent           = guard.intent,
         )
         store.add_message(thread_id, assistant_msg)
         return _build_response(thread_id, assistant_msg, retrieval_count=0)
@@ -231,6 +233,7 @@ def _build_response(thread_id: str, msg: Message, retrieval_count: int) -> dict:
         "last_updated":    msg.last_updated,
         "timestamp":       msg.timestamp,
         "is_refusal":      msg.is_refusal,
+        "is_math_redirect": msg.is_math_redirect,
         "intent":          msg.intent,
         "retrieval_count": retrieval_count,
     }

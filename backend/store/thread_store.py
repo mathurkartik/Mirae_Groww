@@ -61,6 +61,7 @@ class Message:
     citation:     Optional[str] = None
     last_updated: Optional[str] = None
     is_refusal:   bool          = False
+    is_math_redirect: bool      = False
     intent:       Optional[str] = None
 
     def to_dict(self) -> dict:

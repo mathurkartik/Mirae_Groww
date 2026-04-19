@@ -22,7 +22,8 @@
 
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { fetchHistoricalReturns } from "../lib/mfapi";
 import {
   BarChart,
   Bar,
@@ -109,15 +110,52 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Main component
-// ─────────────────────────────────────────────────────────────────────────────
+export interface SipCalculatorProps {
+  fundName?: string;
+  mfapiCode?: number | null;
+}
 
-export default function SipCalculator() {
+export default function SipCalculator({ fundName, mfapiCode }: SipCalculatorProps = {}) {
   const [mode, setMode]           = useState<Mode>("sip");
   const [amount, setAmount]       = useState(5000);
   const [returnRate, setReturnRate] = useState(12);
   const [activePeriod, setActivePeriod] = useState<string>("3Y");
+  
+  const [fundReturns, setFundReturns] = useState<{
+    returns_1y: number | null;
+    returns_3y: number | null;
+    returns_5y: number | null;
+    latestDate?: string | null;
+  } | null>(null);
+  const [isLoadingReturns, setIsLoadingReturns] = useState(false);
+
+  useEffect(() => {
+    if (mfapiCode) {
+      setIsLoadingReturns(true);
+      fetchHistoricalReturns(mfapiCode).then(res => {
+        setFundReturns({
+          returns_1y: res.returns_1y,
+          returns_3y: res.returns_3y,
+          returns_5y: res.returns_5y,
+          latestDate: res.latest_date
+        });
+        setIsLoadingReturns(false);
+      });
+    }
+  }, [mfapiCode]);
+
+  useEffect(() => {
+    if (!fundReturns) return;
+    let rate = 12;
+    if (activePeriod === "1Y" && fundReturns.returns_1y != null) rate = fundReturns.returns_1y;
+    else if (activePeriod === "3Y" && fundReturns.returns_3y != null) rate = fundReturns.returns_3y;
+    else if (activePeriod === "5Y" && fundReturns.returns_5y != null) rate = fundReturns.returns_5y;
+    else if (fundReturns.returns_3y != null) rate = fundReturns.returns_3y; // Fallback
+    
+    // Validate bounds for rate slider (1 to 40)
+    rate = Math.min(40, Math.max(1, rate));
+    setReturnRate(rate);
+  }, [activePeriod, fundReturns]);
 
   // ── Derived chart data ─────────────────────────────────────────────────────
   const chartData = PERIODS.map((p) => {
@@ -350,6 +388,27 @@ export default function SipCalculator() {
 
   return (
     <div style={S.wrapper}>
+      {fundName && (
+        <div style={{
+          background: "linear-gradient(to right, #0a1f18, #0d2820)",
+          border: "1px solid #1a3a2a",
+          color: "#00e6a8",
+          padding: "10px 16px",
+          borderRadius: 8,
+          marginBottom: 16,
+          fontSize: 13,
+          fontWeight: 500,
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          maxWidth: 420,
+          width: "100%",
+        }}>
+          💡 Context: Using historical performance for {fundName}.
+          {isLoadingReturns && " (Loading...)"}
+        </div>
+      )}
+
       <div style={S.card}>
 
         {/* ── Mode toggle ─────────────────────────────────────────────────── */}
@@ -530,7 +589,9 @@ export default function SipCalculator() {
 
       {/* ── Disclaimer ──────────────────────────────────────────────────────── */}
       <div style={S.disclaimer}>
-        ⚠️ This uses your entered return rate — not actual fund performance.
+        ⚠️ {fundName 
+             ? `Projecting estimates using actual historical CAGR for ${fundName}. `
+             : `This uses your entered return rate — not actual fund performance. `}
         Mathematical estimate only. Past performance does not guarantee future returns.
         Not investment advice.
       </div>
