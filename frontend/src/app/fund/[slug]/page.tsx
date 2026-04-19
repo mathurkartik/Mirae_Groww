@@ -1,22 +1,34 @@
-/**
- * fund/[slug]/page.tsx — Fund Detail Page (Emerald Ledger Redesign)
- * Full analytics dashboard for a single mutual fund scheme.
- */
-"use client";
-
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
 import { NavChart } from "@/components/NavChart";
 import { HoldingsTable } from "@/components/HoldingsTable";
 import { SectorChart } from "@/components/SectorChart";
 import { PeerComparison } from "@/components/PeerComparison";
-import SipCalculator from "@/components/SipCalculator";
 import { useFundDetail } from "@/hooks/useFundData";
+import { fetchHistoricalReturns } from "@/lib/mfapi";
 
 export default function FundDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const { fund, isLoading, error } = useFundDetail(slug);
+  const [sipAmount, setSipAmount] = useState(5000);
+  const [activeReturnRates, setActiveReturnRates] = useState({
+    returns_1y: 12,
+    returns_3y: 12,
+    returns_5y: 12,
+  });
+
+  useEffect(() => {
+    if (fund?.mfapi_code) {
+      fetchHistoricalReturns(fund.mfapi_code).then(res => {
+        setActiveReturnRates({
+          returns_1y: res.returns_1y || 12,
+          returns_3y: res.returns_3y || 12,
+          returns_5y: res.returns_5y || 12,
+        });
+      });
+    }
+  }, [fund?.mfapi_code]);
 
   if (error) {
     return (
@@ -43,6 +55,34 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
   }
 
   const isPositive = !fund.nav_change_1d?.startsWith("-");
+
+  const calcSIP = (sip: number, annualRate: number, years: number) => {
+    const months = years * 12;
+    if (annualRate === 0) return { invested: sip * months, corpus: sip * months };
+    const r = annualRate / 100 / 12;
+    const corpus = sip * ((Math.pow(1 + r, months) - 1) / r) * (1 + r);
+    return { invested: sip * months, corpus };
+  };
+
+  const formatINR = (n: number) => {
+    if (n >= 1_00_00_000) return `₹${(n / 1_00_00_000).toFixed(2)} Cr`;
+    if (n >= 1_00_000) return `₹${(n / 1_00_000).toFixed(2)} L`;
+    return `₹${n.toLocaleString('en-IN')}`;
+  };
+
+  const calcRows = [
+    { label: '1 Year', years: 1, rate: activeReturnRates.returns_1y },
+    { label: '3 Years', years: 3, rate: activeReturnRates.returns_3y },
+    { label: '5 Years', years: 5, rate: activeReturnRates.returns_5y },
+  ].map(row => {
+    const { invested, corpus } = calcSIP(sipAmount, row.rate, row.years);
+    return {
+      label: row.label,
+      rateStr: `${row.rate.toFixed(2)}%`,
+      invested: formatINR(invested),
+      corpus: formatINR(corpus)
+    };
+  });
 
   return (
     <AppShell>
@@ -126,9 +166,73 @@ export default function FundDetailPage({ params }: { params: Promise<{ slug: str
          </div>
       </div>
 
-      {/* ── 3. Returns Calculator (FUNCTIONAL) ── */}
-      <div id="sip-calculator" style={{ marginBottom: '40px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', border: '1px solid var(--border)' }}>
-         <SipCalculator fundName={fund.scheme_name} mfapiCode={fund.mfapi_code} />
+      {/* ── 3. Returns Calculator (RESTORED UI + DYNAMIC LOGIC) ── */}
+      <div id="sip-calculator" style={{ background: 'var(--bg-white)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '28px', marginBottom: '40px' }}>
+         <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 800 }}>Returns Calculator</h2>
+         <p style={{ margin: '4px 0 24px', fontSize: '13px', color: 'var(--text-muted)', fontWeight: 500 }}>Based on actual historical performance of this fund.</p>
+         
+         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.2fr)', gap: '48px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+               <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                     <label style={{ fontSize: '10px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>MONTHLY SIP AMOUNT</label>
+                     <div style={{ background: 'var(--bg-surface-2)', padding: '8px 16px', borderRadius: '40px', color: 'var(--green)', fontSize: '16px', fontWeight: 800 }}>
+                        ₹{sipAmount.toLocaleString('en-IN')}
+                     </div>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="500" 
+                    max="100000" 
+                    step="500"
+                    value={sipAmount}
+                    onChange={(e) => setSipAmount(parseInt(e.target.value))}
+                    style={{ width: '100%', height: '6px', appearance: 'none', background: 'var(--bg-surface-2)', borderRadius: '3px', outline: 'none', cursor: 'pointer' }} 
+                  />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)' }}>
+                     <span>₹500</span>
+                     <span>₹1,00,000</span>
+                  </div>
+               </div>
+
+               {/* Invest Now CTA */}
+               <a
+                 href={fund.source_url}
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 style={{ 
+                   padding: '14px', borderRadius: '12px', background: 'linear-gradient(135deg, var(--accent), var(--accent-dark))', color: 'white', border: 'none', fontSize: '15px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', boxShadow: '0 8px 24px rgba(0, 168, 132, 0.25)', textDecoration: 'none'
+                 }}
+               >
+                  INVEST NOW ON GROWW →
+               </a>
+            </div>
+
+            {/* Returns Result Table */}
+            <div style={{ background: 'var(--bg-surface-2)', borderRadius: '16px', padding: '24px' }}>
+               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 800 }}>
+                     <tr>
+                        <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em' }}>PERIOD</th>
+                        <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em' }}>RETURN RATE</th>
+                        <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em' }}>TOTAL INVESTED</th>
+                        <th style={{ padding: '0 12px 16px', letterSpacing: '0.05em', textAlign: 'right' }}>WOULD&apos;VE BECOME</th>
+                     </tr>
+                  </thead>
+                  <tbody style={{ fontSize: '13px', fontWeight: 700 }}>
+                     {calcRows.map((row, i) => (
+                        <tr key={row.label} style={{ borderTop: i > 0 ? '1px solid var(--border)' : 'none' }}>
+                           <td style={{ padding: '16px 12px' }}>{row.label}</td>
+                           <td style={{ padding: '16px 12px', color: 'var(--text-muted)' }}>{row.rateStr}</td>
+                           <td style={{ padding: '16px 12px', color: 'var(--text-secondary)' }}>{row.invested}</td>
+                           <td style={{ padding: '16px 12px', textAlign: 'right', color: 'var(--green)', fontSize: '15px' }}>{row.corpus}</td>
+                        </tr>
+                     ))}
+                  </tbody>
+               </table>
+               <p style={{ margin: '16px 0 0', fontSize: '10px', color: 'var(--text-muted)', textAlign: 'center' }}>⚠️ Projections are based on historical returns of this specific fund. Past performance does not guarantee future results.</p>
+            </div>
+         </div>
       </div>
 
       {/* ── 4. Bottom Detailed Stats ── */}
