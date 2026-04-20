@@ -19,7 +19,10 @@ env:
 
 on:
   schedule:
-    - cron: "45 3 * * *"   # 9:15 AM IST daily  (UTC 03:45)
+    # Multiple schedules to ensure run near 9:15 AM IST (GitHub has jitter/delays)
+    - cron: "45 3 * * *"   # 9:15 AM IST (primary)
+    - cron: "50 3 * * *"   # 9:20 AM IST (fallback)
+    - cron: "15 4 * * *"   # 9:45 AM IST (fallback)
 
   workflow_dispatch:
     inputs:
