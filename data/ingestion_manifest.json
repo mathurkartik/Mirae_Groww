@@ -1,15 +1,15 @@
 {
-  "run_id": "24704398125",
-  "pipeline_run_at": "2026-04-21T04:46:03Z",
+  "run_id": "24706405548",
+  "pipeline_run_at": "2026-04-21T05:55:09Z",
   "triggered_by": "workflow_dispatch",
   "embedding_model": "BAAI/bge-small-en-v1.5",
   "embedding_version": "2026-04",
   "counts": {
-    "new": 431,
+    "new": 1,
     "updated": 0,
-    "unchanged": 0,
-    "deleted": 431,
-    "total_in_collection": 431
+    "unchanged": 424,
+    "deleted": 7,
+    "total_in_collection": 425
   },
   "urls_processed": 36,
   "chunk_ids": [
@@ -280,13 +280,7 @@
     "a19a9ccba55920192106ac9cc101ec4efde4de627b847bf65f352bae663413cb",
     "870bbd99fd91c65aa389e15e1045e4169a3ce1c7ed5e7a0297217bfdadeaec56",
     "8153dd7455d16717345c1a11846aaeeabf1dfcf01f2793532b18a6350681a2c0",
-    "dad2c427d0f3298b9464269d1da1074af9a60c1fb2c026445a7ebc90cfbbfe17",
-    "e0afa85e9dff9531cea5d26ef788478db9fbae80892130fd4606a7a92276bed3",
-    "495291ad000d2f65e06b8a96c35d80e45fdaed7dcaeece7b9676783c16024b02",
-    "4bffd8981c0fe4ba956ece018d767c7c19d7e0fef205b89c6fd75771c3dd5a76",
-    "29b10e9f46765aa6b11368a5dbf597cdc119bad86ea3a36074d9ee3e935fb3b7",
-    "46602552882914ef84e346e208e0d49a96e05a45f7092826f54fdb42d2a80c24",
-    "ef98365a17bb9f5bb1ea22baa4825ec0d7ef538196aac6b0aee96d05af0c276a",
+    "f722aeddd83eab510c28ec9627dee0a979eaf41ebedd94800d50f652155a693d",
     "f59de3be22bc5cc3d363448470279b9cd1021f99c7a7c34dd500273978750fd6",
     "1260751c2101960969ee9cd5014782f04930be7771200c84c15c82f63b71086e",
     "952774e9d46ec34c592ba02217ce0aa48b09fc8719ee99de6056d501a76ad716",
@@ -465,7 +459,7 @@
     "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth": "e31a6852f57d51f37e786f032ddefcef450bb8a319e5e0b538e31aded0f5eef0",
     "https://groww.in/mutual-funds/mirae-asset-nifty-midsmallcap400-momentum-quality-100-etf-fof-direct-growth": "db73c8c00dcfc224edb9b07141813d39005f0bf46405123afc9199610d936f79",
     "https://groww.in/mutual-funds/mirae-asset-nifty-india-new-age-consumption-etf-fof-direct-growth": "22391d56ac3bce7a61d96e02ec3bff29d0d688c68cbd894b10414d879dcef5e2",
-    "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth": "165d79c6ef348d0bee3952b0af723be2f58d88b0ff8d23c89dc986e6b9e9e2ec",
+    "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth": "ccef023ff4d87c7484f81723ba0735590e56d494faefd40f427e4427da8fab04",
     "https://groww.in/mutual-funds/mirae-asset-hang-seng-tech-etf-fof-direct-growth": "c66e6cfd35c2c54ec973a084af3f954288b1467745a5cf02c6733f9dc9a0de43",
     "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth": "aea7edf7c4769f3f44424d0c53f6b2c083bd1f53905fbe4d94cd46bb5a281f9d",
     "https://groww.in/mutual-funds/mirae-asset-global-x-artificial-intelligence-technology-etf-fof-direct-growth": "4473ab561541dca1f207c31ce34ce33ce87e2ba52e35a6829b1d23e9882de188",
@@ -1552,32 +1546,8 @@
       "doc_hash": "22391d56ac3bce7a61d96e02ec3bff29d0d688c68cbd894b10414d879dcef5e2",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-india-new-age-consumption-etf-fof-direct-growth"
     },
-    "dad2c427d0f3298b9464269d1da1074af9a60c1fb2c026445a7ebc90cfbbfe17": {
-      "doc_hash": "165d79c6ef348d0bee3952b0af723be2f58d88b0ff8d23c89dc986e6b9e9e2ec",
-      "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
-    },
-    "e0afa85e9dff9531cea5d26ef788478db9fbae80892130fd4606a7a92276bed3": {
-      "doc_hash": "165d79c6ef348d0bee3952b0af723be2f58d88b0ff8d23c89dc986e6b9e9e2ec",
-      "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
-    },
-    "495291ad000d2f65e06b8a96c35d80e45fdaed7dcaeece7b9676783c16024b02": {
-      "doc_hash": "165d79c6ef348d0bee3952b0af723be2f58d88b0ff8d23c89dc986e6b9e9e2ec",
-      "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
-    },
-    "4bffd8981c0fe4ba956ece018d767c7c19d7e0fef205b89c6fd75771c3dd5a76": {
-      "doc_hash": "165d79c6ef348d0bee3952b0af723be2f58d88b0ff8d23c89dc986e6b9e9e2ec",
-      "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
-    },
-    "29b10e9f46765aa6b11368a5dbf597cdc119bad86ea3a36074d9ee3e935fb3b7": {
-      "doc_hash": "165d79c6ef348d0bee3952b0af723be2f58d88b0ff8d23c89dc986e6b9e9e2ec",
-      "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
-    },
-    "46602552882914ef84e346e208e0d49a96e05a45f7092826f54fdb42d2a80c24": {
-      "doc_hash": "165d79c6ef348d0bee3952b0af723be2f58d88b0ff8d23c89dc986e6b9e9e2ec",
-      "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
-    },
-    "ef98365a17bb9f5bb1ea22baa4825ec0d7ef538196aac6b0aee96d05af0c276a": {
-      "doc_hash": "165d79c6ef348d0bee3952b0af723be2f58d88b0ff8d23c89dc986e6b9e9e2ec",
+    "f722aeddd83eab510c28ec9627dee0a979eaf41ebedd94800d50f652155a693d": {
+      "doc_hash": "ccef023ff4d87c7484f81723ba0735590e56d494faefd40f427e4427da8fab04",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
     },
     "f59de3be22bc5cc3d363448470279b9cd1021f99c7a7c34dd500273978750fd6": {
