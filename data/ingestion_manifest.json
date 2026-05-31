@@ -1,14 +1,14 @@
 {
-  "run_id": "26706640758",
-  "pipeline_run_at": "2026-05-31T07:38:45Z",
+  "run_id": "26706977272",
+  "pipeline_run_at": "2026-05-31T07:55:30Z",
   "triggered_by": "workflow_dispatch",
   "embedding_model": "BAAI/bge-small-en-v1.5",
   "embedding_version": "2026-04",
   "counts": {
-    "new": 303,
+    "new": 0,
     "updated": 0,
-    "unchanged": 121,
-    "deleted": 303,
+    "unchanged": 424,
+    "deleted": 0,
     "total_in_collection": 424
   },
   "urls_processed": 36,
