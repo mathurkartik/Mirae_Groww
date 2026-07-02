@@ -58,7 +58,7 @@ Start the Next.js development server:
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open ((https://mirae-groww.vercel.app/[https://mirae-groww.vercel.app/])) in your browser.
 
 ## 🤝 Project Structure
 - `/frontend`: Next.js web application.
