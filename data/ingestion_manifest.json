@@ -1,14 +1,14 @@
 {
-  "run_id": "29309834699",
-  "pipeline_run_at": "2026-07-14T06:00:07Z",
+  "run_id": "29311200180",
+  "pipeline_run_at": "2026-07-14T06:27:58Z",
   "triggered_by": "workflow_dispatch",
   "embedding_model": "BAAI/bge-small-en-v1.5",
   "embedding_version": "2026-04",
   "counts": {
-    "new": 440,
+    "new": 8,
     "updated": 0,
-    "unchanged": 0,
-    "deleted": 440,
+    "unchanged": 432,
+    "deleted": 8,
     "total_in_collection": 440
   },
   "urls_processed": 36,
@@ -292,14 +292,14 @@
     "059a434ca75b7e2c995777c34db0a6dcb720c7999ae2b02dc0413cf100b77231",
     "807ae3b6f869332cdc94bc60cb6e9f212eabedc93ffaa41ce65a1f4d93baa570",
     "6dd63644a3ad9a9a538c657e435e470546bf645d08cc6d63a41e101fe08f2a2e",
-    "55b7b69340eb6a88a7f37772f720ac5a715e054aefcd27a88416bf0ffb01665f",
-    "8c893e4cdd163764a5051d3c85ffd657dce578c1e01ff671dcbdf29994434c09",
-    "7d4ae129051f5a924e0f1054a868de59654d285c69204da67434fa69ab369c60",
-    "e2f38a2a5b8a7808786d86b974752b14ca464a89d58a15a4859d3eeca2d61926",
-    "b93a4b40b8877de8dc1a93bac8472d587739c92abfb4122c98f233f4d555fa98",
-    "2b44cf53b83a162d99378bd2c2e1ede1b167294292f15ec54f1f457881f002e5",
-    "827ea9ca64230c0ea4bf0cd452b3dff78e1d49fb6711b2a63d633321694d542d",
-    "2be25b987326451e28d2f7c47c04b0f529c785eaf1ecd8b0b746adeb52eba5d2",
+    "6d51e4f37060ba69b6138bc23dd92497105314124d6540b6f9193507dba875f3",
+    "6512fa4c19215483513c79f0237f378fc5df2f68abd2cffd393617c4e5687ea3",
+    "5fefa3f2aaaf941ea361944da512e78f1cfb3b12d3e7c02d2b59b901524099bc",
+    "26225888bc272816d80d501a0dde2747ef86fa38651a768389bbde8d0c680925",
+    "3f917d255375dd02c7203438bd291f637c653b0369ddac413e2e8cd6aa751b5e",
+    "8cb0527657f703ce5ce36e810f9ebf12f58f239b4ba38040383c4e0abe306882",
+    "6d17f4453d0bc85d229de30c02f973ea03bca8085bad73384e39f9883b79fc19",
+    "cdc681d9a2884b46b7697ce8c46845c827b66fd0525129a10834c2bc9ff9a5f9",
     "bcfaeb3e4da1438e67c7267a085a2c4571933e1e83fa0fa67f512be6d057c932",
     "e99a0c79c3c1b4bda602a20bbe584562c81b082782f80d4963fd4c3b1652c9ea",
     "682d9ee37c1a8f7154d18d6288222399b14781dcea76742a3398f5bdb22d4aed",
@@ -476,7 +476,7 @@
     "https://groww.in/mutual-funds/mirae-asset-nifty-india-new-age-consumption-etf-fof-direct-growth": "afeafb0776d6ac1cbd088dedf96820f910d362e4e37bfc4b37bccdac6031d253",
     "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth": "453dd0816d260e342a43f5c864af741d7eb0d2d6578a37f981788e49659f3eb0",
     "https://groww.in/mutual-funds/mirae-asset-hang-seng-tech-etf-fof-direct-growth": "2ef6ffb757855369ed3ac283d121bdd319c26d3090872b64f8db38056a84a0e9",
-    "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth": "892cdbbe7b708b84d96fd6617661ccf517855d1cbf8e893a8e1a9b5ec0079414",
+    "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth": "cb4ca611e2fed74d7be5cbd506bc4aea374e1d11e2eef47361b9961dc8704e00",
     "https://groww.in/mutual-funds/mirae-asset-global-x-artificial-intelligence-technology-etf-fof-direct-growth": "961f70205bbb3d021424e429c6c033a1e469605fbfed90161b62b9af201beeb9",
     "https://groww.in/mutual-funds/mirae-asset-liquid-fund-direct-growth": "1d542b2e90377f10dd1deda0d8d27d7672878e12da1ce1c611921b27f618bea3",
     "https://groww.in/mutual-funds/mirae-asset-money-market-fund-direct-growth": "7b9c020db4703311907a5161c46b2092cbeae9d4aeae16d4a37fdf1c130192c9",
@@ -1609,36 +1609,36 @@
       "doc_hash": "2ef6ffb757855369ed3ac283d121bdd319c26d3090872b64f8db38056a84a0e9",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-hang-seng-tech-etf-fof-direct-growth"
     },
-    "55b7b69340eb6a88a7f37772f720ac5a715e054aefcd27a88416bf0ffb01665f": {
-      "doc_hash": "892cdbbe7b708b84d96fd6617661ccf517855d1cbf8e893a8e1a9b5ec0079414",
+    "6d51e4f37060ba69b6138bc23dd92497105314124d6540b6f9193507dba875f3": {
+      "doc_hash": "cb4ca611e2fed74d7be5cbd506bc4aea374e1d11e2eef47361b9961dc8704e00",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth"
     },
-    "8c893e4cdd163764a5051d3c85ffd657dce578c1e01ff671dcbdf29994434c09": {
-      "doc_hash": "892cdbbe7b708b84d96fd6617661ccf517855d1cbf8e893a8e1a9b5ec0079414",
+    "6512fa4c19215483513c79f0237f378fc5df2f68abd2cffd393617c4e5687ea3": {
+      "doc_hash": "cb4ca611e2fed74d7be5cbd506bc4aea374e1d11e2eef47361b9961dc8704e00",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth"
     },
-    "7d4ae129051f5a924e0f1054a868de59654d285c69204da67434fa69ab369c60": {
-      "doc_hash": "892cdbbe7b708b84d96fd6617661ccf517855d1cbf8e893a8e1a9b5ec0079414",
+    "5fefa3f2aaaf941ea361944da512e78f1cfb3b12d3e7c02d2b59b901524099bc": {
+      "doc_hash": "cb4ca611e2fed74d7be5cbd506bc4aea374e1d11e2eef47361b9961dc8704e00",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth"
     },
-    "e2f38a2a5b8a7808786d86b974752b14ca464a89d58a15a4859d3eeca2d61926": {
-      "doc_hash": "892cdbbe7b708b84d96fd6617661ccf517855d1cbf8e893a8e1a9b5ec0079414",
+    "26225888bc272816d80d501a0dde2747ef86fa38651a768389bbde8d0c680925": {
+      "doc_hash": "cb4ca611e2fed74d7be5cbd506bc4aea374e1d11e2eef47361b9961dc8704e00",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth"
     },
-    "b93a4b40b8877de8dc1a93bac8472d587739c92abfb4122c98f233f4d555fa98": {
-      "doc_hash": "892cdbbe7b708b84d96fd6617661ccf517855d1cbf8e893a8e1a9b5ec0079414",
+    "3f917d255375dd02c7203438bd291f637c653b0369ddac413e2e8cd6aa751b5e": {
+      "doc_hash": "cb4ca611e2fed74d7be5cbd506bc4aea374e1d11e2eef47361b9961dc8704e00",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth"
     },
-    "2b44cf53b83a162d99378bd2c2e1ede1b167294292f15ec54f1f457881f002e5": {
-      "doc_hash": "892cdbbe7b708b84d96fd6617661ccf517855d1cbf8e893a8e1a9b5ec0079414",
+    "8cb0527657f703ce5ce36e810f9ebf12f58f239b4ba38040383c4e0abe306882": {
+      "doc_hash": "cb4ca611e2fed74d7be5cbd506bc4aea374e1d11e2eef47361b9961dc8704e00",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth"
     },
-    "827ea9ca64230c0ea4bf0cd452b3dff78e1d49fb6711b2a63d633321694d542d": {
-      "doc_hash": "892cdbbe7b708b84d96fd6617661ccf517855d1cbf8e893a8e1a9b5ec0079414",
+    "6d17f4453d0bc85d229de30c02f973ea03bca8085bad73384e39f9883b79fc19": {
+      "doc_hash": "cb4ca611e2fed74d7be5cbd506bc4aea374e1d11e2eef47361b9961dc8704e00",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth"
     },
-    "2be25b987326451e28d2f7c47c04b0f529c785eaf1ecd8b0b746adeb52eba5d2": {
-      "doc_hash": "892cdbbe7b708b84d96fd6617661ccf517855d1cbf8e893a8e1a9b5ec0079414",
+    "cdc681d9a2884b46b7697ce8c46845c827b66fd0525129a10834c2bc9ff9a5f9": {
+      "doc_hash": "cb4ca611e2fed74d7be5cbd506bc4aea374e1d11e2eef47361b9961dc8704e00",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth"
     },
     "bcfaeb3e4da1438e67c7267a085a2c4571933e1e83fa0fa67f512be6d057c932": {
