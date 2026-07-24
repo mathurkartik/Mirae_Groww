@@ -1,14 +1,14 @@
 {
-  "run_id": "30071572350",
-  "pipeline_run_at": "2026-07-24T06:17:01Z",
+  "run_id": "30072853800",
+  "pipeline_run_at": "2026-07-24T06:51:57Z",
   "triggered_by": "workflow_dispatch",
   "embedding_model": "BAAI/bge-small-en-v1.5",
   "embedding_version": "2026-04",
   "counts": {
-    "new": 438,
+    "new": 57,
     "updated": 0,
-    "unchanged": 6,
-    "deleted": 438,
+    "unchanged": 387,
+    "deleted": 57,
     "total_in_collection": 444
   },
   "urls_processed": 36,
@@ -75,18 +75,18 @@
     "6a41cc6cacc396ad965814208ab5abed1520950949eadee2b04ff50326841b7f",
     "fd1180674b01eb77240b49ccacb65826d754930ac16c1aef050c82e23dfb7114",
     "95ef72ec50fc2cddf67080d2be4db490c7fedba69b19c9e968cb2ff27d61771f",
-    "0f0f8cca1dace1cac7555b3b4bd7d08c594c30a2a031e0dd0c8eb391baa600b7",
-    "1dda07ec54a8911799eff59cde922d0dffddea06bde1ec5bf39fdbfe5a548cf8",
-    "3f42f76027f70ddf3e7c9c5d0a231996adc26d05b22eec7d0eaf598500585885",
-    "cae7e2bdb576d7377a857199c774ecae842b3962ae4458bdf0af4614366fb44d",
-    "6cea7134bb2128004a2ae5a868b092a6d498347ae1450ae095ffc41e32d21e1e",
-    "37576f056172decd84163565e8b29788e70c652c3ab26fc973b09efe4c9dd2c3",
-    "8058e2951ed271090dd054f85eb6fa39dcb07af580075238581f00329347127a",
-    "22040ec868b240084446b0c097d5897e78bafecfb23a010a1fa08d35bf26e2cd",
-    "2e708452797633a4910f8a56334a1a4b6a3ac3bb46f57e423967329e5cadbe74",
-    "494f20ac29fc9e9a5c202b64e1f21a32418258acc4aa399d7ddafd662d636515",
-    "7d79d9b663e0b0cba76a554f75eddf5b9f61093687fc1e65db44de63d37904bc",
-    "599f0d7da65cee3346793c9433a3aa5f255df1101a9c4369b800016a8e530816",
+    "f56af43371d018554e26c8a0ca1960111c8169c89ff86461da281a5910c0cede",
+    "7a350411615feacda61fee18f6e6633f41d95804835c113855d61352c6929512",
+    "3912aad0e58e6108820cfd79026636b7d17c8f94904f1e06813d92a82ec6c098",
+    "416dfa6b4d6947916d69b8ecbeffde2745515c4172d3b18e9dd07834915e918f",
+    "ad5c9ee80c0c19de6ecf6f80c62243e68fb587ffd96f8bef7c92053c9d99dcde",
+    "69c9a14f402bb6630e6a44ca748a5447be8b2de87c8cdddaa7bf13add7739629",
+    "5f2f67cef534b5a7dc8cdbfbdb23c6b6dcb9efe86c3949e01d6a9d04affe44f3",
+    "0a5fe7978f092862fa638833a3eee729d7f80a66735f0c705aeaff3e71af58b1",
+    "a0919b6450562ef417ebf014befd3d58fe3bc4d06f1f93ecdd77753835c6e611",
+    "b9f2abe0639364bbda304e736fb7297fd7b31f72524bbfb0da9820f6b3cc82ff",
+    "e1409473f2f78566fed24102ccc353180d82821fe073b8a05e11a0c622aef112",
+    "a31450020bd36df512354da8dd415f5a18b917163957fb89179033f94aabae64",
     "4583cef094782019dc9480b7e1c9ccb914bf2683276b1cd812909d16e7204428",
     "f15a709359ee5bdf289633e25ef0f76cbd0ce7df1f9a0a189b3a4adbc5ed9836",
     "e8c8d7af76e52b1a61dfd4265c1d01bedafc9cf734855e1ad5f54886ce49707d",
@@ -226,43 +226,43 @@
     "746a97c1b2f8311c4fd51dad73acb6daf0f26679753c819e8a096e8d71c57723",
     "5d45c2cb57565f9384da61ae437bd6f018e351c12d4c297afd20cc897dc3c0ac",
     "a952b02ccb594e3473be2a95a4b74ace7467ef28541ce59f670c04b776842e9f",
-    "57ec93afa7a62e35fcd6118bc606d4d01358f8642c05ec6dc39b81a745f7d176",
-    "af4ad8ed9edcd1a4c04ec0727f0ab24cc391cab7b898cfdea2ea670dd1001806",
-    "5ee511c4cddfc3b7165e2978b3451bf7c35d94a622d9020c79984f60be9a2d89",
-    "3929b46c6475cb15b08cc6ea1e63231ae756c873f63e553fb6fc4452ddce66f0",
-    "3f47841fa3efa6ef9cd6c767dc5d21bfba94669023b9e24ecce1494b1f45b34a",
-    "889aa7f10617223b6177e7f727b038d861542b1ee782212aa90dd27483152b34",
-    "fb5ade323a1428f0830af1699df22027ff73cc76f68634eefa441fa789da7159",
-    "6e8fc8d1a4089962373221d92c21888ff9ee98956691026e3559ae59e66956ad",
-    "a3b7976706bc5a367fa8240206ebc7ee0102e7a57505f1969e3c371e19fc1f46",
-    "189da5bce587c06ba6f1af8a1e021499736f3e565b885d7556cb246bdc708ad7",
-    "bc294ca819e7c7f88fd03424ee0d2230362a738997c8fc76883bfe58aab78ea8",
-    "0d35a24b1eca62b35d44a585f45300f9f00eb691bce5f8bf87d1d26525dce905",
-    "fa087a7c4f1d6dcc84d8c31dc55e091658ab21dda5b1a4eb841ec6949783e3ff",
-    "129e4a211ef158e29e32bf895a6fe1b69891fad127d3e6d2bc1b5da31cff0c8a",
-    "5d1c11eab3333781dc5ce4267ec9b3a9f3a75cfe12bdfe3320ec3b3d648287a4",
-    "e3bd90b8fcb2da3e1efa388b4c636d8754abc8430de331749e73e65d6de47082",
-    "1a4b0fc9423c5d25aed434c58418e3a6e6418fb6d8239edbddb15fb1338e3a1f",
-    "19d8a24858056cd8c9de9afc5557cb4cb140331cbf7f959845ab62669341364d",
-    "15b247b5a40da054800e0dfc71e69ec6225a77b8d83520d8274824c6231adf3d",
-    "5758e15eea665a5ba62226fa7b492dfa9cb756898f2adfa19de90df0d20ee198",
-    "299ff2b69d33fa00fa4343cad2301ea3a9654181aef85bcaff4ae9493d02615e",
-    "dd8ef5e555b16b357626881f145eb51bd13f3f61b70020482025f6f1b9d7ade6",
-    "3ee1825f40ef420a4d4d7399d3ba1d823e3379ded9a6aa09581a10f1f3257682",
-    "802daa2d060937052184ac69e6468982ee0b733df92ae907f9a67a1d8c71bd46",
-    "01dc54d26c59eeff6b04b000c259a1a46038f8985849675de0db3bae095ead79",
-    "505e6966bb67d6cd29516558567efc62174d95d84868e12b1d921a1292b75f88",
-    "f1f6c4a89e7b01d2f19cffed69e3d1579300af0f000b6a9db33fd344a8345cf9",
-    "f2baf2b4fdf3556ef2c2179ed7c5002abd679d4e6735228ed2ab565de95c60eb",
-    "4c999758e6ac3cea983b904356e78b624ae8d25995cebbe0db03f05cf41ffb40",
-    "07705b9a13be4a088674b72a34d07202d608a5538a1863a14cbacc616e35ad1c",
-    "f2d2fcc2882396c2ac57db36198565518e95887a73ce30a42d05c0291653c61a",
-    "ea106c642d81f49e3cf2414838107e27e54a9bfaaffc3229f1a73857581e5d67",
-    "48912b4314aa04bce94bd92f35a9b743616105586d76a872fa9dee14805e7501",
-    "434ed7af92b1d23f237bc8dc667b978432da345335d020d6ccd68999d8887397",
-    "66e59243348ea065d0359d134c1149ef6f3aadc5d1a40960ee053a0a43d69a16",
-    "4766a9aac31251bb1e7f44f8219d3869ef68ad985964c41d9c8830bb3f2bef10",
-    "1de2093890519ba46b440b809d9354b59ce1b6c614fe7e709b426a0d6364f13c",
+    "c13b1e9e80f0e1859d65f489c3805b1f0edccdac764f29c1c4edd7930fb1c4c5",
+    "722dac13c53cc3dcc10e382ca129791581d729c7204f9a1ff68cf2ef8ef8b211",
+    "fa21a1c0de19c277182a13b8a831408e23521806a07c7cbf29f7caa58d2ab9cc",
+    "5515cfed0d9caa2f41188a645f03f33b2ddd04dc14597dfa65b89046b2ffb920",
+    "12f472d576b450c04ffe989edec61d7214ff46d3b9013602747b19799ca9c55e",
+    "f2fc1b577c75cadcec5fd6d0c37349fe82e8280e579dce4e6e0c9a929f8fd14f",
+    "eda1d724991bd15631b40cba60e7f3dfd8f29fb221ea1be79d2071b4a817c527",
+    "75d491c12590267fabbb9c0599b6d712dd5d4c13e502042649bec5a85a1080dc",
+    "b540bdead0831a7c006fa7e31739fdbcb9185dd84ce9bee69a482c271f0b1c76",
+    "c9975d186426a8bccef78403536f3c258dcd6ed05be7f9eb7a0ae6a345fd53ee",
+    "0ea56fef8af7b33fe69124ffe169d1af5eea2622e787fd43c5ada12aa33ac0ba",
+    "2aaec8e3f2ede9b13d393538b2525bba3fb6943808b829f068befe30f9dfa653",
+    "212fb760410c87954a347c259c4dcb921f8d282ab196c459ea36ff7ed3f2fa25",
+    "da224359e33c8d667acb701fd1c8f258f63052adbe2dfa947df3ab824feb2d4e",
+    "25c6ace4562228da3dbb088d61b871c1a318a90445bd6103379a3c3448aa6003",
+    "77a496e4c5ac9657f786d26cc58f01c89aaafe540af416daafd857d76ac9d5c7",
+    "3754e621db3a92a70f1a1841b27748d40e89c48c63eaa187b1f7afee177568d8",
+    "c881ef0407d1024a9ffe361df4d919ff8789f85a5128fcfd4dbb7de01ae5cf4a",
+    "0c781a0c75f9500ea1bba647d6385a122d2fafeaf46bfa7f42a555b27dbcd7a2",
+    "081eac59fc6125b08993e67a85bcb1537e41f06105b49906ea3dfe6cd6879f20",
+    "84f50cf52883fa80bda35d8e0b846c390354ab711d0fffa0fa05fc4180000e69",
+    "28921fd778d4001b320377dd1eb169fd71d12f63af1cc46ce38dfbaf83daa236",
+    "b38e4d864fbdbc8f68d2911c5b0dd40c4554d7cb11903c43948a6ecddea5f98a",
+    "a0e50f81ca351af48dfac0d0a7e7f1413b84949893d1efe69ac52e855d17be2d",
+    "9c9853350cfd0eaf21aa41c8e16e81788b151ee18d118e5498cd1af9d75c32a3",
+    "60abf7453ba3b4458dc4bbbe8c96fc63456fc41cf7b7e6c958fa66c403343686",
+    "14820ca794c2b92ab03c19994201e314ade2a02903794833413f56a7b555752d",
+    "4f40f9f5630b99b46f7d5991d44412f74d7bd257093a3d4a804f48f712857cb1",
+    "e1f331ce8430e79a61462a100a7d514c9838338ba2a36846255a1bc02a618515",
+    "96934ac2523d2b93f51dcccda7e02562aeaa0a95665ee24b949be945aa0d1e5d",
+    "9653e8385e824073a121d6929fc8507a69aee28b41bfa5dbb0d90d5729f5cf2f",
+    "c3ea9a0f37fd5314f71f774cb887019f161ef79d550fbc93328c78def1a34226",
+    "af1d340a52fcfd92ad1d2dd823087da70eaabc52a0ee3da85fa89c6de93bd268",
+    "214ea9021bc282c4a97af12eff4fd968cada22c158fcf57bdf554ac6c34bce77",
+    "18aaeaecc6e800d2c7b2a626d4e5913f1750f82313f05fe5342d0999cd614167",
+    "7d659eb4105733837c575ebf345e69d7852ba804b1a99dd1527005c252c28b76",
+    "7878caf0ccbb98d7fa90341442dfae242e4f8ae8aad1771e630228fb71847c80",
     "0bf5c407c7c296d434101588e27fad11769991887c46190a5a011843b3b878cd",
     "1a1a1ed5353e36a634b1fdee33c6d36339ed30f87455c1c39439aa10ee6cd4ee",
     "f6aaa7f8a0055114bed22896391854886596058b327c728a8c60370ff33a3a30",
@@ -284,14 +284,14 @@
     "41ce5b1eb54e5a95c86fdae3998f24e86014918836b4cd1a58498f07f64be761",
     "5fb00ae826bc67b701be507ccd09e537359f5997ffd0618e4c8b7ce1f894fad3",
     "878455921e7ab33ac19d2cbe58dd703401dbbf6f0fa3937f047a295ab716739f",
-    "e520e96bb4e25f8f056e2e2bab3f41a4fc665362e941090a7ebf132f73251f70",
-    "e4f272918529fac306b81c4c71431c4e3f9963cf92899a2ce24a3dd8d3727ef2",
-    "8c1f0867880f3dc304f735c41e474d277a4a0edd199086927a50727d2f7082eb",
-    "ec808e7d12df309c8a894428cabe4bc611715999adf19333c11b2dd577df38fe",
-    "84619acd37e00d17aad1e6c14128c4b180e89711718b226c8dd0ec419cc53a1b",
-    "365cf672faa0d91faf2314dc597e8f2cbad8013f138807d878f268c4af0ef39b",
-    "e04cdbca6cc2eabbad5b064bff42515f1d74b578a78bd4a6dfb87d7cc7be61be",
-    "1e0349a6f0160980f68907ecf79569aec33bed8677e628dbcfcca37ecd6c858e",
+    "e93553f8287e459c1fd25523decea52473d5f2df43fc783b2bab29a770bd34a0",
+    "a6551486697390737f4d578153d50d6f68c0fe1c6ebfeaffc843933feff2d4d3",
+    "9d34f7ca22b263995dd1f21480aa8a0e5926622e8eb22b8c2260c6701e8a1545",
+    "c929e7fd7090f6086e18a53632471cb95b502be3874920ae4c9a4821db6dda7d",
+    "0f6281ede34cb6996e2484b7a05804b69f16d7dac6bab8ceb84e005fd965d3ec",
+    "42e89adbdf1d8570e4884f577f3df752b912969b16e77516606d9e2367961374",
+    "509dd0fb95a71faf2ff6f4152cb0e2b0c77c97c3b6288fa2628f2b24322e0637",
+    "325739f59366892f8e8c7857bee9c8a40846befb467e18d9366a26e0f3181316",
     "5d4efa3898884fa0e3a6a885c474fa2afeec114233dce9b816f24c3e4f03b60e",
     "cac051a8a33eeb9c93852f07764e31cdaae5901d18d9c55ecd0536785dea24c4",
     "9d9eb98998a3baad61311c3a190af898cedd611097290eabaf5acdaf51ae5fff",
@@ -464,7 +464,7 @@
     "https://groww.in/mutual-funds/mirae-asset-midcap-fund-direct-growth": "137ff03d775feaa9722458854c0c8f09817793dd0d0ec45cf7a04c5c7dace2ba",
     "https://groww.in/mutual-funds/mirae-asset-small-cap-fund-direct-growth": "608c842a468a9bc5374d6d56a599c5f8304569d4f99e52829f35b6e069839cf5",
     "https://groww.in/mutual-funds/mirae-asset-multicap-fund-direct-growth": "2148a413e6e495dd1b6790b4fab1fc8d5bfa1376b15218d84e9f32462524935d",
-    "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
     "https://groww.in/mutual-funds/mirae-asset-elss-tax-saver-fund-direct-growth": "5268633320d182c1be51271bdbe40c3a9925d8ac90ba98c12b4cbb2353a069c1",
     "https://groww.in/mutual-funds/mirae-asset-aggressive-hybrid-fund-direct-growth": "e5c8fde3949405befce1288ee85a781f076d833126014920409e15ab5337205b",
     "https://groww.in/mutual-funds/mirae-asset-equity-savings-fund-direct-growth": "1aed86847e14f832bd8ebe79b63d3249d6bd88df863cc186760753260882cc70",
@@ -475,10 +475,10 @@
     "https://groww.in/mutual-funds/mirae-asset-infrastructure-fund-direct-growth": "5499a61114d828e7881777e8719656f25c4f8c11115eb508bc93e553d96a6832",
     "https://groww.in/mutual-funds/mirae-asset-nifty-50-index-fund-direct-growth": "1e00cd544c49ce4df437526b8c39110be89c85f9d35a6d98aa04ad95eb6b4f66",
     "https://groww.in/mutual-funds/mirae-asset-nifty-largemidcap-250-index-fund-direct-growth": "0eea7a7cc6d3b25e197dfdd8f9447a54c4f38494eb77093bcf09ec68aaaf55c6",
-    "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
     "https://groww.in/mutual-funds/mirae-asset-nifty-midsmallcap400-momentum-quality-100-etf-fof-direct-growth": "4e8ae37114ea83bc3a205e7b1e908ffbd4df59eec5574d4a7dae0d0c04640ecb",
     "https://groww.in/mutual-funds/mirae-asset-nifty-india-new-age-consumption-etf-fof-direct-growth": "5ce7b4a0b25c989a136efd801ee5f0d880619e6a01703704a9164daddad93125",
-    "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth": "814ed50c98ad81600b8fec7754b65357287c8973b780cff6bd89834f3c444090",
+    "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth": "610b8f4d057515cb6a4a90f1db533739934bbd95f2fec2256d105f2c1ab26895",
     "https://groww.in/mutual-funds/mirae-asset-hang-seng-tech-etf-fof-direct-growth": "521a930fc935bbcad6c3d7b1e44d05ac558b1a19a676bf45646ba9514f24b126",
     "https://groww.in/mutual-funds/mirae-asset-s-p-500-top-50-etf-fof-direct-growth": "f776970c2e349fc1b11e0803f7e4ac4036998fccb8882679a8ed1b29aa3651b3",
     "https://groww.in/mutual-funds/mirae-asset-global-x-artificial-intelligence-technology-etf-fof-direct-growth": "c07b1c744cea4a49df9769602db3d0f8da0e66b9ea666142071f107b1b6ce01e",
@@ -745,52 +745,52 @@
       "doc_hash": "2148a413e6e495dd1b6790b4fab1fc8d5bfa1376b15218d84e9f32462524935d",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-multicap-fund-direct-growth"
     },
-    "0f0f8cca1dace1cac7555b3b4bd7d08c594c30a2a031e0dd0c8eb391baa600b7": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "f56af43371d018554e26c8a0ca1960111c8169c89ff86461da281a5910c0cede": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "1dda07ec54a8911799eff59cde922d0dffddea06bde1ec5bf39fdbfe5a548cf8": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "7a350411615feacda61fee18f6e6633f41d95804835c113855d61352c6929512": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "3f42f76027f70ddf3e7c9c5d0a231996adc26d05b22eec7d0eaf598500585885": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "3912aad0e58e6108820cfd79026636b7d17c8f94904f1e06813d92a82ec6c098": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "cae7e2bdb576d7377a857199c774ecae842b3962ae4458bdf0af4614366fb44d": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "416dfa6b4d6947916d69b8ecbeffde2745515c4172d3b18e9dd07834915e918f": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "6cea7134bb2128004a2ae5a868b092a6d498347ae1450ae095ffc41e32d21e1e": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "ad5c9ee80c0c19de6ecf6f80c62243e68fb587ffd96f8bef7c92053c9d99dcde": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "37576f056172decd84163565e8b29788e70c652c3ab26fc973b09efe4c9dd2c3": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "69c9a14f402bb6630e6a44ca748a5447be8b2de87c8cdddaa7bf13add7739629": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "8058e2951ed271090dd054f85eb6fa39dcb07af580075238581f00329347127a": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "5f2f67cef534b5a7dc8cdbfbdb23c6b6dcb9efe86c3949e01d6a9d04affe44f3": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "22040ec868b240084446b0c097d5897e78bafecfb23a010a1fa08d35bf26e2cd": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "0a5fe7978f092862fa638833a3eee729d7f80a66735f0c705aeaff3e71af58b1": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "2e708452797633a4910f8a56334a1a4b6a3ac3bb46f57e423967329e5cadbe74": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "a0919b6450562ef417ebf014befd3d58fe3bc4d06f1f93ecdd77753835c6e611": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "494f20ac29fc9e9a5c202b64e1f21a32418258acc4aa399d7ddafd662d636515": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "b9f2abe0639364bbda304e736fb7297fd7b31f72524bbfb0da9820f6b3cc82ff": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "7d79d9b663e0b0cba76a554f75eddf5b9f61093687fc1e65db44de63d37904bc": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "e1409473f2f78566fed24102ccc353180d82821fe073b8a05e11a0c622aef112": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
-    "599f0d7da65cee3346793c9433a3aa5f255df1101a9c4369b800016a8e530816": {
-      "doc_hash": "45cf3a23ce7cd35091471bbde15f4c1af049f3205c14908d46e9b7af1c090976",
+    "a31450020bd36df512354da8dd415f5a18b917163957fb89179033f94aabae64": {
+      "doc_hash": "e12d60bc9fc19bec3507276cf456b65c40c2516719b15181ce181e5e055d8541",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-flexi-cap-fund-direct-growth"
     },
     "4583cef094782019dc9480b7e1c9ccb914bf2683276b1cd812909d16e7204428": {
@@ -1349,152 +1349,152 @@
       "doc_hash": "0eea7a7cc6d3b25e197dfdd8f9447a54c4f38494eb77093bcf09ec68aaaf55c6",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-largemidcap-250-index-fund-direct-growth"
     },
-    "57ec93afa7a62e35fcd6118bc606d4d01358f8642c05ec6dc39b81a745f7d176": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "c13b1e9e80f0e1859d65f489c3805b1f0edccdac764f29c1c4edd7930fb1c4c5": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "af4ad8ed9edcd1a4c04ec0727f0ab24cc391cab7b898cfdea2ea670dd1001806": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "722dac13c53cc3dcc10e382ca129791581d729c7204f9a1ff68cf2ef8ef8b211": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "5ee511c4cddfc3b7165e2978b3451bf7c35d94a622d9020c79984f60be9a2d89": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "fa21a1c0de19c277182a13b8a831408e23521806a07c7cbf29f7caa58d2ab9cc": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "3929b46c6475cb15b08cc6ea1e63231ae756c873f63e553fb6fc4452ddce66f0": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "5515cfed0d9caa2f41188a645f03f33b2ddd04dc14597dfa65b89046b2ffb920": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "3f47841fa3efa6ef9cd6c767dc5d21bfba94669023b9e24ecce1494b1f45b34a": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "12f472d576b450c04ffe989edec61d7214ff46d3b9013602747b19799ca9c55e": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "889aa7f10617223b6177e7f727b038d861542b1ee782212aa90dd27483152b34": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "f2fc1b577c75cadcec5fd6d0c37349fe82e8280e579dce4e6e0c9a929f8fd14f": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "fb5ade323a1428f0830af1699df22027ff73cc76f68634eefa441fa789da7159": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "eda1d724991bd15631b40cba60e7f3dfd8f29fb221ea1be79d2071b4a817c527": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "6e8fc8d1a4089962373221d92c21888ff9ee98956691026e3559ae59e66956ad": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "75d491c12590267fabbb9c0599b6d712dd5d4c13e502042649bec5a85a1080dc": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "a3b7976706bc5a367fa8240206ebc7ee0102e7a57505f1969e3c371e19fc1f46": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "b540bdead0831a7c006fa7e31739fdbcb9185dd84ce9bee69a482c271f0b1c76": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "189da5bce587c06ba6f1af8a1e021499736f3e565b885d7556cb246bdc708ad7": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "c9975d186426a8bccef78403536f3c258dcd6ed05be7f9eb7a0ae6a345fd53ee": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "bc294ca819e7c7f88fd03424ee0d2230362a738997c8fc76883bfe58aab78ea8": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "0ea56fef8af7b33fe69124ffe169d1af5eea2622e787fd43c5ada12aa33ac0ba": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "0d35a24b1eca62b35d44a585f45300f9f00eb691bce5f8bf87d1d26525dce905": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "2aaec8e3f2ede9b13d393538b2525bba3fb6943808b829f068befe30f9dfa653": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "fa087a7c4f1d6dcc84d8c31dc55e091658ab21dda5b1a4eb841ec6949783e3ff": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "212fb760410c87954a347c259c4dcb921f8d282ab196c459ea36ff7ed3f2fa25": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "129e4a211ef158e29e32bf895a6fe1b69891fad127d3e6d2bc1b5da31cff0c8a": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "da224359e33c8d667acb701fd1c8f258f63052adbe2dfa947df3ab824feb2d4e": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "5d1c11eab3333781dc5ce4267ec9b3a9f3a75cfe12bdfe3320ec3b3d648287a4": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "25c6ace4562228da3dbb088d61b871c1a318a90445bd6103379a3c3448aa6003": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "e3bd90b8fcb2da3e1efa388b4c636d8754abc8430de331749e73e65d6de47082": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "77a496e4c5ac9657f786d26cc58f01c89aaafe540af416daafd857d76ac9d5c7": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "1a4b0fc9423c5d25aed434c58418e3a6e6418fb6d8239edbddb15fb1338e3a1f": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "3754e621db3a92a70f1a1841b27748d40e89c48c63eaa187b1f7afee177568d8": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "19d8a24858056cd8c9de9afc5557cb4cb140331cbf7f959845ab62669341364d": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "c881ef0407d1024a9ffe361df4d919ff8789f85a5128fcfd4dbb7de01ae5cf4a": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "15b247b5a40da054800e0dfc71e69ec6225a77b8d83520d8274824c6231adf3d": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "0c781a0c75f9500ea1bba647d6385a122d2fafeaf46bfa7f42a555b27dbcd7a2": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "5758e15eea665a5ba62226fa7b492dfa9cb756898f2adfa19de90df0d20ee198": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "081eac59fc6125b08993e67a85bcb1537e41f06105b49906ea3dfe6cd6879f20": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "299ff2b69d33fa00fa4343cad2301ea3a9654181aef85bcaff4ae9493d02615e": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "84f50cf52883fa80bda35d8e0b846c390354ab711d0fffa0fa05fc4180000e69": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "dd8ef5e555b16b357626881f145eb51bd13f3f61b70020482025f6f1b9d7ade6": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "28921fd778d4001b320377dd1eb169fd71d12f63af1cc46ce38dfbaf83daa236": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "3ee1825f40ef420a4d4d7399d3ba1d823e3379ded9a6aa09581a10f1f3257682": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "b38e4d864fbdbc8f68d2911c5b0dd40c4554d7cb11903c43948a6ecddea5f98a": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "802daa2d060937052184ac69e6468982ee0b733df92ae907f9a67a1d8c71bd46": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "a0e50f81ca351af48dfac0d0a7e7f1413b84949893d1efe69ac52e855d17be2d": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "01dc54d26c59eeff6b04b000c259a1a46038f8985849675de0db3bae095ead79": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "9c9853350cfd0eaf21aa41c8e16e81788b151ee18d118e5498cd1af9d75c32a3": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "505e6966bb67d6cd29516558567efc62174d95d84868e12b1d921a1292b75f88": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "60abf7453ba3b4458dc4bbbe8c96fc63456fc41cf7b7e6c958fa66c403343686": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "f1f6c4a89e7b01d2f19cffed69e3d1579300af0f000b6a9db33fd344a8345cf9": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "14820ca794c2b92ab03c19994201e314ade2a02903794833413f56a7b555752d": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "f2baf2b4fdf3556ef2c2179ed7c5002abd679d4e6735228ed2ab565de95c60eb": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "4f40f9f5630b99b46f7d5991d44412f74d7bd257093a3d4a804f48f712857cb1": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "4c999758e6ac3cea983b904356e78b624ae8d25995cebbe0db03f05cf41ffb40": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "e1f331ce8430e79a61462a100a7d514c9838338ba2a36846255a1bc02a618515": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "07705b9a13be4a088674b72a34d07202d608a5538a1863a14cbacc616e35ad1c": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "96934ac2523d2b93f51dcccda7e02562aeaa0a95665ee24b949be945aa0d1e5d": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "f2d2fcc2882396c2ac57db36198565518e95887a73ce30a42d05c0291653c61a": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "9653e8385e824073a121d6929fc8507a69aee28b41bfa5dbb0d90d5729f5cf2f": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "ea106c642d81f49e3cf2414838107e27e54a9bfaaffc3229f1a73857581e5d67": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "c3ea9a0f37fd5314f71f774cb887019f161ef79d550fbc93328c78def1a34226": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "48912b4314aa04bce94bd92f35a9b743616105586d76a872fa9dee14805e7501": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "af1d340a52fcfd92ad1d2dd823087da70eaabc52a0ee3da85fa89c6de93bd268": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "434ed7af92b1d23f237bc8dc667b978432da345335d020d6ccd68999d8887397": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "214ea9021bc282c4a97af12eff4fd968cada22c158fcf57bdf554ac6c34bce77": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "66e59243348ea065d0359d134c1149ef6f3aadc5d1a40960ee053a0a43d69a16": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "18aaeaecc6e800d2c7b2a626d4e5913f1750f82313f05fe5342d0999cd614167": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "4766a9aac31251bb1e7f44f8219d3869ef68ad985964c41d9c8830bb3f2bef10": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "7d659eb4105733837c575ebf345e69d7852ba804b1a99dd1527005c252c28b76": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
-    "1de2093890519ba46b440b809d9354b59ce1b6c614fe7e709b426a0d6364f13c": {
-      "doc_hash": "1c99b3405d683aea9fd6d2bd5d2446fd3703ff5e439b2ac98b991e93ad36977e",
+    "7878caf0ccbb98d7fa90341442dfae242e4f8ae8aad1771e630228fb71847c80": {
+      "doc_hash": "eeccd6188fe195d96b2c2244414f1eb4567e55967fc47861390d8f03061b60f8",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-total-market-index-fund-direct-growth"
     },
     "0bf5c407c7c296d434101588e27fad11769991887c46190a5a011843b3b878cd": {
@@ -1581,36 +1581,36 @@
       "doc_hash": "5ce7b4a0b25c989a136efd801ee5f0d880619e6a01703704a9164daddad93125",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nifty-india-new-age-consumption-etf-fof-direct-growth"
     },
-    "e520e96bb4e25f8f056e2e2bab3f41a4fc665362e941090a7ebf132f73251f70": {
-      "doc_hash": "814ed50c98ad81600b8fec7754b65357287c8973b780cff6bd89834f3c444090",
+    "e93553f8287e459c1fd25523decea52473d5f2df43fc783b2bab29a770bd34a0": {
+      "doc_hash": "610b8f4d057515cb6a4a90f1db533739934bbd95f2fec2256d105f2c1ab26895",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
     },
-    "e4f272918529fac306b81c4c71431c4e3f9963cf92899a2ce24a3dd8d3727ef2": {
-      "doc_hash": "814ed50c98ad81600b8fec7754b65357287c8973b780cff6bd89834f3c444090",
+    "a6551486697390737f4d578153d50d6f68c0fe1c6ebfeaffc843933feff2d4d3": {
+      "doc_hash": "610b8f4d057515cb6a4a90f1db533739934bbd95f2fec2256d105f2c1ab26895",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
     },
-    "8c1f0867880f3dc304f735c41e474d277a4a0edd199086927a50727d2f7082eb": {
-      "doc_hash": "814ed50c98ad81600b8fec7754b65357287c8973b780cff6bd89834f3c444090",
+    "9d34f7ca22b263995dd1f21480aa8a0e5926622e8eb22b8c2260c6701e8a1545": {
+      "doc_hash": "610b8f4d057515cb6a4a90f1db533739934bbd95f2fec2256d105f2c1ab26895",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
     },
-    "ec808e7d12df309c8a894428cabe4bc611715999adf19333c11b2dd577df38fe": {
-      "doc_hash": "814ed50c98ad81600b8fec7754b65357287c8973b780cff6bd89834f3c444090",
+    "c929e7fd7090f6086e18a53632471cb95b502be3874920ae4c9a4821db6dda7d": {
+      "doc_hash": "610b8f4d057515cb6a4a90f1db533739934bbd95f2fec2256d105f2c1ab26895",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
     },
-    "84619acd37e00d17aad1e6c14128c4b180e89711718b226c8dd0ec419cc53a1b": {
-      "doc_hash": "814ed50c98ad81600b8fec7754b65357287c8973b780cff6bd89834f3c444090",
+    "0f6281ede34cb6996e2484b7a05804b69f16d7dac6bab8ceb84e005fd965d3ec": {
+      "doc_hash": "610b8f4d057515cb6a4a90f1db533739934bbd95f2fec2256d105f2c1ab26895",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
     },
-    "365cf672faa0d91faf2314dc597e8f2cbad8013f138807d878f268c4af0ef39b": {
-      "doc_hash": "814ed50c98ad81600b8fec7754b65357287c8973b780cff6bd89834f3c444090",
+    "42e89adbdf1d8570e4884f577f3df752b912969b16e77516606d9e2367961374": {
+      "doc_hash": "610b8f4d057515cb6a4a90f1db533739934bbd95f2fec2256d105f2c1ab26895",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
     },
-    "e04cdbca6cc2eabbad5b064bff42515f1d74b578a78bd4a6dfb87d7cc7be61be": {
-      "doc_hash": "814ed50c98ad81600b8fec7754b65357287c8973b780cff6bd89834f3c444090",
+    "509dd0fb95a71faf2ff6f4152cb0e2b0c77c97c3b6288fa2628f2b24322e0637": {
+      "doc_hash": "610b8f4d057515cb6a4a90f1db533739934bbd95f2fec2256d105f2c1ab26895",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
     },
-    "1e0349a6f0160980f68907ecf79569aec33bed8677e628dbcfcca37ecd6c858e": {
-      "doc_hash": "814ed50c98ad81600b8fec7754b65357287c8973b780cff6bd89834f3c444090",
+    "325739f59366892f8e8c7857bee9c8a40846befb467e18d9366a26e0f3181316": {
+      "doc_hash": "610b8f4d057515cb6a4a90f1db533739934bbd95f2fec2256d105f2c1ab26895",
       "source_url": "https://groww.in/mutual-funds/mirae-asset-nyse-fang-plus-etf-fof-direct-growth"
     },
     "5d4efa3898884fa0e3a6a885c474fa2afeec114233dce9b816f24c3e4f03b60e": {
