@@ -1,6 +1,6 @@
 {
-  "run_id": "34830043359",
-  "pipeline_run_at": "2026-09-14T09:55:02Z",
+  "run_id": "34949783575",
+  "pipeline_run_at": "2026-09-15T09:01:32Z",
   "triggered_by": "workflow_dispatch",
   "embedding_model": "BAAI/bge-small-en-v1.5",
   "embedding_version": "2026-04",
