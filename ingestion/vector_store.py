@@ -61,6 +61,8 @@ import logging
 import math
 import os
 import random
+import shutil
+import sqlite3
 import sys
 import time
 from datetime import datetime, timezone
@@ -235,6 +237,22 @@ class VectorStore:
         log.info("Deleting %d stale vector(s)", len(chunk_ids))
         self._collection.delete(ids=chunk_ids)
 
+    def reset(self) -> None:
+        """
+        Delete the collection and recreate it empty to reclaim HNSW index storage.
+        Eliminates fragmentation and guarantees minimal on-disk index size.
+        """
+        try:
+            self._client.delete_collection(self.collection_name)
+            self._collection = self._client.create_collection(
+                name=self.collection_name,
+                metadata={"hnsw:space": "cosine"},
+            )
+            self.cleanup_orphans()
+            log.info("VectorStore collection '%s' reset and recreated cleanly", self.collection_name)
+        except Exception as exc:
+            log.warning("VectorStore reset encountered error: %s", exc)
+
     # ------------------------------------------------------------------
     # Read operations
     # ------------------------------------------------------------------
@@ -355,6 +373,35 @@ class VectorStore:
             counts.get("unchanged", 0),
             counts.get("deleted", 0),
         )
+
+        # Prune orphan segments and vacuum SQLite
+        self.cleanup_orphans()
+
+    def cleanup_orphans(self) -> None:
+        """
+        Remove orphaned segment directories and vacuum SQLite.
+        Prevents disk bloat and keeps ChromaDB lean for GitHub / Render deployment.
+        """
+        sqlite_path = self.persist_path / "chroma.sqlite3"
+        if not sqlite_path.exists():
+            return
+        try:
+            conn = sqlite3.connect(str(sqlite_path))
+            cur = conn.cursor()
+            cur.execute("SELECT id FROM segments")
+            active_segments = {row[0] for row in cur.fetchall()}
+            conn.close()
+
+            for item in self.persist_path.iterdir():
+                if item.is_dir() and item.name not in active_segments:
+                    log.info("Removing orphaned segment directory: %s", item.name)
+                    shutil.rmtree(item, ignore_errors=True)
+
+            conn = sqlite3.connect(str(sqlite_path))
+            conn.execute("VACUUM")
+            conn.close()
+        except Exception as exc:
+            log.warning("ChromaDB orphan cleanup failed: %s", exc)
 
     # ------------------------------------------------------------------
     # Info

@@ -236,18 +236,21 @@ jobs:
           run-id: ${{ steps.state-locator.outputs.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Download previous ChromaDB
-        if: steps.state-locator.outputs.found == 'true'
-        uses: actions/download-artifact@v4
-        continue-on-error: true
-        with:
-          name: chroma-latest
-          path: data/chroma_db/
-          run-id: ${{ steps.state-locator.outputs.run_id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create ChromaDB directory (backup)
-        run: mkdir -p data/chroma_db
+      - name: Prepare ChromaDB workspace
+        run: |
+          mkdir -p data/chroma_db
+          # If any file in data/chroma_db exceeds 40MB or if force_full_rerun was requested, wipe for fresh rebuild
+          if [ "${{ github.event.inputs.force_full_rerun }}" = "true" ]; then
+            echo "Full rerun requested -- cleaning data/chroma_db"
+            rm -rf data/chroma_db/*
+          elif [ -d "data/chroma_db" ]; then
+            BLOATED=$(find data/chroma_db -type f -size +40M)
+            if [ -n "$BLOATED" ]; then
+              echo "Detected bloated ChromaDB index files (>40MB): $BLOATED"
+              echo "Wiping data/chroma_db to force fresh compaction..."
+              rm -rf data/chroma_db/*
+            fi
+          fi
 
       - name: Run embedder and ChromaDB upsert
         run: python ingestion/embedder.py
@@ -288,6 +291,23 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          # Safety guard: ensure no files in data/ exceed 90MB (GitHub limit is 100MB)
+          LARGE_FILES=$(find data/ -type f -size +90M)
+          if [ -n "$LARGE_FILES" ]; then
+            echo "WARNING: Files exceeding 90MB detected before commit:"
+            echo "$LARGE_FILES"
+            echo "Running forced re-embed to compact indices..."
+            rm -rf data/chroma_db/*
+            FORCE_FULL_RERUN=true python ingestion/embedder.py
+          fi
+
+          # Final verification before staging
+          REMAINING_LARGE=$(find data/ -type f -size +95M)
+          if [ -n "$REMAINING_LARGE" ]; then
+            echo "FATAL: Files still exceeding 95MB: $REMAINING_LARGE. Aborting push to protect repo."
+            exit 1
+          fi
+
           # Force-add data files that are normally gitignored
           git add -f data/chroma_db/
           git add -f data/chunks.jsonl
@@ -298,12 +318,27 @@ jobs:
           if git diff --cached --quiet; then
             echo "No data changes — skipping commit"
           else
-            git commit -m "chore: update ingestion data
-
-            Run ID: ${{ github.run_id }}
-            Triggered by: ${{ github.event_name }}"
-            git pull --rebase origin main
-            git push
+            # Fetch latest main to avoid push rejection, but keep local changes in workspace
+            git fetch origin main
+            git reset --soft origin/main
+            
+            # Re-stage our newly generated data files
+            git add -f data/chroma_db/
+            git add -f data/chunks.jsonl
+            git add -f data/cleaned_docs.jsonl
+            git add -f data/ingestion_manifest.json
+            
+            # Only commit and push if there are actual changes compared to the latest main
+            if git diff --cached --quiet; then
+              echo "No data changes compared to remote — skipping push"
+            else
+              git commit -m "chore: update ingestion data
+              
+              Run ID: ${{ github.run_id }}
+              Triggered by: ${{ github.event_name }}"
+              
+              git push origin main
+            fi
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

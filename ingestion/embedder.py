@@ -538,8 +538,22 @@ def main() -> None:
     log.info("-" * 60)
     log.info("Stage C -- Change Detection")
 
+    # Auto-detect if on-disk index has bloated beyond 40 MB
+    index_bloated = False
+    if CHROMA_PERSIST_PATH.exists():
+        for f in CHROMA_PERSIST_PATH.glob("**/*"):
+            if f.is_file() and f.stat().st_size > 40 * 1024 * 1024:
+                log.warning(
+                    "Detected bloated index file %s (%.1f MB) -- triggering auto-compaction",
+                    f.name, f.stat().st_size / (1024 * 1024),
+                )
+                index_bloated = True
+                break
+
+    force_full_rerun = FORCE_FULL_RERUN or index_bloated
+
     new_chunks, updated_chunks, unchanged_chunks, deleted_ids = classify_chunks(
-        all_chunks, manifest, FORCE_FULL_RERUN
+        all_chunks, manifest, force_full_rerun
     )
 
     to_embed = new_chunks + updated_chunks
@@ -585,6 +599,10 @@ def main() -> None:
         persist_path=CHROMA_PERSIST_PATH,
         collection_name=CHROMA_COLLECTION,
     )
+
+    if force_full_rerun:
+        log.info("Force full rerun / compaction active -- resetting collection for clean index")
+        vs.reset()
 
     if to_embed and embeddings:
         vs.upsert(to_embed, embeddings)
