@@ -58,6 +58,7 @@ class MessageResponse(BaseModel):
     intent:       Optional[str]   = None
     # Debug fields (omitted from production responses via exclude_none)
     retrieval_count: Optional[int] = None
+    experiment_variant: Optional[dict] = None
 
 
 # ---------------------------------------------------------------------------
@@ -143,6 +144,18 @@ def send_message(
     if history and history[-1]["role"] == "user":
         history = history[:-1]
 
+    # ── 3b. A/B test assignment (apply feature flag overrides) ───────────────
+    from backend.core.ab_testing import get_ab_manager
+    from backend.core.feature_flags import set_flag
+
+    ab_manager = get_ab_manager()
+    ab_assignments = ab_manager.get_assignment(thread_id)
+    if ab_assignments:
+        ab_flags = ab_manager.get_flags_for_session(thread_id)
+        for flag_name, flag_val in ab_flags.items():
+            set_flag(flag_name, flag_val)
+        ab_manager.log_assignment(thread_id, ab_assignments, query=query)
+
     # ── 4. Query Guard ────────────────────────────────────────────────────────
     from backend.core.query_guard import classify, REFUSAL_ADVISORY
 
@@ -162,7 +175,7 @@ def send_message(
             intent           = guard.intent,
         )
         store.add_message(thread_id, assistant_msg)
-        return _build_response(thread_id, assistant_msg, retrieval_count=0)
+        return _build_response(thread_id, assistant_msg, retrieval_count=0, experiment_variant=ab_assignments)
 
     # ── 5. Retrieve ───────────────────────────────────────────────────────────
     from backend.core.retriever import retrieve
@@ -220,11 +233,16 @@ def send_message(
     )
     store.add_message(thread_id, assistant_msg)
 
-    return _build_response(thread_id, assistant_msg, retrieval_count=len(chunks))
+    return _build_response(thread_id, assistant_msg, retrieval_count=len(chunks), experiment_variant=ab_assignments)
 
 
-def _build_response(thread_id: str, msg: Message, retrieval_count: int) -> dict:
-    return {
+def _build_response(
+    thread_id: str,
+    msg: Message,
+    retrieval_count: int,
+    experiment_variant: dict[str, str] | None = None,
+) -> dict:
+    resp = {
         "thread_id":       thread_id,
         "message_id":      msg.message_id,
         "role":            msg.role,
@@ -237,6 +255,9 @@ def _build_response(thread_id: str, msg: Message, retrieval_count: int) -> dict:
         "intent":          msg.intent,
         "retrieval_count": retrieval_count,
     }
+    if experiment_variant:
+        resp["experiment_variant"] = experiment_variant
+    return resp
 
 
 # ---------------------------------------------------------------------------

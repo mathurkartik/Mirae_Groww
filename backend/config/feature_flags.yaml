@@ -1,0 +1,12 @@
+# Feature Flags Configuration
+# Each flag can be overridden via environment variable: FF_<FLAG_NAME_UPPER>=true/false
+# Example: FF_HYBRID_SEARCH=false disables hybrid search at runtime
+
+flags:
+  hybrid_search: true           # Toggle vector search (false = BM25 only)
+  cross_encoder_reranker: true  # Toggle cross-encoder reranker (false = RRF scores only)
+  query_guard: true             # Toggle input intent classification
+  output_filter: true           # Toggle post-generation advisory/PII filtering
+  pii_scanning: true            # Toggle PII detection in responses
+  query_expansion: true         # Toggle acronym expansion in queries
+  citation_validation: true     # Toggle URL whitelist checking

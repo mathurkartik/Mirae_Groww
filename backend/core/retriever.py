@@ -583,57 +583,68 @@ def retrieve(
     if expanded_query != query:
         log.info("Query expanded: %r -> %r", query, expanded_query)
 
+    # -- Feature flag: hybrid_search ------------------------------------------
+    try:
+        from backend.core.feature_flags import get_flag
+        use_hybrid = get_flag("hybrid_search", True)
+    except Exception:
+        use_hybrid = True
+
     # -- Step 2: dense retrieval ----------------------------------------------
-    query_vec = embed_query(expanded_query)
-
-    dense_kwargs: dict[str, Any] = {
-        "top_k":                dense_top_k,
-        "confidence_threshold": confidence_threshold,
-    }
-    # Apply optional scheme filter via ChromaDB where clause
-    collection = _get_chroma_collection()
-    n_in_col   = collection.count()
-    if n_in_col == 0:
-        log.warning("Collection is empty — check that embedder.py has been run first")
-        return []
-
-    n_results = min(dense_top_k, n_in_col)
-    where_clause: dict | None = (
-        {"scheme_name": {"$eq": scheme_filter}} if scheme_filter else None
-    )
     dense_results: list[dict] = []
-    if query_vec:
-        raw = collection.query(
-            query_embeddings=[query_vec],
-            n_results=n_results,
-            include=["documents", "metadatas", "distances"],
-            **({"where": where_clause} if where_clause else {}),
-        )
 
-        for cid, doc, meta, dist in zip(
-            raw["ids"][0], raw["documents"][0],
-            raw["metadatas"][0], raw["distances"][0],
-        ):
-            if dist > confidence_threshold:
-                log.debug("Dense filtered (dist=%.4f): %s...", dist, cid[:12])
-                continue
-            dense_results.append({
-                "chunk_id":          cid,
-                "content":           doc,
-                "source_url":        meta.get("source_url", ""),
-                "scheme_name":       meta.get("scheme_name", ""),
-                "section_heading":   meta.get("section_heading", ""),
-                "last_crawled_date": meta.get("last_crawled_date", ""),
-                "cosine_distance":   dist,
-                "retrieval_method":  "dense",
-            })
+    if use_hybrid:
+        query_vec = embed_query(expanded_query)
+
+        dense_kwargs: dict[str, Any] = {
+            "top_k":                dense_top_k,
+            "confidence_threshold": confidence_threshold,
+        }
+        # Apply optional scheme filter via ChromaDB where clause
+        collection = _get_chroma_collection()
+        n_in_col   = collection.count()
+        if n_in_col == 0:
+            log.warning("Collection is empty — check that embedder.py has been run first")
+            # Fall through to BM25 only instead of returning empty
+        else:
+            n_results = min(dense_top_k, n_in_col)
+            where_clause: dict | None = (
+                {"scheme_name": {"$eq": scheme_filter}} if scheme_filter else None
+            )
+            if query_vec:
+                raw = collection.query(
+                    query_embeddings=[query_vec],
+                    n_results=n_results,
+                    include=["documents", "metadatas", "distances"],
+                    **({"where": where_clause} if where_clause else {}),
+                )
+
+                for cid, doc, meta, dist in zip(
+                    raw["ids"][0], raw["documents"][0],
+                    raw["metadatas"][0], raw["distances"][0],
+                ):
+                    if dist > confidence_threshold:
+                        log.debug("Dense filtered (dist=%.4f): %s...", dist, cid[:12])
+                        continue
+                    dense_results.append({
+                        "chunk_id":          cid,
+                        "content":           doc,
+                        "source_url":        meta.get("source_url", ""),
+                        "scheme_name":       meta.get("scheme_name", ""),
+                        "section_heading":   meta.get("section_heading", ""),
+                        "last_crawled_date": meta.get("last_crawled_date", ""),
+                        "cosine_distance":   dist,
+                        "retrieval_method":  "dense",
+                    })
+            else:
+                log.warning("Query vector empty; bypassing ChromaDB dense query.")
+
+            log.info(
+                "Dense: %d/%d passed filter (threshold=%.2f)",
+                len(dense_results), n_results, confidence_threshold,
+            )
     else:
-        log.warning("Query vector empty; bypassing ChromaDB dense query.")
-
-    log.info(
-        "Dense: %d/%d passed filter (threshold=%.2f)",
-        len(dense_results), n_results, confidence_threshold,
-    )
+        log.info("hybrid_search=false — skipping dense retrieval (BM25 only)")
 
     # -- Step 3: sparse retrieval ---------------------------------------------
     sparse_results = sparse_retrieve(expanded_query, top_k=sparse_top_k)
@@ -648,8 +659,21 @@ def retrieve(
         log.warning("No results after RRF fusion -- returning empty list")
         return []
 
+    # -- Feature flag: cross_encoder_reranker ---------------------------------
+    try:
+        from backend.core.feature_flags import get_flag
+        use_reranker = get_flag("cross_encoder_reranker", True)
+    except Exception:
+        use_reranker = True
+
     # -- Step 5: cross-encoder re-ranking -------------------------------------
-    reranked = rerank(expanded_query, fused, top_n=rerank_top_n)
+    if use_reranker:
+        reranked = rerank(expanded_query, fused, top_n=rerank_top_n)
+    else:
+        log.info("cross_encoder_reranker=false — using RRF scores only")
+        for c in fused:
+            c["score"] = c.get("rrf_score", 0.0)
+        reranked = sorted(fused, key=lambda c: c["score"], reverse=True)[:rerank_top_n]
 
     # -- Step 6: build output objects -----------------------------------------
     output: list[RetrievedChunk] = []

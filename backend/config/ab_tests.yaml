@@ -1,0 +1,32 @@
+# A/B Testing Configuration
+# Each experiment defines variants with weights (must sum to 100) and feature flag overrides.
+# Bucketing is hash-based on conversation/session ID for consistency.
+
+experiments:
+  retrieval_method:
+    enabled: true
+    variants:
+      bm25_only:
+        weight: 50
+        flags:
+          hybrid_search: false
+          cross_encoder_reranker: false
+      full_hybrid:
+        weight: 50
+        flags:
+          hybrid_search: true
+          cross_encoder_reranker: true
+
+  guardrail_layers:
+    enabled: false
+    variants:
+      all_layers:
+        weight: 50
+        flags:
+          query_guard: true
+          output_filter: true
+      output_only:
+        weight: 50
+        flags:
+          query_guard: false
+          output_filter: true

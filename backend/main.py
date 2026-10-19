@@ -68,6 +68,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.routes import health, threads, messages, ingest, funds
+from backend.api.routes import feedback as feedback_routes
+from backend.api.routes import ab_testing as ab_routes
 from backend.middleware.rate_limiter import ThreadRateLimiter
 
 # ── App definition ────────────────────────────────────────────────────────────
@@ -108,6 +110,8 @@ app.include_router(threads.router,  prefix=_PREFIX)
 app.include_router(messages.router, prefix=_PREFIX)
 app.include_router(ingest.router,   prefix=_PREFIX)
 app.include_router(funds.router,    prefix=_PREFIX)
+app.include_router(feedback_routes.router, prefix=_PREFIX)
+app.include_router(ab_routes.router,       prefix=_PREFIX)
 
 
 # ── Startup event: warm up BM25 index ────────────────────────────────────────
@@ -130,6 +134,13 @@ async def _startup() -> None:
         log.info("Fund registry loaded at startup")
     except Exception as exc:
         log.warning("Fund registry warm-up skipped: %s", exc)
+
+    # Log feature flags state
+    try:
+        from backend.core.feature_flags import log_startup_state
+        log_startup_state()
+    except Exception as exc:
+        log.warning("Feature flags startup logging skipped: %s", exc)
 
     # Log key configuration
     log.info(
